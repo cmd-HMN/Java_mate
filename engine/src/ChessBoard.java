@@ -1,4 +1,4 @@
-package engine;
+package engine.src;
 
 public class ChessBoard{
     public static void main(String[] args) {
