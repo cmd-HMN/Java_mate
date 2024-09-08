@@ -1,14 +1,14 @@
-# Java_mate
+# 👑 Java_mate 👑
 
 A chess engine written in Java, designed to build the engine and GUI for a chess game.
 
-## Features(Mainly to be decided, features are written just for the show)
+## Features(Mainly to be decided, features are written just for the show) 🔑
 
 - **Game Logic**: The engine will be able to handle basic game logic such as moving pieces, and checking for checkmate.
 
 - **GUI**: The engine will be able to build a GUI for the chess game using Java Swing.
 
-## Installation
+## Installation 🪛
 
 To install the engine, you will need to have Java installed on your computer. You can download the
 
@@ -33,7 +33,7 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
     run the file
 
-## Contributing
+## Contributing 💖
 
 Contributions are welcome! Please follow these steps:
 
@@ -44,6 +44,6 @@ Contributions are welcome! Please follow these steps:
 5. Push to the branch (`git push origin feature-branch`).
 6. Create a new Pull Request.
 
-## License
+## License 📖🔓
 
 This project is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://opensource.org/licenses/AGPL-3.0).
