@@ -19,7 +19,8 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
 2. Get the repo:
 
-    Then clone the repo    
+    Then clone the repo
+
     ```bash
        gh repo clone cmd-HMN/Java_mate
     ```
@@ -28,7 +29,7 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
     download the zip file from [here](https://github.com/cmd-HMN/Java_mate/archive/refs/heads/main.zip) then extract the files
 
-4. Run the file(will be specified)
+3. Run the file(will be specified)
 
     run the file
 
