@@ -19,13 +19,10 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
 2. Get the repo:
 
-    Then clone the repo
-   
-        ```bash
-   
-        gh repo clone cmd-HMN/Java_mate
-   
-        ```
+    Then clone the repo    
+    ```bash
+       gh repo clone cmd-HMN/Java_mate
+    ```
 
     or
 
