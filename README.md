@@ -15,11 +15,12 @@ To install the engine, you will need to have Java installed on your computer. Yo
 1. Download the below files:
 
     - [Java](https://www.java.com/download/ie_manual.jsp)
-    - [JDK](https://www.oracle.com/pk/java/technologies/downloads/)(preferd) or [OpenJDK](https://adoptopenjdk.net/downloads.html)
+    - [JDK](https://www.oracle.com/pk/java/technologies/downloads/) (prefer) or [OpenJDK](https://adoptopenjdk.net/downloads.html)
 
 2. Get the repo:
 
-    Then clone the repo    
+    Then clone the repo
+
     ```bash
        gh repo clone cmd-HMN/Java_mate
     ```
@@ -28,7 +29,7 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
     download the zip file from [here](https://github.com/cmd-HMN/Java_mate/archive/refs/heads/main.zip) then extract the files
 
-4. Run the file(will be specified)
+3. Run the file (will be specified)
 
     run the file
 
