@@ -6,5 +6,7 @@ public class Main extends ChessBoard
         System.out.println("Hello, World!");
 
         ChessBoard.main(args);
+
+        System.out.println("Bye, World!");
     }
 }
