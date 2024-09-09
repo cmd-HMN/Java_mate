@@ -8,5 +8,8 @@ public class Main extends ChessBoard
         ChessBoard.main(args);
 
         System.out.println("Bye, World!");
+        System.out.println("Bye, World!");
+
+
     }
 }
