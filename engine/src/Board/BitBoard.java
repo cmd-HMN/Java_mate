@@ -20,17 +20,22 @@ public class BitBoard {
     private long blackQueens = 0x0800000000000000L;
     private long blackKings = 0x1000000000000000L;
 
+    public static final long FILE_A = 0xFEFEFEFEFEFEFEFEL;
+    public static final long FILE_H = 0x7F7F7F7F7F7F7F7FL;
+    public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
+    public static final long FILE_GH = 0x3F3F3F3F3F3F3F3FL;
+
+
     public BitBoard() {
         board = whiteBishops | whiteKings | whiteKnights | whitePawns | whiteQueens | whiteRooks |
                 blackBishops | blackKings | blackKnights | blackPawns | blackQueens | blackRooks;
     }
-
-    public void setPiece(int pos) {
-        board |= (1L << pos);
+    public long getWhitePawns() {
+        return whitePawns;
     }
 
-    public void removePiece(int pos) {
-        board &= ~(1L >> pos);
+    public void setWhitePawns(long whitePawns) {
+        this.whitePawns = whitePawns;
     }
 
     public void printBoard() {
@@ -73,6 +78,15 @@ public class BitBoard {
             boardStringRepresentation.append('\n');
         }
         System.out.println(boardStringRepresentation.toString());
+    }
+
+    public String printWhitePawns() {
+        return toBinaryString(whitePawns);
+    }
+
+    private String toBinaryString(long value) {
+        String binaryString = Long.toBinaryString(value);
+        return String.format("%64s", binaryString).replace(' ', '0');
     }
 
     public void sample() {
