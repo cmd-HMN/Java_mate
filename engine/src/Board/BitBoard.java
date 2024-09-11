@@ -25,6 +25,7 @@ public class BitBoard {
     public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
     public static final long FILE_GH = 0x3F3F3F3F3F3F3F3FL;
 
+    public static final long empty = 0L;
 
     public BitBoard() {
         board = whiteBishops | whiteKings | whiteKnights | whitePawns | whiteQueens | whiteRooks |
