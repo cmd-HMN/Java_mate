@@ -19,7 +19,7 @@ public  class Moves {
 
     public void movePawnOneSquare(long position) {
         long newPosition = north(position);
-        
+
         if (isValidMove(position, newPosition)) {
             long whitePawns = bitBoard.getWhitePawns();
             bitBoard.setWhitePawns((whitePawns & ~position) | newPosition);
@@ -55,5 +55,4 @@ public  class Moves {
     public static long south_west(long pos){
         return pos >> 9;
     }
-
 }
