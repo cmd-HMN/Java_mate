@@ -1,8 +1,5 @@
 package engine.src.Board;
 
-//TO-DO
-//pop count
-
 public class BitBoard {
     private long board;
 
