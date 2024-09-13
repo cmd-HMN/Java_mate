@@ -22,11 +22,15 @@ public class BitBoard {
     public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
     public static final long FILE_GH = 0x3F3F3F3F3F3F3F3FL;
 
-    public static final long empty = 0L;
+    public static final long empty = ~0L;
 
     public BitBoard() {
         board = whiteBishops | whiteKings | whiteKnights | whitePawns | whiteQueens | whiteRooks |
                 blackBishops | blackKings | blackKnights | blackPawns | blackQueens | blackRooks;
+    }
+
+    public BitBoard(long board){
+        this.board = board;
     }
     public long getWhitePawns() {
         return whitePawns;
@@ -34,6 +38,10 @@ public class BitBoard {
 
     public void setWhitePawns(long whitePawns) {
         this.whitePawns = whitePawns;
+    }
+
+    public void setBishopMove(long whiteBishop){
+        this.whiteBishops = whiteBishop;
     }
 
     public void printBoard() {
