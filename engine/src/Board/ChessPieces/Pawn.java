@@ -2,7 +2,6 @@ package engine.src.Board.ChessPieces;
 
 import engine.src.Board.Moves.Moves;
 
-//all the pawn moves wil be here
 public class Pawn extends Pieces{
 
     private long wPawn_forward(long move, long empty){
