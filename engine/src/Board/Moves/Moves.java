@@ -1,6 +1,7 @@
 package engine.src.Board.Moves;
 
 import engine.src.Board.BitBoard;
+import engine.src.Board.ChessPieces.Pawn;
 
 // Moves chess engine 
 // Queen, bishop, rook -> MOZI
@@ -8,9 +9,25 @@ import engine.src.Board.BitBoard;
 
 public  class Moves {
     private BitBoard bitBoard;
+    Pawn pawn = new Pawn();
 
     public Moves(BitBoard bitBoard){
         this.bitBoard = bitBoard;
+    }
+
+    public long PawnMove(long from , long to, long occ, long wPawn){
+        long possible_moves = pawn.white_possible_moves(from, BitBoard.empty);
+
+        System.out.println("moves" + possible_moves);
+        if((to & possible_moves) != 0){
+            wPawn &= ~ from;
+            wPawn |= to;
+            System.out.println("Worked");
+            return wPawn;
+        }
+        
+        System.out.println("Failed");
+        return wPawn;
     }
     
     private static boolean isValidMove(long position, long move) {

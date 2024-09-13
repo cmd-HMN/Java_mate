@@ -3,7 +3,7 @@ package engine.src.Board.ChessPieces;
 import engine.src.Board.Moves.Moves;
 
 //all the pawn moves wil be here
-public class Pawn{
+public class Pawn extends Pieces{
 
     private long wPawn_forward(long move, long empty){
         return Moves.north(move) & empty;
@@ -31,50 +31,28 @@ public class Pawn{
         return Moves.south_east(move) | Moves.south_west(move);
     }
 
-    public long white_get_possible_piece(long move, long empty){
-
-        long single_forward = wPawn_forward(move, empty);
-
-        long double_forward = wPawn_DForward(move, empty);
-
-        return single_forward | double_forward ;
-
+    
+    public long white_possible_attack(long move, long black_occ){
+        return wPawn_capture(move) & black_occ;
     }
 
-    public long black_get_possible_piece(long move, long empty){
-
-        long single_forward = bPawn_forward(move, empty);
-
-        long double_forward = bPawn_DForward(move, empty);
-
-        return single_forward | double_forward;
-
+    public long black_possible_attack(long move, long white_occ){
+        return bPawn_capture(move) & white_occ;
     }
 
-    public long white_possible_attack(long move){
-        return wPawn_capture(move);
+    public long white_possible_moves(long move, long empty){
+        return wPawn_forward(move, empty) | wPawn_DForward(move, empty);
     }
 
-    public long black_possible_attack(long move){
-        return bPawn_capture(move);
+    public long black_possible_moves(long from, long empty){
+        return bPawn_forward(from, empty) | bPawn_DForward(from, empty);
+    }
+    public long white_get_possible_pieces(long move, long empty, long black_occ){
+        return white_possible_attack(move, black_occ) | white_possible_moves(move, empty);
+    }
+    
+    public long black_get_possible_pieces(long move, long empty ,long white_occ){
+        return black_possible_attack(move, white_occ) | black_possible_moves(move, empty);
     }
 
-    public long movePawn(long from, long to, long empty, long whitePawns){
-
-        long possible_moves = white_get_possible_piece(from, empty);
-
-
-        if((possible_moves & to) != 0){
-            whitePawns &= ~from;
-            whitePawns |= to;
-            System.out.println(whitePawns);
-
-            System.out.println("Move successful");
-            return whitePawns;
-        }
-        else{
-            System.out.println("Move failed");
-            return -1;
-        }
-    }
 }
