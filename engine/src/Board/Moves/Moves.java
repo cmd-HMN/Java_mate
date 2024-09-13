@@ -52,24 +52,24 @@ public  class Moves {
     public static long east(long pos){
         return pos << 1 & BitBoard.FILE_A;
     }
-
+    
+    public static long north_east(long pos){
+        return (pos << 9) & BitBoard.FILE_A;
+    }
+    
+    public static long south_east(long pos){
+        return (pos >> 7) & BitBoard.FILE_A;
+    }
+    
     public static long west(long pos){
         return pos >> 1 & BitBoard.FILE_H;
     }
-
-    public static long north_east(long pos){
-        return pos << 9;
-    }
-
+    
     public static long north_west(long pos){
-        return pos << 7;
+        return (pos << 7) & BitBoard.FILE_H;
     }
-
-    public static long south_east(long pos){
-        return pos >> 7;
-    }
-
+    
     public static long south_west(long pos){
-        return pos >> 9;
+        return (pos >> 9) & BitBoard.FILE_H;
     }
 }
