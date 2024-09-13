@@ -30,28 +30,34 @@ public class Pawn extends Pieces{
         return Moves.south_east(move) | Moves.south_west(move);
     }
 
-    
-    public long white_possible_attack(long move, long black_occ){
-        return wPawn_capture(move) & black_occ;
-    }
-
-    public long black_possible_attack(long move, long white_occ){
-        return bPawn_capture(move) & white_occ;
-    }
-
+    @Override
     public long white_possible_moves(long move, long empty){
         return wPawn_forward(move, empty) | wPawn_DForward(move, empty);
     }
 
+    @Override
     public long black_possible_moves(long from, long empty){
         return bPawn_forward(from, empty) | bPawn_DForward(from, empty);
     }
-    public long white_get_possible_pieces(long move, long empty, long black_occ){
-        return white_possible_attack(move, black_occ) | white_possible_moves(move, empty);
+
+    @Override
+    public long white_possible_attack(long move, long empty, long black_occ){
+        return wPawn_capture(move) & black_occ & ~empty;
     }
-    
+
+    @Override
+    public long black_possible_attack(long move, long empty, long white_occ){
+        return bPawn_capture(move) & white_occ & ~empty;
+    }
+
+    @Override
+    public long white_get_possible_pieces(long move, long empty, long black_occ){
+        return white_possible_attack(move, empty, black_occ) | white_possible_moves(move, empty);
+    }
+
+    @Override
     public long black_get_possible_pieces(long move, long empty ,long white_occ){
-        return black_possible_attack(move, white_occ) | black_possible_moves(move, empty);
+        return black_possible_attack(move, empty, white_occ) | black_possible_moves(move, empty);
     }
 
 }

@@ -3,7 +3,7 @@ package engine.src.Board.ChessPieces;
 import engine.src.Board.BitBoard;
 import engine.src.Board.Bits.Bits;
 
-public class BishopMove {
+public class Bishop {
 
     // Method to generate all possible moves for a bishop at a given position
     public static long generateBishopMoves(long square, long occupied) {

@@ -36,12 +36,31 @@ public class BitBoard {
         return whitePawns;
     }
 
+    public long wGetKing(){
+        return whiteKings;
+    }
+
+    public void setKing(long bit){
+        this.whiteKings = bit;
+    }
+
+    public long getBlackPawns() {
+        return blackPawns;
+    }
     public void setWhitePawns(long whitePawns) {
         this.whitePawns = whitePawns;
     }
 
     public void setBishopMove(long whiteBishop){
         this.whiteBishops = whiteBishop;
+    }
+
+    public long wGetKnight(){
+        return whiteKnights;
+    }
+
+    public void setKnights(long knight){
+        this.whiteKnights = knight;
     }
 
     public void printBoard() {
