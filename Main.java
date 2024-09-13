@@ -11,9 +11,30 @@ public class Main extends BitBoard {
         long to = Bits.E3;
 
         long wPawn = board.getWhitePawns();
-        long white = move.PawnMove(from_move, to, to, wPawn);
+
+        wPawn = move.PawnMove(from_move, to, to, wPawn);
+
+        board.setWhitePawns(wPawn);
+
+        board.printBoard();
+
+        long from_ = Bits.E1;
+        long to_ = Bits.E2;
+        long wKing = board.wGetKing();
+        long king = move.KingMove(from_, to_, to, wKing);
         
-        board.setWhitePawns(white);
+        board.setKing(king);
+        board.printBoard();
+
+        long from___ = Bits.B1;
+        long to___ = Bits.C3;
+
+        long knight = board.wGetKnight();
+
+        knight = move.KnightMove(from___, to___, to___, knight);
+
+        board.setKnights(knight);
+
         board.printBoard();
     }
 }
