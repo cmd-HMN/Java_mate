@@ -8,6 +8,7 @@ import engine.src.Board.ChessPieces.Pawn;
 // Moves chess engine 
 // Queen, bishop, rook -> MOZI
 // king, pawns, knight -> HMN
+// adding the feature like checkmate and other -> HMN
 
 public  class Moves {
     private BitBoard bitBoard;
