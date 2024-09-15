@@ -1,7 +1,5 @@
 package src.engine.ChessPieces;
 
-import src.engine.BitBoard;
-import src.engine.Bits.Bits;
 
 public class Bishop {
 
