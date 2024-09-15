@@ -1,4 +1,6 @@
-package engine.src.Board;
+package src.engine;
+
+import src.engine.Type.PiecesType;
 
 public class BitBoard {
     private long board;
@@ -32,35 +34,154 @@ public class BitBoard {
     public BitBoard(long board){
         this.board = board;
     }
-    public long getWhitePawns() {
+
+    public long getWPawn(){
         return whitePawns;
     }
 
-    public long wGetKing(){
-        return whiteKings;
-    }
-
-    public void setKing(long bit){
-        this.whiteKings = bit;
-    }
-
-    public long getBlackPawns() {
-        return blackPawns;
-    }
-    public void setWhitePawns(long whitePawns) {
-        this.whitePawns = whitePawns;
-    }
-
-    public void setBishopMove(long whiteBishop){
-        this.whiteBishops = whiteBishop;
-    }
-
-    public long wGetKnight(){
+    public long getWKnight(){
         return whiteKnights;
     }
 
-    public void setKnights(long knight){
-        this.whiteKnights = knight;
+    public long getWBishop(){
+        return whiteBishops;
+    }
+
+    public long getWRook(){
+        return whiteRooks;
+    }
+
+    public long getWQueen(){
+        return whiteQueens;
+    }
+
+    public long getWKing(){
+        return whiteKings;
+    }
+
+    public long getBPawn(){
+        return blackPawns;
+    }
+
+    public long getBKnight(){
+        return blackKnights;
+    }
+
+    public long getBBishop(){
+        return blackBishops;
+    }
+
+    public long getBRook(){
+        return blackRooks;
+    }
+
+    public long getBQueen(){
+        return blackQueens;
+    }
+
+    public long getBKing(){
+        return blackKings;
+    }
+
+    public void setWPawn(long wPawn){
+        this.whitePawns = wPawn;
+    }
+
+    public void setWKnight(long wKnight){
+        this.whiteKnights = wKnight;
+    }
+
+    public void setWBishop(long wBishop){
+        this.whiteBishops = wBishop;
+    }
+    
+    public void setWRook(long wRook){
+        this.whiteRooks = wRook;
+    }
+
+    public void setWQueen(long wQueen){
+        this.whiteQueens = wQueen;
+    }
+
+    public void setWKing(long wKing){
+        this.whiteKings = wKing;
+    }
+
+    public void setBPawn(long bPawn){
+        this.blackPawns = bPawn;
+    }
+
+    public void setBKnight(long bKnight){
+        this.blackKnights = bKnight;
+    }
+
+    public void setBBishop(long bBishop){
+        this.blackBishops = bBishop;
+    }
+
+    public void setBRook(long bRook){
+        this.blackRooks = bRook;
+    }
+
+    public void setBQueen(long bQueen){
+        this.blackQueens = bQueen;
+    }
+
+    public void setBKing(long bKing){
+        this.blackKings = bKing;
+    }
+    
+    public PiecesType getPieceType(long pos) {
+    
+        if ((whitePawns & pos) != 0) return PiecesType.PAWN;
+        if ((whiteKnights & pos) != 0) return PiecesType.KNIGHT;
+        if ((whiteBishops & pos) != 0) return PiecesType.BISHOP;
+        if ((whiteRooks & pos) != 0) return PiecesType.ROOK;
+        if ((whiteQueens & pos) != 0) return PiecesType.QUEEN;
+        if ((whiteKings & pos) != 0) return PiecesType.KING;
+    
+        if ((blackPawns & pos) != 0) return PiecesType.PAWN;
+        if ((blackKnights & pos) != 0) return PiecesType.KNIGHT;
+        if ((blackBishops & pos) != 0) return PiecesType.BISHOP;
+        if ((blackRooks & pos) != 0) return PiecesType.ROOK;
+        if ((blackQueens & pos) != 0) return PiecesType.QUEEN;
+        if ((blackKings & pos) != 0) return PiecesType.KING;
+    
+        return PiecesType.NONE;
+    }
+
+    public long getOcc(long to){
+        return to & board;
+    }
+
+    public long getUnOCc(long to){
+        long board_full = 0xFFFFFFFFFFFFFFFFL;
+        long occ = getOcc(to);
+
+        return board_full & ~occ;
+    }
+    
+    public String  getPieceTypeAsString(long pos) {
+        PiecesType pieceType = getPieceType(pos);
+        
+        switch (pieceType) {
+            case PAWN:
+                return "Pawn";
+            case KNIGHT:
+                return "Knight";
+            case BISHOP:
+                return "Bishop";
+            case ROOK:
+                return "Rook";
+            case QUEEN:
+                return "Queen";
+            case KING:
+                return "King";
+            case NONE:
+                return "None";
+            default:
+                return "Unknown";
+        }
     }
 
     public void printBoard() {

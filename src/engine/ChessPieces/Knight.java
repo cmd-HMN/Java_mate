@@ -1,6 +1,6 @@
-package engine.src.Board.ChessPieces;
+package src.engine.ChessPieces;
 
-import engine.src.Board.Moves.Moves;
+import src.engine.Moves.Moves;
 
 public class Knight extends Pieces{
     

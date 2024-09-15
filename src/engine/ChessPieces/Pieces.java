@@ -1,4 +1,4 @@
-package engine.src.Board.ChessPieces;
+package src.engine.ChessPieces;
 
 //isn't implemented yet
 abstract class Pieces {
