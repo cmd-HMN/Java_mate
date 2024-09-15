@@ -134,20 +134,22 @@ public class BitBoard {
     public PiecesType getPieceType(long pos) {
     
         if ((whitePawns & pos) != 0) return PiecesType.PAWN;
-        if ((whiteKnights & pos) != 0) return PiecesType.KNIGHT;
-        if ((whiteBishops & pos) != 0) return PiecesType.BISHOP;
-        if ((whiteRooks & pos) != 0) return PiecesType.ROOK;
-        if ((whiteQueens & pos) != 0) return PiecesType.QUEEN;
-        if ((whiteKings & pos) != 0) return PiecesType.KING;
+        else if ((whiteKnights & pos) != 0) return PiecesType.KNIGHT;
+        else if ((whiteBishops & pos) != 0) return PiecesType.BISHOP;
+        else if ((whiteRooks & pos) != 0) return PiecesType.ROOK;
+        else if ((whiteQueens & pos) != 0) return PiecesType.QUEEN;
+        else if ((whiteKings & pos) != 0) return PiecesType.KING;
     
-        if ((blackPawns & pos) != 0) return PiecesType.PAWN;
-        if ((blackKnights & pos) != 0) return PiecesType.KNIGHT;
-        if ((blackBishops & pos) != 0) return PiecesType.BISHOP;
-        if ((blackRooks & pos) != 0) return PiecesType.ROOK;
-        if ((blackQueens & pos) != 0) return PiecesType.QUEEN;
-        if ((blackKings & pos) != 0) return PiecesType.KING;
-    
-        return PiecesType.NONE;
+        else if ((blackPawns & pos) != 0) return PiecesType.PAWN;
+        else if ((blackKnights & pos) != 0) return PiecesType.KNIGHT;
+        else if ((blackBishops & pos) != 0) return PiecesType.BISHOP;
+        else if ((blackRooks & pos) != 0) return PiecesType.ROOK;
+        else if ((blackQueens & pos) != 0) return PiecesType.QUEEN;
+        else if ((blackKings & pos) != 0) return PiecesType.KING;
+        
+        else{
+            return PiecesType.NONE;
+        }
     }
 
     public long getOcc(long to){

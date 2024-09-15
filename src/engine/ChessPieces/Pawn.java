@@ -9,7 +9,7 @@ public class Pawn extends Pieces{
     };
 
     private long bPawn_forward(long move, long empty){
-        return Moves.north(move) & empty;
+        return Moves.south(move) & empty;
     }
 
     private long wPawn_DForward(long move, long empty){
@@ -19,7 +19,7 @@ public class Pawn extends Pieces{
 
     private long bPawn_DForward(long move, long empty){
         long forward = bPawn_forward(move, empty);
-        return Moves.north(forward) & empty;
+        return Moves.south(forward) & empty;
     }
 
     private long wPawn_capture(long move){

@@ -10,7 +10,7 @@ import src.engine.Type.PlayerColor;
 // Moves chess engine 
 // Queen, bishop, rook -> MOZI
 // king, pawns, knight -> HMN
-// adding the feature like checkmate and other -> HMN
+// adding the feature castling, capture and promotion and checkmate -> HMN
 
 public class Moves {
     private BitBoard bitBoard;
@@ -22,27 +22,34 @@ public class Moves {
         this.bitBoard = bitBoard;
     }
 
-    public long makeMove(long from, long to) {
+    public long makeMove(long from, long to, int playerColor) {
+        if(playerColor == 0){
+            return normal(from, to, PlayerColor.WHITE);
+        }
+        else{
+            return normal(from, to, PlayerColor.BLACK);
+        }
+    }
+    
+    public long normal(long from, long to, PlayerColor playerColor){
         PiecesType piecesType = bitBoard.getPieceType(from);
+        System.out.println(piecesType);
         long unoccupied = bitBoard.getUnOCc(to);
-        System.out.println(bitBoard.getUnOCc(to));
-        long possible_move = getPossibleMoves(piecesType, from, unoccupied);
+        long possible_move = getPossibleMoves(piecesType, playerColor,from, unoccupied);
         printBoardWithMoves(possible_move);
-
-        long get_board = getBoard(piecesType, PlayerColor.WHITE);
+    
+        long get_board = getBoard(piecesType, playerColor);
         System.out.println(get_board);
         if ((to & possible_move) != 0) {
             get_board &= ~from;
             get_board |= to;
-            System.out.println("Worked");
-            setBoard(piecesType, PlayerColor.WHITE, get_board);
+            setBoard(piecesType, playerColor, get_board);
             return get_board;
         }
         System.out.println("Failed");
         return get_board;
 
     }
-
     public long PawnMove(long from, long to, long occ, long wPawn) {
         long possible_moves = pawn.white_possible_moves(from, BitBoard.empty);
 
@@ -205,19 +212,54 @@ public class Moves {
         }
     }
 
-    public long getPossibleMoves(PiecesType piecesType, long from, long empty) {
-        switch (piecesType) {
-            case KNIGHT:
-                return knight.white_possible_moves(from, empty);
+    public long getPossibleMoves(PiecesType piecesType, PlayerColor playerColor, long from, long empty) {
+        if(playerColor == PlayerColor.WHITE){
+            switch (piecesType) {
+                case KNIGHT:
+                    return knight.white_possible_moves(from, empty);
+    
+                case KING:
+                    return king.white_possible_moves(from, empty);
+    
+                case PAWN:
+                    return pawn.white_possible_moves(from, empty);
+    
+                // case BISHOP:
+                //     return bishop.white_possible_moves(from, empty);
+    
+                // case ROOK:
+                //     return rook.white_possible_moves(from, empty);
+    
+                // case QUEEN:
+                //     return queen.white_possible_moves(from, empty);
+    
+                default:
+                    return 0;
+            }
+        }
+        else{
+            switch (piecesType) {
+                case KING:
+                    return king.black_possible_moves(from, empty);
+                
+                case PAWN:
+                    return pawn.black_possible_moves(from, empty);
 
-            case KING:
-                return king.white_possible_moves(from, empty);
+                case KNIGHT:
+                    return knight.black_possible_moves(from, empty);
 
-            case PAWN:
-                return pawn.white_possible_moves(from, empty);
+                // case BISHOP:
+                //     return bishop.black_possible_moves(from, empty);
 
-            default:
-                return 0;
+                // case ROOK:
+                //     return rook.black_possible_moves(from, empty);
+
+                // case QUEEN:  
+                //     return queen.black_possible_moves(from, empty);
+            
+                default:
+                    return 0;
+            }
         }
     }
 
