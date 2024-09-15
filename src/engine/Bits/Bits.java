@@ -1,4 +1,4 @@
-package engine.src.Board.Bits;
+package src.engine.Bits;
 
 public class Bits {
 

@@ -1,7 +1,7 @@
-package engine.src.Board.ChessPieces;
+package src.engine.ChessPieces;
 
-import engine.src.Board.BitBoard;
-import engine.src.Board.Bits.Bits;
+import src.engine.BitBoard;
+import src.engine.Bits.Bits;
 
 public class Bishop {
 
@@ -40,18 +40,4 @@ public class Bishop {
         return bishopMoves;
     }
 
-    public static void main(String[] args) {
-        // Example usage
-        long square = Bits.C1; // Bishop is on d4 (square 27)
-        long occupied = 0x0000000000280000L; // Example of some pieces blocking the way
-
-        // Generate bishop moves
-        long moves = generateBishopMoves(square, occupied);
-        
-        BitBoard board = new BitBoard();
-
-        board.setBishopMove(moves);
-        // Print the bitboard as binary to visualize the moves
-        board.printBoard();
-    }
 }
