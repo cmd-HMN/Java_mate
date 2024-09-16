@@ -1,9 +1,12 @@
 package src.engine;
 
+
 import src.engine.Type.PiecesType;
+import src.engine.Type.PlayerColor;
 
 public class BitBoard {
     private long board;
+    private long[][] bitboards = new long[2][6];
 
     private long whitePawns = 0x000000000000FF00L;
     private long whiteKnights = 0x0000000000000042L;
@@ -24,113 +27,59 @@ public class BitBoard {
     public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
     public static final long FILE_GH = 0x3F3F3F3F3F3F3F3FL;
 
+    public static final long RANK_2 = 0x000000000000FF00L;
+    public static final long RANK_4 = 0x00000000FF000000L;
+    public static final long RANK_5 = 0x000000FF00000000L;
+    public static final long RANK_7 = 0x00FF000000000000L;
+
+
     public static final long empty = ~0L;
 
     public BitBoard() {
-        board = whiteBishops | whiteKings | whiteKnights | whitePawns | whiteQueens | whiteRooks |
-                blackBishops | blackKings | blackKnights | blackPawns | blackQueens | blackRooks;
+
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = whiteKings;   // White King
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.PAWN.ordinal()] = whitePawns;   // White Pawns
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KNIGHT.ordinal()] = whiteKnights; // White Knights
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = whiteBishops; // White Bishops
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = whiteRooks;   // White Rooks
+    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = whiteQueens;  // White Queen
+
+
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KING.ordinal()] = blackKings;   // Black King
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.PAWN.ordinal()] = blackPawns;   // Black Pawns
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KNIGHT.ordinal()] = blackKnights; // Black Knights
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = blackBishops; // Black Bishops
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = blackRooks;   // Black Rooks
+    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = blackQueens;  // Black Queen
+}
+
+    public long getBitBoard(PiecesType piecesType, PlayerColor playerColor) {
+        return bitboards[playerColor.ordinal()][piecesType.ordinal()];
     }
 
-    public BitBoard(long board){
-        this.board = board;
+    public void setBitBoard(PiecesType piecesType, PlayerColor playerColor, long board) {
+        if(playerColor == PlayerColor.WHITE){
+            switch (piecesType){
+                case PAWN:
+                whitePawns = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whitePawns; // Update bitboards array if needed
+                break;
+                case KNIGHT:
+                whiteKnights = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteKnights; // Update bitboards array if needed
+                break;
+            }
+        }
+        else{
+            switch (piecesType){
+                case PAWN:
+                blackPawns = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackPawns; // Update bitboards array if needed
+                break;
+            }
+        }
     }
 
-    public long getWPawn(){
-        return whitePawns;
-    }
-
-    public long getWKnight(){
-        return whiteKnights;
-    }
-
-    public long getWBishop(){
-        return whiteBishops;
-    }
-
-    public long getWRook(){
-        return whiteRooks;
-    }
-
-    public long getWQueen(){
-        return whiteQueens;
-    }
-
-    public long getWKing(){
-        return whiteKings;
-    }
-
-    public long getBPawn(){
-        return blackPawns;
-    }
-
-    public long getBKnight(){
-        return blackKnights;
-    }
-
-    public long getBBishop(){
-        return blackBishops;
-    }
-
-    public long getBRook(){
-        return blackRooks;
-    }
-
-    public long getBQueen(){
-        return blackQueens;
-    }
-
-    public long getBKing(){
-        return blackKings;
-    }
-
-    public void setWPawn(long wPawn){
-        this.whitePawns = wPawn;
-    }
-
-    public void setWKnight(long wKnight){
-        this.whiteKnights = wKnight;
-    }
-
-    public void setWBishop(long wBishop){
-        this.whiteBishops = wBishop;
-    }
-    
-    public void setWRook(long wRook){
-        this.whiteRooks = wRook;
-    }
-
-    public void setWQueen(long wQueen){
-        this.whiteQueens = wQueen;
-    }
-
-    public void setWKing(long wKing){
-        this.whiteKings = wKing;
-    }
-
-    public void setBPawn(long bPawn){
-        this.blackPawns = bPawn;
-    }
-
-    public void setBKnight(long bKnight){
-        this.blackKnights = bKnight;
-    }
-
-    public void setBBishop(long bBishop){
-        this.blackBishops = bBishop;
-    }
-
-    public void setBRook(long bRook){
-        this.blackRooks = bRook;
-    }
-
-    public void setBQueen(long bQueen){
-        this.blackQueens = bQueen;
-    }
-
-    public void setBKing(long bKing){
-        this.blackKings = bKing;
-    }
-    
     public PiecesType getPieceType(long pos) {
     
         if ((whitePawns & pos) != 0) return PiecesType.PAWN;
@@ -153,14 +102,34 @@ public class BitBoard {
     }
 
     public long getOcc(long to){
-        return to & board;
+        return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings|
+        blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
     }
 
-    public long getUnOCc(long to){
+    public long getUnOcc(long to){
         long board_full = 0xFFFFFFFFFFFFFFFFL;
         long occ = getOcc(to);
 
         return board_full & ~occ;
+    }
+
+    public long getOccSquaresByColor(PlayerColor playerColor){
+        switch (playerColor) {
+            case WHITE:
+                return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings; 
+            case BLACK:
+                return blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
+    
+            default:
+                return 0L;
+        }
+    }
+    public long getWOcc(){
+        return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings;
+    }
+
+    public long getBOcc(){
+        return blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
     }
     
     public String  getPieceTypeAsString(long pos) {
@@ -248,6 +217,40 @@ public class BitBoard {
                 } else {
                     System.out.print("0 ");
                 }
+            }
+            System.out.println();
+        }
+    }
+    public void printPossibleMoves(long possibleMoves) {
+        String binaryString = Long.toBinaryString(possibleMoves);
+        binaryString = String.format("%64s", binaryString).replace(' ', '0');
+        System.out.println("Possible Moves (Binary):");
+        System.out.println(binaryString);
+    }
+
+    public void printBoardWithMoves(long possibleMoves) {
+        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
+        long mask = 1L;
+        char[][] board = new char[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = '-';
+            }
+        }
+
+        for (int i = 0; i < 64; i++) {
+            if ((possibleMoves & mask) != 0) {
+                int row = 7 - (i / 8);
+                int col = i % 8;
+                board[row][col] = '*';
+            }
+            mask <<= 1;
+        }
+
+        System.out.println("Board with Possible Moves:");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
