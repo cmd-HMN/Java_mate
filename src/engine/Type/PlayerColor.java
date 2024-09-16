@@ -2,5 +2,9 @@ package src.engine.Type;
 
 public enum PlayerColor {
     BLACK,
-    WHITE
+    WHITE;
+
+    public PlayerColor getOppositeColor(){
+        return this == WHITE ? BLACK : WHITE;
+    }
 }
