@@ -1,33 +1,34 @@
 package src.engine.ChessPieces;
 
-import src.engine.Moves.Moves;
+import src.engine.BitBoard;
+import src.engine.Moves.ClassicMoves;
 
 public class Pawn extends Pieces{
 
     private long wPawn_forward(long move, long empty){
-        return Moves.north(move) & empty;
+        return ClassicMoves.north(move) & empty;
     };
 
     private long bPawn_forward(long move, long empty){
-        return Moves.south(move) & empty;
+        return ClassicMoves.south(move) & empty;
     }
 
     private long wPawn_DForward(long move, long empty){
         long forward = wPawn_forward(move, empty);
-        return Moves.north(forward) & empty;
+        return ClassicMoves.north(forward) & empty & ~BitBoard.RANK_2;
     }
 
     private long bPawn_DForward(long move, long empty){
         long forward = bPawn_forward(move, empty);
-        return Moves.south(forward) & empty;
+        return ClassicMoves.south(forward) & empty & ~BitBoard.RANK_7;
     }
 
     private long wPawn_capture(long move){
-        return Moves.north_east(move) | Moves.north_west(move);
+        return ClassicMoves.north_east(move) | ClassicMoves.north_west(move);
     }
 
     private long bPawn_capture(long move){
-        return Moves.south_east(move) | Moves.south_west(move);
+        return ClassicMoves.south_east(move) | ClassicMoves.south_west(move);
     }
 
     @Override
@@ -41,23 +42,23 @@ public class Pawn extends Pieces{
     }
 
     @Override
-    public long white_possible_attack(long move, long empty, long black_occ){
-        return wPawn_capture(move) & black_occ & ~empty;
+    public long white_possible_attack(long move, long black_occ){
+        return wPawn_capture(move) & black_occ;
     }
 
     @Override
-    public long black_possible_attack(long move, long empty, long white_occ){
-        return bPawn_capture(move) & white_occ & ~empty;
+    public long black_possible_attack(long move, long white_occ){
+        return bPawn_capture(move) & white_occ;
     }
 
     @Override
     public long white_get_possible_pieces(long move, long empty, long black_occ){
-        return white_possible_attack(move, empty, black_occ) | white_possible_moves(move, empty);
+        return white_possible_attack(move, black_occ) | white_possible_moves(move, empty);
     }
 
     @Override
     public long black_get_possible_pieces(long move, long empty ,long white_occ){
-        return black_possible_attack(move, empty, white_occ) | black_possible_moves(move, empty);
+        return black_possible_attack(move,white_occ) | black_possible_moves(move, empty);
     }
 
 }
