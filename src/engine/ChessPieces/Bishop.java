@@ -1,41 +1,41 @@
 package src.engine.ChessPieces;
 
+import src.engine.Moves.ClassicMoves;
 
-public class Bishop {
+public class Bishop extends Pieces {
 
-    // Method to generate all possible moves for a bishop at a given position
-    public static long generateBishopMoves(long square, long occupied) {
-        long bishopMoves = 0L; // Stores the moves bitboard
-        int[] directions = { 7, 9, -7, -9 }; // Diagonal directions
-
-        for (int direction : directions) {
-            long currentSquare = square; // Start from the given square
-            while (true) {
-                // Move to the next square in the given direction
-                currentSquare += direction;
-
-                // Break if out of bounds
-                if (currentSquare < 0 || currentSquare >= 64)
-                    break;
-
-                // Prevent wrapping around the edges of the board
-                if ((direction == 7 || direction == -9) && (currentSquare % 8 == 0))
-                    break;
-                if ((direction == -7 || direction == 9) && (currentSquare % 8 == 7))
-                    break;
-
-                // Calculate the square's bitboard representation
-                long currentBit = 1L << currentSquare;
-
-                // Add the current square to the moves bitboard
-                bishopMoves |= currentBit;
-
-                // Stop if a piece is blocking the way
-                if ((currentBit & occupied) != 0)
-                    break;
-            }
-        }
-        return bishopMoves;
+    public long possible_move(long move) {
+        return (ClassicMoves.bishop_north_east(move) | ClassicMoves.bishop_north_west(move) |
+                ClassicMoves.bishop_south_east(move) | ClassicMoves.bishop_south_west(move));
     }
 
+    @Override
+    public long white_possible_moves(long move, long empty) {
+        return possible_move(move) & empty;
+    }
+
+    @Override
+    public long black_possible_moves(long move, long empty) {
+        return possible_move(move) & empty;
+    }
+
+    @Override
+    public long white_possible_attack(long move, long black_occ) {
+        return possible_move(move) & black_occ;
+    }
+
+    @Override
+    public long black_possible_attack(long move, long white_occ) {
+        return possible_move(move) & white_occ;
+    }
+
+    @Override
+    public long white_get_possible_pieces(long move, long empty, long black_occ) {
+        return white_possible_attack(move, black_occ) | white_possible_moves(move, empty);
+    }
+
+    @Override
+    public long black_get_possible_pieces(long move, long empty, long white_occ) {
+        return black_possible_attack(move, white_occ) | black_possible_moves(move, empty);
+    }
 }

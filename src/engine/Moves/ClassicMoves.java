@@ -8,7 +8,7 @@ import src.engine.BitBoard;
 // adding the feature castling, capture and promotion and checkmate -> HMN
 
 public class ClassicMoves {
-    
+
     public static long south(long pos) {
         return pos >> 8;
     }
@@ -74,4 +74,20 @@ public class ClassicMoves {
         return (pos >> 10) & BitBoard.FILE_GH;
     }
 
+    // Bishop
+    public static long bishop_north_east(long pos) {
+        return (pos << 9) & BitBoard.FILE_A;
+    }
+
+    public static long bishop_north_west(long pos) {
+        return (pos << 7) & BitBoard.FILE_H;
+    }
+
+    public static long bishop_south_east(long pos) {
+        return (pos >> 7) & BitBoard.FILE_A;
+    }
+
+    public static long bishop_south_west(long pos) {
+        return (pos >> 9) & BitBoard.FILE_H;
+    }
 }
