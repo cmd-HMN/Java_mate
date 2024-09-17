@@ -90,4 +90,21 @@ public class ClassicMoves {
     public static long bishop_south_west(long pos) {
         return (pos >> 9) & BitBoard.FILE_H;
     }
+
+    // Rook moves
+    public static long rook_north(long pos) {
+        return pos << 8;
+    }
+
+    public static long rook_south(long pos) {
+        return pos >> 8;
+    }
+
+    public static long rook_east(long pos) {
+        return (pos << 1) & BitBoard.FILE_A;
+    }
+
+    public static long rook_west(long pos) {
+        return (pos >> 1) & BitBoard.FILE_H;
+    }
 }

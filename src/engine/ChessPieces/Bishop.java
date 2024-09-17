@@ -1,32 +1,81 @@
 package src.engine.ChessPieces;
 
 import src.engine.Moves.ClassicMoves;
+import src.engine.BitBoard;
 
 public class Bishop extends Pieces {
 
-    public long possible_move(long move) {
-        return (ClassicMoves.bishop_north_east(move) | ClassicMoves.bishop_north_west(move) |
-                ClassicMoves.bishop_south_east(move) | ClassicMoves.bishop_south_west(move));
+    private long generateBishopMoves(long position, long occupied) {
+        long bishopMoves = 0L;
+        long currentSquare = position;
+
+        // North-East direction
+        while (true) {
+            currentSquare = ClassicMoves.bishop_north_east(currentSquare);
+            if ((currentSquare & BitBoard.FILE_A) != 0)
+                break; // Edge of the board
+            bishopMoves |= currentSquare;
+            if ((currentSquare & occupied) != 0)
+                break; // Blocked by own piece
+        }
+
+        currentSquare = position; // Reset position
+
+        // North-West direction
+        while (true) {
+            currentSquare = ClassicMoves.bishop_north_west(currentSquare);
+            if ((currentSquare & BitBoard.FILE_H) != 0)
+                break; // Edge of the board
+            bishopMoves |= currentSquare;
+            if ((currentSquare & occupied) != 0)
+                break; // Blocked by own piece
+        }
+
+        currentSquare = position; // Reset position
+
+        // South-East direction
+        while (true) {
+            currentSquare = ClassicMoves.bishop_south_east(currentSquare);
+            if ((currentSquare & BitBoard.FILE_A) != 0)
+                break; // Edge of the board
+            bishopMoves |= currentSquare;
+            if ((currentSquare & occupied) != 0)
+                break; // Blocked by own piece
+        }
+
+        currentSquare = position; // Reset position
+
+        // South-West direction
+        while (true) {
+            currentSquare = ClassicMoves.bishop_south_west(currentSquare);
+            if ((currentSquare & BitBoard.FILE_H) != 0)
+                break; // Edge of the board
+            bishopMoves |= currentSquare;
+            if ((currentSquare & occupied) != 0)
+                break; // Blocked by own piece
+        }
+
+        return bishopMoves;
     }
 
     @Override
     public long white_possible_moves(long move, long empty) {
-        return possible_move(move) & empty;
+        return generateBishopMoves(move, empty);
     }
 
     @Override
     public long black_possible_moves(long move, long empty) {
-        return possible_move(move) & empty;
+        return generateBishopMoves(move, empty);
     }
 
     @Override
     public long white_possible_attack(long move, long black_occ) {
-        return possible_move(move) & black_occ;
+        return generateBishopMoves(move, black_occ);
     }
 
     @Override
     public long black_possible_attack(long move, long white_occ) {
-        return possible_move(move) & white_occ;
+        return generateBishopMoves(move, white_occ);
     }
 
     @Override
