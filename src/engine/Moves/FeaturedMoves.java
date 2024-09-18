@@ -1,9 +1,6 @@
 package src.engine.Moves;
 
 import src.engine.BitBoard;
-import src.engine.ChessPieces.King;
-import src.engine.ChessPieces.Knight;
-import src.engine.ChessPieces.Pawn;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
@@ -11,16 +8,16 @@ import src.engine.Type.PlayerColor;
 public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
-    Pawn pawn = new Pawn();
-    King king = new King();
-    Knight knight = new Knight();
 
+
+    // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
     }
 
 
+    // make the move (universal)
     public void makeMove(long from, long to, int playerColor, int moveType) {
         if(moveType == 0){     
             if (playerColor == 0) {
@@ -44,6 +41,8 @@ public class FeaturedMoves {
         }
     }
 
+
+    // make the normal move (only movement)
     public long normal(long from, long to, PlayerColor playerColor) {
 
         PiecesType piecesType = bitBoard.getPieceType(from);
@@ -66,6 +65,8 @@ public class FeaturedMoves {
         return get_board;
     }
 
+
+    // make the capture move
     public long capture(long from, long to, PlayerColor playerColor){
         System.out.println("Capture");
         PiecesType piecesType = bitBoard.getPieceType(from);
@@ -89,6 +90,8 @@ public class FeaturedMoves {
         System.out.println("Failed");
         return 0L;
     }
+
+    // for debugging
     public void printPossibleMoves(long possibleMoves) {
         String binaryString = Long.toBinaryString(possibleMoves);
         binaryString = String.format("%64s", binaryString).replace(' ', '0');
@@ -122,10 +125,12 @@ public class FeaturedMoves {
         }
     }
 
+    // get the board from the bitboard
     public long getBoard(PiecesType piecesType, PlayerColor playerColor) {
         return bitBoard.getBitBoard(piecesType, playerColor);
     }
 
+    // set the board in the bitboard
     public void setBoard(PiecesType piecesType, PlayerColor playerColor, long board) {
         bitBoard.setBitBoard(piecesType, playerColor, board);
     }   

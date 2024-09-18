@@ -7,6 +7,8 @@ import src.engine.BitBoard;
 // king, pawns, knight -> HMN
 // adding the feature castling, capture and promotion and checkmate -> HMN
 
+
+// all the fundamental and classics moves
 public class ClassicMoves {
 
     public static long south(long pos) {

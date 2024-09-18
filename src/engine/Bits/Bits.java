@@ -5,8 +5,11 @@ import java.util.Map;
 
 public class Bits {
 
+    // 64
     public static int int_64 = 64;
 
+
+    // all the position of chess board in bits
     public static final long A1 = 1L << 0;
     public static final long B1 = 1L << 1;
     public static final long C1 = 1L << 2;
@@ -80,10 +83,13 @@ public class Bits {
     public static final long H8 = 1L << 63;
 
 
+
     public static final long[] SQUARES = new long[int_64];
 
+    // hashing to all the bits
     private static final Map<String, Long> bits_sequence = new HashMap<>();
 
+    // hashing to all the bits
     static{
         bits_sequence.put("a1", A1);
         bits_sequence.put("b1", B1);
@@ -157,6 +163,8 @@ public class Bits {
         bits_sequence.put("g8", G8);
         bits_sequence.put("h8", H8);
     }
+
+    // help to get the bits from string 
     public long getBits(String str){
         return bits_sequence.getOrDefault(str, 0L);
     }
