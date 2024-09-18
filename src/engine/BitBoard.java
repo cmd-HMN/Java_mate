@@ -5,9 +5,15 @@ import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
 public class BitBoard {
+
+    // temp board
     private long board;
+
+    // array used to handle the board
     private long[][] bitboards = new long[2][6];
 
+
+    // bitboards 
     private long whitePawns = 0x000000000000FF00L;
     private long whiteKnights = 0x0000000000000042L;
     private long whiteBishops = 0x0000000000000024L;
@@ -22,6 +28,8 @@ public class BitBoard {
     private long blackQueens = 0x0800000000000000L;
     private long blackKings = 0x1000000000000000L;
 
+
+    // file and rank masks
     public static final long FILE_A = 0xFEFEFEFEFEFEFEFEL;
     public static final long FILE_H = 0x7F7F7F7F7F7F7F7FL;
     public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
@@ -35,6 +43,7 @@ public class BitBoard {
 
     public static final long empty = ~0L;
 
+    // used to initialize the bitboard as it is called
     public BitBoard() {
 
     bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = whiteKings;   // White King
@@ -53,10 +62,12 @@ public class BitBoard {
     bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = blackQueens;  // Black Queen
 }
 
+    // get the respective bitboard
     public long getBitBoard(PiecesType piecesType, PlayerColor playerColor) {
         return bitboards[playerColor.ordinal()][piecesType.ordinal()];
     }
 
+    // set the respective bitboard
     public void setBitBoard(PiecesType piecesType, PlayerColor playerColor, long board) {
         if(playerColor == PlayerColor.WHITE){
             switch (piecesType){
@@ -68,6 +79,10 @@ public class BitBoard {
                 whiteKnights = board;
                 bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteKnights; // Update bitboards array if needed
                 break;
+                case BISHOP:
+                whiteBishops = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteBishops; // Update bitboards array if needed
+                break;
             }
         }
         else{
@@ -76,10 +91,19 @@ public class BitBoard {
                 blackPawns = board;
                 bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackPawns; // Update bitboards array if needed
                 break;
+                case KNIGHT:
+                blackKnights = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackKnights; // Update bitboards array if needed
+                break;
+                case BISHOP:
+                blackBishops = board;
+                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackBishops; // Update bitboards array if needed
+                break;
             }
         }
     }
 
+    // get the piece type using pos
     public PiecesType getPieceType(long pos) {
     
         if ((whitePawns & pos) != 0) return PiecesType.PAWN;
@@ -101,11 +125,13 @@ public class BitBoard {
         }
     }
 
+    // get all the occ squares
     public long getOcc(long to){
         return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings|
         blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
     }
 
+    // get all the unoccupied squares
     public long getUnOcc(long to){
         long board_full = 0xFFFFFFFFFFFFFFFFL;
         long occ = getOcc(to);
@@ -113,6 +139,7 @@ public class BitBoard {
         return board_full & ~occ;
     }
 
+    // get all the occ squares by color
     public long getOccSquaresByColor(PlayerColor playerColor){
         switch (playerColor) {
             case WHITE:
@@ -124,14 +151,8 @@ public class BitBoard {
                 return 0L;
         }
     }
-    public long getWOcc(){
-        return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings;
-    }
-
-    public long getBOcc(){
-        return blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
-    }
     
+    // get the piece type as string (haven't used)
     public String  getPieceTypeAsString(long pos) {
         PiecesType pieceType = getPieceType(pos);
         
@@ -155,6 +176,7 @@ public class BitBoard {
         }
     }
 
+    // print the board 
     public void printBoard() {
 
         StringBuilder boardStringRepresentation = new StringBuilder();
@@ -197,30 +219,6 @@ public class BitBoard {
         System.out.println(boardStringRepresentation.toString());
     }
 
-    public String printWhitePawns() {
-        return toBinaryString(whitePawns);
-    }
-
-    private String toBinaryString(long value) {
-        String binaryString = Long.toBinaryString(value);
-        return String.format("%64s", binaryString).replace(' ', '0');
-    }
-
-    public void sample() {
-
-        for (int i = 7; i >= 0; i--) {
-            for (int j = 0; j < 8; j++) {
-                int pos = i * 8 + j;
-
-                if ((board & (1L << pos)) != 0) {
-                    System.out.print("1 ");
-                } else {
-                    System.out.print("0 ");
-                }
-            }
-            System.out.println();
-        }
-    }
     public void printPossibleMoves(long possibleMoves) {
         String binaryString = Long.toBinaryString(possibleMoves);
         binaryString = String.format("%64s", binaryString).replace(' ', '0');
@@ -228,6 +226,7 @@ public class BitBoard {
         System.out.println(binaryString);
     }
 
+    // for debugging 
     public void printBoardWithMoves(long possibleMoves) {
         long fullBoard = 0xFFFFFFFFFFFFFFFFL;
         long mask = 1L;
