@@ -56,7 +56,11 @@ public class FeaturedMoves {
 
     // make the normal move (only movement)
     public long normal(long from, long to, PlayerColor playerColor) {
-
+        if(valid.isDoubleSquare(from, to, playerColor)){
+            bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
+        }
+        printBoardWithMoves(bitBoard.enPassantT);
+        
         PiecesType piecesType = bitBoard.getPieceType(from);
 
         System.out.println(piecesType);
@@ -64,7 +68,6 @@ public class FeaturedMoves {
         long unoccupied = bitBoard.getUnOcc(to);
         printBoardWithMoves(unoccupied);
         long possible_move = mainInterface.getPossibleMoves(piecesType, playerColor, from, unoccupied);
-        System.out.println(possible_move);
 
         long get_board = getBoard(piecesType, playerColor);
         if ((to & possible_move) != 0) {
@@ -107,17 +110,8 @@ public class FeaturedMoves {
     // en Passant(under development)
     public long enPassant(long from, long to, PlayerColor playerColor){
         System.out.println("En Passant");
-        if(valid.isDoubleSquare(from, to, playerColor)){
-            bitBoard.enPassantT = playerColor == PlayerColor.WHITE ? (to >>> 8) : (to << 8);
-            System.out.println("valid");
-        }else{
-            System.out.println("not valid");
-            return 0L;
-        }
-
 
         if(to == bitBoard.enPassantT){
-            System.out.println("En Passant");
             long get_board = getBoard(PiecesType.PAWN, playerColor);
             get_board &= ~from;
             get_board |= to;

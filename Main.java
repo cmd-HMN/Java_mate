@@ -13,7 +13,7 @@ public class Main extends BitBoard {
         featuredMoves.makeMove(Bits.E2, Bits.E4, 0, 0);
         featuredMoves.makeMove(Bits.E4, Bits.E5, 0, 0);
         featuredMoves.makeMove(Bits.D7, Bits.D5, 1, 0);
-        featuredMoves.makeMove(Bits.F1, Bits.C4, 0, 0);
+        featuredMoves.makeMove(Bits.E5, Bits.D6, 0, 2);
     }
     
 }
