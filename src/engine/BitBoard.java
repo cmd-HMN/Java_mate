@@ -12,6 +12,7 @@ public class BitBoard {
     // array used to handle the board
     private long[][] bitboards = new long[2][6];
 
+    public long enPassantT = 0L;
 
     // bitboards 
     private long whitePawns = 0x000000000000FF00L;
