@@ -129,6 +129,11 @@ public class FeaturedMoves {
         return 0L;
     }
 
+    //promotion
+    public long promotion(long from, long to, PlayerColor playerColor){
+        return 0L;
+    }
+
     // for debugging
     public void printPossibleMoves(long possibleMoves) {
         String binaryString = Long.toBinaryString(possibleMoves);
