@@ -12,7 +12,7 @@ import src.engine.BitBoard;
 public class ClassicMoves {
 
     public static long south(long pos) {
-        return pos >> 8;
+        return pos >>> 8;
     }
 
     public static long north(long pos) {
@@ -32,7 +32,7 @@ public class ClassicMoves {
     }
 
     public static long west(long pos) {
-        return pos >> 1 & BitBoard.FILE_H;
+        return pos >>> 1 & BitBoard.FILE_H;
     }
 
     public static long north_west(long pos) {
@@ -76,20 +76,141 @@ public class ClassicMoves {
         return (pos >> 10) & BitBoard.FILE_GH;
     }
 
-    // Bishop
-    public static long bishop_north_east(long pos) {
-        return (pos << 9) & BitBoard.FILE_A;
+    public static long bishop_move(long pos, long unOcc, boolean attack) {
+
+        long bishopMoves = 0L;
+        long currentSquare = pos;
+
+        // North-East direction
+        while ((north_west(currentSquare) & unOcc) != 0) {
+            bishopMoves |= north_west(currentSquare);
+            currentSquare = north_west(currentSquare);
+        }
+
+        // North-West direction
+        if(attack){
+            bishopMoves |= north_west(currentSquare);
+        }
+
+        // South-East direction
+        currentSquare = pos;
+        while ((south_west(currentSquare) & unOcc) != 0) {
+            bishopMoves |= south_west(currentSquare);
+            currentSquare = south_west(currentSquare);
+        }
+
+        if(attack){
+            bishopMoves |= south_west(currentSquare);
+        }
+
+        // // South-West direction
+        currentSquare = pos;
+        while ((south_east(currentSquare) & unOcc) != 0) {
+            bishopMoves |= south_east(currentSquare);
+            currentSquare = south_east(currentSquare);
+        }
+
+        if(attack){
+            bishopMoves |= south_east(currentSquare);
+        }
+
+        // // North-West direction
+        currentSquare = pos;
+        while ((north_east(currentSquare) & unOcc) != 0) {
+            bishopMoves |= north_east(currentSquare);
+            currentSquare = north_east(currentSquare);
+        }
+
+        if(attack){
+            bishopMoves |= north_east(currentSquare);
+        }
+        return bishopMoves;
     }
 
-    public static long bishop_north_west(long pos) {
-        return (pos << 7) & BitBoard.FILE_H;
+    public static long rook_move(long pos, long unOcc, boolean attack) {
+        long rookMoves = 0L;
+    
+        // North direction
+        long currentSquare = pos;
+        while ((north(currentSquare) & unOcc) != 0) {
+            rookMoves |= north(currentSquare);
+            currentSquare = north(currentSquare);
+        }
+        if (attack) {
+            rookMoves |= north(currentSquare);
+        }
+    
+        // South direction
+        currentSquare = pos;
+        while ((south(currentSquare) & unOcc) != 0) {
+            rookMoves |= south(currentSquare);
+            currentSquare = south(currentSquare);
+        }
+        if (attack) {
+            rookMoves |= south(currentSquare);
+        }
+    
+        // East direction
+        currentSquare = pos;
+        while ((east(currentSquare) & unOcc) != 0) {
+            rookMoves |= east(currentSquare);
+            currentSquare = east(currentSquare);
+        }
+        if (attack) {
+            rookMoves |= east(currentSquare);
+        }
+    
+        // West direction
+        currentSquare = pos;
+        while ((west(currentSquare) & unOcc) != 0) {
+            rookMoves |= west(currentSquare);
+            currentSquare = west(currentSquare);
+        }
+        if (attack) {
+            rookMoves |= west(currentSquare);
+        }
+    
+        return rookMoves;
     }
 
-    public static long bishop_south_east(long pos) {
-        return (pos >> 7) & BitBoard.FILE_A;
+    
+
+    public void printPossibleMoves(long possibleMoves) {
+        String binaryString = Long.toBinaryString(possibleMoves);
+        binaryString = String.format("%64s", binaryString).replace(' ', '0');
+        System.out.println("Possible Moves (Binary):");
+        System.out.println(binaryString);
     }
 
-    public static long bishop_south_west(long pos) {
-        return (pos >> 9) & BitBoard.FILE_H;
+    // for debugging
+    public static void printBoardWithMoves(long possibleMoves) {
+        if(possibleMoves == 0L){
+            System.out.println("No possible moves");
+        }
+        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
+        long mask = 1L;
+        char[][] board = new char[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = '-';
+            }
+        }
+
+        for (int i = 0; i < 64; i++) {
+            if ((possibleMoves & mask) != 0) {
+                int row = 7 - (i / 8);
+                int col = i % 8;
+                board[row][col] = '*';
+            }
+            mask <<= 1;
+        }
+
+        System.out.println("Board with Possible Moves:");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

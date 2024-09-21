@@ -79,6 +79,8 @@ public class FeaturedMoves {
         long possible_move = mainInterface.getPossibleMoves(piecesType, playerColor, from, unoccupied);
 
         long get_board = getBoard(piecesType, playerColor);
+
+        System.out.println((to & possible_move) != 0);
         if ((to & possible_move) != 0) {
             get_board &= ~from;
             get_board |= to;
@@ -95,9 +97,15 @@ public class FeaturedMoves {
         System.out.println("Capture");
         PiecesType piecesType = bitBoard.getPieceType(from);
 
+
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
-        long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_);
+
+        long unoccupied = bitBoard.getUnOcc(to);
+
+
+        long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
+        printBoardWithMoves(possible_attack);
         
         long get_board = getBoard(piecesType, playerColor);
         if ((to & possible_attack) != 0) {
@@ -144,8 +152,8 @@ public class FeaturedMoves {
         bitBoard.printBoard();
         
         boolean checkValidity = playerColor == PlayerColor.WHITE 
-                            ? (to & BitBoard.RANK_1) != 0
-                            : (to & BitBoard.RANK_8) != 0;
+                            ? (to & BitBoard.RANK_8) != 0
+                            : (to & BitBoard.RANK_1) != 0;
 
         System.out.println(checkValidity);
         if(checkValidity){
