@@ -1,5 +1,6 @@
 package src.engine;
 
+import java.util.Scanner;
 
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
@@ -14,7 +15,7 @@ public class BitBoard {
 
     public long enPassantT = 0L;
 
-    // bitboards 
+    // bitboards
     private long whitePawns = 0x000000000000FF00L;
     private long whiteKnights = 0x0000000000000042L;
     private long whiteBishops = 0x0000000000000024L;
@@ -29,39 +30,39 @@ public class BitBoard {
     private long blackQueens = 0x0800000000000000L;
     private long blackKings = 0x1000000000000000L;
 
-
     // file and rank masks
     public static final long FILE_A = 0xFEFEFEFEFEFEFEFEL;
     public static final long FILE_H = 0x7F7F7F7F7F7F7F7FL;
     public static final long FILE_AB = 0xFCFCFCFCFCFCFCFCL;
     public static final long FILE_GH = 0x3F3F3F3F3F3F3F3FL;
 
+    // some rank used in the development
+    public static final long RANK_1 = 0xFF00000000000000L;
     public static final long RANK_2 = 0x000000000000FF00L;
     public static final long RANK_4 = 0x00000000FF000000L;
     public static final long RANK_5 = 0x000000FF00000000L;
     public static final long RANK_7 = 0x00FF000000000000L;
-
+    public static final long RANK_8 = 0x00000000000000FFL;
 
     public static final long empty = ~0L;
 
     // used to initialize the bitboard as it is called
     public BitBoard() {
 
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = whiteKings;   // White King
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.PAWN.ordinal()] = whitePawns;   // White Pawns
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KNIGHT.ordinal()] = whiteKnights; // White Knights
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = whiteBishops; // White Bishops
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = whiteRooks;   // White Rooks
-    bitboards[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = whiteQueens;  // White Queen
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = whiteKings; // White King
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.PAWN.ordinal()] = whitePawns; // White Pawns
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KNIGHT.ordinal()] = whiteKnights; // White Knights
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = whiteBishops; // White Bishops
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = whiteRooks; // White Rooks
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = whiteQueens; // White Queen
 
-
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KING.ordinal()] = blackKings;   // Black King
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.PAWN.ordinal()] = blackPawns;   // Black Pawns
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KNIGHT.ordinal()] = blackKnights; // Black Knights
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = blackBishops; // Black Bishops
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = blackRooks;   // Black Rooks
-    bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = blackQueens;  // Black Queen
-}
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KING.ordinal()] = blackKings; // Black King
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.PAWN.ordinal()] = blackPawns; // Black Pawns
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KNIGHT.ordinal()] = blackKnights; // Black Knights
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = blackBishops; // Black Bishops
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = blackRooks; // Black Rooks
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = blackQueens; // Black Queen
+    }
 
     // get the respective bitboard
     public long getBitBoard(PiecesType piecesType, PlayerColor playerColor) {
@@ -70,70 +71,121 @@ public class BitBoard {
 
     // set the respective bitboard
     public void setBitBoard(PiecesType piecesType, PlayerColor playerColor, long board) {
-        if(playerColor == PlayerColor.WHITE){
-            switch (piecesType){
+        if (playerColor == PlayerColor.WHITE) {
+            switch (piecesType) {
                 case PAWN:
-                whitePawns = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whitePawns; // Update bitboards array if needed
-                break;
+                    whitePawns = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whitePawns; // Update bitboards array if
+                                                                                         // needed
+                    break;
                 case KNIGHT:
-                whiteKnights = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteKnights; // Update bitboards array if needed
-                break;
+                    whiteKnights = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteKnights; // Update bitboards array if
+                                                                                           // needed
+                    break;
                 case BISHOP:
-                whiteBishops = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteBishops; // Update bitboards array if needed
-                break;
+                    whiteBishops = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteBishops; // Update bitboards array if
+                                                                                           // needed
+                    break;
+                case ROOK:
+                    whiteRooks = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteRooks; // Update bitboards array if
+                                                                                         // needed
+                    break;
+                case QUEEN:
+                    whiteQueens = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteQueens; // Update bitboards array if
+                                                                                          // needed
+                    break;
+                case KING:
+                    whiteKings = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = whiteKings; // Update bitboards array if
+                                                                                         // needed
+                    break;
+                default:
+                    break;
             }
-        }
-        else{
-            switch (piecesType){
+        } else {
+            switch (piecesType) {
                 case PAWN:
-                blackPawns = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackPawns; // Update bitboards array if needed
-                break;
+                    blackPawns = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackPawns; // Update bitboards array if
+                                                                                         // needed
+                    break;
                 case KNIGHT:
-                blackKnights = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackKnights; // Update bitboards array if needed
-                break;
+                    blackKnights = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackKnights; // Update bitboards array if
+                                                                                           // needed
+                    break;
                 case BISHOP:
-                blackBishops = board;
-                bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackBishops; // Update bitboards array if needed
-                break;
+                    blackBishops = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackBishops; // Update bitboards array if
+                                                                                           // needed
+                    break;
+                case ROOK:
+                    blackRooks = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackRooks; // Update bitboards array if
+                                                                                         // needed
+                    break;
+                case QUEEN:
+                    blackQueens = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackQueens; // Update bitboards array if
+                                                                                          // needed
+                    break;
+                case KING:
+                    blackKings = board;
+                    bitboards[playerColor.ordinal()][piecesType.ordinal()] = blackKings; // Update bitboards array if
+                                                                                         // needed
+                    break;
+                default:
+                    break;
             }
         }
     }
 
     // get the piece type using pos
     public PiecesType getPieceType(long pos) {
-    
-        if ((whitePawns & pos) != 0) return PiecesType.PAWN;
-        else if ((whiteKnights & pos) != 0) return PiecesType.KNIGHT;
-        else if ((whiteBishops & pos) != 0) return PiecesType.BISHOP;
-        else if ((whiteRooks & pos) != 0) return PiecesType.ROOK;
-        else if ((whiteQueens & pos) != 0) return PiecesType.QUEEN;
-        else if ((whiteKings & pos) != 0) return PiecesType.KING;
-    
-        else if ((blackPawns & pos) != 0) return PiecesType.PAWN;
-        else if ((blackKnights & pos) != 0) return PiecesType.KNIGHT;
-        else if ((blackBishops & pos) != 0) return PiecesType.BISHOP;
-        else if ((blackRooks & pos) != 0) return PiecesType.ROOK;
-        else if ((blackQueens & pos) != 0) return PiecesType.QUEEN;
-        else if ((blackKings & pos) != 0) return PiecesType.KING;
-        
-        else{
+
+        if ((whitePawns & pos) != 0)
+            return PiecesType.PAWN;
+        else if ((whiteKnights & pos) != 0)
+            return PiecesType.KNIGHT;
+        else if ((whiteBishops & pos) != 0)
+            return PiecesType.BISHOP;
+        else if ((whiteRooks & pos) != 0)
+            return PiecesType.ROOK;
+        else if ((whiteQueens & pos) != 0)
+            return PiecesType.QUEEN;
+        else if ((whiteKings & pos) != 0)
+            return PiecesType.KING;
+
+        else if ((blackPawns & pos) != 0)
+            return PiecesType.PAWN;
+        else if ((blackKnights & pos) != 0)
+            return PiecesType.KNIGHT;
+        else if ((blackBishops & pos) != 0)
+            return PiecesType.BISHOP;
+        else if ((blackRooks & pos) != 0)
+            return PiecesType.ROOK;
+        else if ((blackQueens & pos) != 0)
+            return PiecesType.QUEEN;
+        else if ((blackKings & pos) != 0)
+            return PiecesType.KING;
+
+        else {
             return PiecesType.NONE;
         }
     }
 
     // get all the occ squares
-    public long getOcc(long to){
-        return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings|
-        blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
+    public long getOcc(long to) {
+        return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings |
+                blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
     }
 
     // get all the unoccupied squares
-    public long getUnOcc(long to){
+    public long getUnOcc(long to) {
         long board_full = 0xFFFFFFFFFFFFFFFFL;
         long occ = getOcc(to);
 
@@ -141,22 +193,22 @@ public class BitBoard {
     }
 
     // get all the occ squares by color
-    public long getOccSquaresByColor(PlayerColor playerColor){
+    public long getOccSquaresByColor(PlayerColor playerColor) {
         switch (playerColor) {
             case WHITE:
-                return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings; 
+                return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings;
             case BLACK:
                 return blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
-    
+
             default:
                 return 0L;
         }
     }
-    
+
     // get the piece type as string (haven't used)
-    public String  getPieceTypeAsString(long pos) {
+    public String getPieceTypeAsString(long pos) {
         PiecesType pieceType = getPieceType(pos);
-        
+
         switch (pieceType) {
             case PAWN:
                 return "Pawn";
@@ -177,7 +229,29 @@ public class BitBoard {
         }
     }
 
-    // print the board 
+    // get the pieceType using the string given by the use
+    public PiecesType getPieceTypeFromString() {
+        Scanner scanner = new Scanner(System.in);
+        String pieceType = scanner.nextLine();
+        scanner.close();
+
+        switch (pieceType) {
+            case "Pawn":
+                return PiecesType.PAWN;
+            case "Knight":
+                return PiecesType.KNIGHT;
+            case "Bishop":
+                return PiecesType.BISHOP;
+            case "Rook":
+                return PiecesType.ROOK;
+            case "Queen":
+                return PiecesType.QUEEN;
+            default:
+                return PiecesType.NONE;
+        }
+    }
+
+    // print the board
     public void printBoard() {
 
         StringBuilder boardStringRepresentation = new StringBuilder();
@@ -227,7 +301,7 @@ public class BitBoard {
         System.out.println(binaryString);
     }
 
-    // for debugging 
+    // for debugging
     public void printBoardWithMoves(long possibleMoves) {
         long fullBoard = 0xFFFFFFFFFFFFFFFFL;
         long mask = 1L;
