@@ -203,6 +203,7 @@ public class BitBoard {
 
     // get all the occ squares by color
     public long getOccSquaresByColor(PlayerColor playerColor) {
+        System.out.println("Working");
         switch (playerColor) {
             case WHITE:
                 return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings;

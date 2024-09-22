@@ -14,4 +14,8 @@ public class Valid {
             return (from & 0x00FF000000000000L) != 0 && (to & 0x000000FF00000000L) != 0;
         }
     }
+
+    public boolean kingInCheck(){
+        return false;
+    }
 }
