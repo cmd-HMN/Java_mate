@@ -10,6 +10,7 @@ public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
     Valid valid = new Valid();
+    AttackBoard attackBoard = new AttackBoard();
 
 
     // initialize the bitboard
@@ -70,12 +71,15 @@ public class FeaturedMoves {
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
         
-        PiecesType piecesType = bitBoard.getPieceType(from);
 
+        attackBoard.getAttackBoard(playerColor.getOppositeColor());
+
+        PiecesType piecesType = bitBoard.getPieceType(from);
+        
         System.out.println(piecesType);
         
         long unoccupied = bitBoard.getUnOcc(to);
-
+        
         long possible_move = mainInterface.getPossibleMoves(piecesType, playerColor, from, unoccupied);
 
         long get_board = getBoard(piecesType, playerColor);
@@ -102,6 +106,7 @@ public class FeaturedMoves {
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
 
         long unoccupied = bitBoard.getUnOcc(to);
+        printBoardWithMoves(unoccupied);
 
 
         long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
@@ -117,6 +122,11 @@ public class FeaturedMoves {
             return get_board;
         }
         System.out.println("Failed");
+        return 0L;
+    }
+
+    public long castle(long from, long to, PlayerColor playerColor){    
+        System.out.println("Castling");
         return 0L;
     }
 
