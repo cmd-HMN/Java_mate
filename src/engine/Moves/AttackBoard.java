@@ -7,6 +7,7 @@ import src.engine.ChessPieces.Knight;
 import src.engine.ChessPieces.Pawn;
 import src.engine.ChessPieces.Queen;
 import src.engine.ChessPieces.Rook;
+import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
 public class AttackBoard {
@@ -21,12 +22,83 @@ public class AttackBoard {
 
     public long getAttackBoard(PlayerColor playerColor) {
 
-        System.out.println("entered");
+        long attack_board = 0L;
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
-        System.out.println("entered");
-        printBoardWithMoves(get_board);
 
-        return get_board;
+        for(long i = 0; i < 64; i++){
+            if((get_board & (1L << i)) != 0){
+                PiecesType piecesType = bitBoard.getPieceType(i);
+                long unOcc = bitBoard.getUnOcc(i);
+                long get_opponent_board = bitBoard.getBitBoard(piecesType, playerColor);
+            
+                if(playerColor == PlayerColor.WHITE){
+
+                    switch(piecesType){
+                        
+                        case KING:
+                            attack_board |= king.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        case QUEEN:
+                            attack_board |= queen.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        case KNIGHT:
+                            attack_board |= knight.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        case BISHOP:
+                            attack_board |= bishop.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        case ROOK:
+                            attack_board |= rook.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        case PAWN:
+                            attack_board |= pawn.white_possible_attack(i, get_opponent_board, unOcc);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }else{
+                switch(piecesType){
+
+                    case KING:
+                        attack_board |= king.black_possible_attack(i, get_opponent_board, unOcc);
+                        break;
+
+                    case QUEEN:
+                        attack_board |= queen.black_possible_attack(i, get_opponent_board, unOcc);
+                        break;
+
+                    case KNIGHT:
+                        attack_board |= knight.black_possible_attack(i, get_opponent_board, unOcc);
+                        break;
+
+                    case BISHOP:
+                        attack_board |= bishop.black_possible_attack(i, get_opponent_board, unOcc);
+                        break;
+
+                    case ROOK:
+                        attack_board |= rook.black_possible_attack(i, get_opponent_board, unOcc);
+                        break;
+
+                    case PAWN:
+                        attack_board |= pawn.black_possible_attack(i, get_opponent_board, unOcc);
+                        printBoardWithMoves(pawn.black_possible_attack((i << 1L), get_opponent_board, unOcc));
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            }
+        }
+        printBoardWithMoves(attack_board);
+        return attack_board;
 
     }
 
