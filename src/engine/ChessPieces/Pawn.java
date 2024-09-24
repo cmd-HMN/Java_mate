@@ -48,7 +48,8 @@ public class Pawn extends Pieces{
 
     @Override
     public long black_possible_attack(long move, long white_occ, long empty){
-        return bPawn_capture(move) & white_occ;
+        return bPawn_capture(move) & ~white_occ;
+
     }
 
     @Override

@@ -44,17 +44,6 @@ public class BitBoard {
     public static final long RANK_7 = 0x00FF000000000000L;
     public static final long RANK_8 = 0xFF00000000000000L;
 
-
-    public static final long DIAGONAL_MASKS[] = //from top left to bottom right
-          { 0x1L, 0x102L, 0x10204L, 0x1020408L, 0x102040810L, 0x10204081020L, 0x1020408102040L, 0x102040810204080L,
-                  0x204081020408000L, 0x408102040800000L, 0x810204080000000L, 0x1020408000000000L,
-                  0x2040800000000000L, 0x4080000000000000L, 0x8000000000000000L };
-                  
-  public static final long ANTIDIAGONAL_MASKS[] = // from top right to bottom left
-          { 0x80L, 0x8040L, 0x804020L, 0x80402010L, 0x8040201008L, 0x804020100804L, 0x80402010080402L,
-                  0x8040201008040201L, 0x4020100804020100L, 0x2010080402010000L, 0x1008040201000000L,
-                  0x804020100000000L, 0x402010000000000L, 0x201000000000000L, 0x100000000000000L };
-
     // used to initialize the bitboard as it is called
     public BitBoard() {
 
@@ -203,7 +192,6 @@ public class BitBoard {
 
     // get all the occ squares by color
     public long getOccSquaresByColor(PlayerColor playerColor) {
-        System.out.println("Working");
         switch (playerColor) {
             case WHITE:
                 return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings;

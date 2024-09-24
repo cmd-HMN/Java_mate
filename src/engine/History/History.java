@@ -9,4 +9,8 @@ public class History {
     private static Stack<Bits> history = new Stack<Bits>();
 
     public static void addHistory(Bits bits) { history.push(bits);}
+
+}
+
+
 }
