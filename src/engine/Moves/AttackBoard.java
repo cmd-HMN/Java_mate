@@ -12,22 +12,25 @@ import src.engine.Type.PlayerColor;
 
 public class AttackBoard {
 
+
     BitBoard bitBoard;
+
     King king = new King();
     Queen queen = new Queen();
     Knight knight = new Knight();
     Pawn pawn = new Pawn();
     Bishop bishop = new Bishop();
     Rook rook = new Rook();
-
     
     public AttackBoard(BitBoard bitBoard){
         this.bitBoard = bitBoard;
     }
+
     public long getAttackBoard(PlayerColor playerColor) {
 
         long attack_board = 0L;
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
+
         long position;
 
         for(long i = 0; i < 64; i++){
@@ -36,7 +39,6 @@ public class AttackBoard {
                 PiecesType piecesType = bitBoard.getPieceType(position);
                 long unOcc = bitBoard.getUnOcc(position);
                 long get_opponent_board = bitBoard.getBitBoard(piecesType, playerColor.getOppositeColor());
-
             
                 if(playerColor == PlayerColor.WHITE){
 
@@ -71,7 +73,6 @@ public class AttackBoard {
                     }
 
                 }else{
-                    System.out.println("Kala");
                 switch(piecesType){
     
 
@@ -105,7 +106,6 @@ public class AttackBoard {
             }
             }
         }
-
         printBoardWithMoves(attack_board);
         return attack_board;
 

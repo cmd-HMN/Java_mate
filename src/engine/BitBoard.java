@@ -44,7 +44,6 @@ public class BitBoard {
     public static final long RANK_7 = 0x00FF000000000000L;
     public static final long RANK_8 = 0xFF00000000000000L;
 
-
     // used to initialize the bitboard as it is called
     public BitBoard() {
 

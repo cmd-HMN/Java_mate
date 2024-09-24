@@ -29,5 +29,5 @@ public class Queen {
     public long black_get_possible_pieces(long from, long empty, long white_occ) {
         return black_possible_attack(from, white_occ, empty) | black_possible_moves(from, empty);
     }
-
+  
 }
