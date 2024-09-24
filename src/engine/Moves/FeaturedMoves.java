@@ -1,6 +1,7 @@
 package src.engine.Moves;
 
 import src.engine.BitBoard;
+import src.engine.Bits.Bits;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
@@ -10,13 +11,14 @@ public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
     Valid valid = new Valid();
-    AttackBoard attackBoard = new AttackBoard();
+    AttackBoard attackBoard;
 
 
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
+        this.attackBoard = new AttackBoard(bitBoard);
     }
 
 
@@ -63,27 +65,25 @@ public class FeaturedMoves {
             }
         }
     }
-
-
+    
+    
     // make the normal move (only movement)
     public long normal(long from, long to, PlayerColor playerColor) {
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
-        
-
-        attackBoard.getAttackBoard(playerColor.getOppositeColor());
 
         PiecesType piecesType = bitBoard.getPieceType(from);
-        
-        System.out.println(piecesType);
-        
+    
         long unoccupied = bitBoard.getUnOcc(to);
         
         long possible_move = mainInterface.getPossibleMoves(piecesType, playerColor, from, unoccupied);
 
         long get_board = getBoard(piecesType, playerColor);
 
+        if(from == Bits.H4 && to == Bits.H3){
+            attackBoard.getAttackBoard(playerColor.getOppositeColor());
+        }
         System.out.println((to & possible_move) != 0);
         if ((to & possible_move) != 0) {
             get_board &= ~from;
@@ -106,12 +106,9 @@ public class FeaturedMoves {
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
 
         long unoccupied = bitBoard.getUnOcc(to);
-        printBoardWithMoves(unoccupied);
-
 
         long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
-        printBoardWithMoves(possible_attack);
-        
+
         long get_board = getBoard(piecesType, playerColor);
         if ((to & possible_attack) != 0) {
             get_board &= ~from;

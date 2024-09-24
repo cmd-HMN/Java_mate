@@ -12,7 +12,7 @@ import src.engine.Type.PlayerColor;
 
 public class AttackBoard {
 
-    BitBoard bitBoard = new BitBoard();
+    BitBoard bitBoard;
     King king = new King();
     Queen queen = new Queen();
     Knight knight = new Knight();
@@ -20,43 +20,50 @@ public class AttackBoard {
     Bishop bishop = new Bishop();
     Rook rook = new Rook();
 
+    
+    public AttackBoard(BitBoard bitBoard){
+        this.bitBoard = bitBoard;
+    }
     public long getAttackBoard(PlayerColor playerColor) {
 
         long attack_board = 0L;
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
+        long position;
 
         for(long i = 0; i < 64; i++){
             if((get_board & (1L << i)) != 0){
-                PiecesType piecesType = bitBoard.getPieceType(i);
-                long unOcc = bitBoard.getUnOcc(i);
-                long get_opponent_board = bitBoard.getBitBoard(piecesType, playerColor);
+                position = 1L << i;
+                PiecesType piecesType = bitBoard.getPieceType(position);
+                long unOcc = bitBoard.getUnOcc(position);
+                long get_opponent_board = bitBoard.getBitBoard(piecesType, playerColor.getOppositeColor());
+
             
                 if(playerColor == PlayerColor.WHITE){
 
                     switch(piecesType){
                         
                         case KING:
-                            attack_board |= king.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= king.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         case QUEEN:
-                            attack_board |= queen.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= queen.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         case KNIGHT:
-                            attack_board |= knight.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= knight.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         case BISHOP:
-                            attack_board |= bishop.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= bishop.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         case ROOK:
-                            attack_board |= rook.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= rook.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         case PAWN:
-                            attack_board |= pawn.white_possible_attack(i, get_opponent_board, unOcc);
+                            attack_board |= pawn.white_possible_attack(position, get_opponent_board, unOcc);
                             break;
 
                         default:
@@ -64,31 +71,32 @@ public class AttackBoard {
                     }
 
                 }else{
+                    System.out.println("Kala");
                 switch(piecesType){
+    
 
                     case KING:
-                        attack_board |= king.black_possible_attack(i, get_opponent_board, unOcc);
+                        attack_board |= king.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     case QUEEN:
-                        attack_board |= queen.black_possible_attack(i, get_opponent_board, unOcc);
+                        attack_board |= queen.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     case KNIGHT:
-                        attack_board |= knight.black_possible_attack(i, get_opponent_board, unOcc);
+                        attack_board |= knight.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     case BISHOP:
-                        attack_board |= bishop.black_possible_attack(i, get_opponent_board, unOcc);
+                        attack_board |= bishop.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     case ROOK:
-                        attack_board |= rook.black_possible_attack(i, get_opponent_board, unOcc);
+                        attack_board |= rook.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     case PAWN:
-                        attack_board |= pawn.black_possible_attack(i, get_opponent_board, unOcc);
-                        printBoardWithMoves(pawn.black_possible_attack((i << 1L), get_opponent_board, unOcc));
+                        attack_board |= pawn.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
                     default:
@@ -97,6 +105,7 @@ public class AttackBoard {
             }
             }
         }
+
         printBoardWithMoves(attack_board);
         return attack_board;
 
