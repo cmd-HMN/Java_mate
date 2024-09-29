@@ -11,6 +11,3 @@ public class History {
     public static void addHistory(Bits bits) { history.push(bits);}
 
 }
-
-
-}
