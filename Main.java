@@ -1,11 +1,8 @@
 import src.engine.BitBoard;
 import src.engine.Bits.Bits;
 import src.engine.Interfaces.MainInterface;
-import src.engine.Moves.AttackBoard;
 import src.engine.Moves.FeaturedMoves;
 
-
-import src.engine.Moves.FeaturedMoves;
 
 
 public class Main extends BitBoard {
