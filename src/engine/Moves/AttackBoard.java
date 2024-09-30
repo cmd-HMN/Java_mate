@@ -29,16 +29,20 @@ public class AttackBoard {
     public long getAttackBoard(PlayerColor playerColor) {
 
         long attack_board = 0L;
+        
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
+        System.out.println(playerColor);
 
+        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
         long position;
 
         for(long i = 0; i < 64; i++){
             if((get_board & (1L << i)) != 0){
                 position = 1L << i;
+                printBoardWithMoves(position);
                 PiecesType piecesType = bitBoard.getPieceType(position);
+                System.out.println(piecesType);
                 long unOcc = bitBoard.getUnOcc(position);
-                long get_opponent_board = bitBoard.getBitBoard(piecesType, playerColor.getOppositeColor());
             
                 if(playerColor == PlayerColor.WHITE){
 
@@ -97,6 +101,7 @@ public class AttackBoard {
                         break;
 
                     case PAWN:
+                        printBoardWithMoves(pawn.black_possible_attack(position, get_opponent_board, unOcc));
                         attack_board |= pawn.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
@@ -106,6 +111,7 @@ public class AttackBoard {
             }
             }
         }
+        System.out.println("Attack Board");
         printBoardWithMoves(attack_board);
         return attack_board;
 

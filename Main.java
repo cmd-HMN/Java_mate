@@ -39,7 +39,8 @@ public class Main extends BitBoard {
         featuredMoves.makeMove(Bits.F4, Bits.F3, 1, 0);
         featuredMoves.makeMove(Bits.G4, Bits.G3, 1, 0);
         featuredMoves.makeMove(Bits.H4, Bits.H3, 1, 0);
-
+        
+        featuredMoves.makeMove(Bits.A3, Bits.B2, 1, 1);
         
         // featuredMoves.makeMove(Bits.A4, Bits.A5, 0, 0); 
         // featuredMoves.makeMove(Bits.A5, Bits.A6, 0, 0); 

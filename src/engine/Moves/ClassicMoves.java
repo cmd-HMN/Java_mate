@@ -28,7 +28,7 @@ public class ClassicMoves {
     }
 
     public static long south_east(long pos) {
-        return (pos >> 7) & BitBoard.FILE_A;
+        return (pos >>> 7) & BitBoard.FILE_A;
     }
 
     public static long west(long pos) {
@@ -40,7 +40,7 @@ public class ClassicMoves {
     }
 
     public static long south_west(long pos) {
-        return (pos >> 9) & BitBoard.FILE_H;
+        return (pos >>> 9) & BitBoard.FILE_H;
     }
 
     // Knight
