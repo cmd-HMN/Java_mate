@@ -48,7 +48,7 @@ public class Pawn extends Pieces{
 
     @Override
     public long black_possible_attack(long move, long white_occ, long empty){
-        return bPawn_capture(move) & ~white_occ;
+        return bPawn_capture(move) & white_occ;
 
     }
 
@@ -62,4 +62,37 @@ public class Pawn extends Pieces{
         return black_possible_attack(move,white_occ, empty) | black_possible_moves(move, empty);
     }
 
+        // for debugging
+        public void printPossibleMoves(long possibleMoves) {
+            String binaryString = Long.toBinaryString(possibleMoves);
+            binaryString = String.format("%64s", binaryString).replace(' ', '0');
+            System.out.println("Possible Moves (Binary):");
+            System.out.println(binaryString);
+        }
+    
+        public void printBoardWithMoves(long possibleMoves) {
+            long fullBoard = 0xFFFFFFFFFFFFFFFFL;
+            long mask = 1L;
+            char[][] board = new char[8][8];
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    board[i][j] = '-';
+                }
+            }
+    
+            for (int i = 0; i < 64; i++) {
+                if ((possibleMoves & mask) != 0) {
+                    int row = 7 - (i / 8);
+                    int col = i % 8;
+                    board[row][col] = '*';
+                }
+                mask <<= 1;
+            }
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    System.out.print(board[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
 }

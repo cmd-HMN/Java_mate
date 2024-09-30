@@ -82,7 +82,7 @@ public class FeaturedMoves {
         long get_board = getBoard(piecesType, playerColor);
 
         if(from == Bits.H4 && to == Bits.H3){
-            attackBoard.getAttackBoard(playerColor.getOppositeColor());
+            attackBoard.getAttackBoard(playerColor);
         }
         System.out.println((to & possible_move) != 0);
         if ((to & possible_move) != 0) {
