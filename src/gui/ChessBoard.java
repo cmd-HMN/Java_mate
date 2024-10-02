@@ -1,8 +1,9 @@
 package src.gui;
 
+import javax.swing.SwingUtilities;
+
 public class ChessBoard {
     public static void main(String[] args) {
-
-        BoardFrame boardFrame = new BoardFrame();
-    }
+        SwingUtilities.invokeLater(BoardFrame::new);
+};
 }
