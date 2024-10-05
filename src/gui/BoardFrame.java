@@ -9,6 +9,7 @@ public class BoardFrame extends JFrame {
 
     private char[][] pieces;
     private Point selectedPiece;
+    boolean selectedCursor = false; 
 
     public BoardFrame() {
         setTitle("Java Mate");
@@ -24,15 +25,15 @@ public class BoardFrame extends JFrame {
                 super.paintComponent(g);
                 boolean isWhite = true;
 
-                for (int y = 0; y < 8; y++) {
+                for (int y = 7; y >= 0; y--) { 
                     for (int x = 0; x < 8; x++) {
                         g.setColor(isWhite ? Color.WHITE : Color.BLACK);
-                        g.fillRect(x * 64, y * 64, 64, 64);
+                        g.fillRect(x * 64, (7 - y) * 64, 64, 64);  
                         isWhite = !isWhite;
 
                         if (pieces[y][x] != ' ') {
                             g.setColor(Color.RED);
-                            g.drawString(String.valueOf(pieces[y][x]), x * 64 + 32, y * 64 + 32);
+                            g.drawString(String.valueOf(pieces[y][x]), x * 64 + 32, (7 - y) * 64 + 32);  
                         }
                     }
                     isWhite = !isWhite;
@@ -40,7 +41,6 @@ public class BoardFrame extends JFrame {
             }
         };
 
-        // Set the default cursor
         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         boardPanel.addMouseListener(new MouseAdapter() {
@@ -50,34 +50,30 @@ public class BoardFrame extends JFrame {
                 int y = e.getY() / 64;
 
                 if (selectedPiece == null) {
-                    if (pieces[y][x] != ' ') {
-                        selectedPiece = new Point(x, y);
+                    if (pieces[7 - y][x] != ' ') {  
+                        selectedPiece = new Point(x, 7 - y);
+                        selectedCursor = true;
                         System.out.println("Selected piece at: " + selectedPiece);
-                        System.out.println((y * 8 + x));
-                        // Change cursor to hand when selecting a piece
-                        boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }
                 } else {
-                    System.out.println("Move piece to: (" + x + ", " + y + ")");
-                    System.out.println((y * 8 + x));
-                    pieces[y][x] = pieces[selectedPiece.y][selectedPiece.x];
+                    System.out.println("Move piece to: (" + x + ", " + (7 - y) + ")");
+                    pieces[7 - y][x] = pieces[selectedPiece.y][selectedPiece.x];
                     pieces[selectedPiece.y][selectedPiece.x] = ' ';
                     selectedPiece = null;
+                    selectedCursor = false;
                     boardPanel.repaint();
-                    // Reset cursor to default after move
-                    boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 }
             }
         });
 
-        // Mouse motion listener to change cursor when hovering over a piece
         boardPanel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 int x = e.getX() / 64;
                 int y = e.getY() / 64;
+
                 if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                    if (pieces[y][x] != ' ') {
+                    if (pieces[7 - y][x] != ' ') {  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     } else {
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

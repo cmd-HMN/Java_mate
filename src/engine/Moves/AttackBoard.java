@@ -42,7 +42,7 @@ public class AttackBoard {
                 printBoardWithMoves(position);
                 PiecesType piecesType = bitBoard.getPieceType(position);
                 System.out.println(piecesType);
-                long unOcc = bitBoard.getUnOcc(position);
+                long unOcc = bitBoard.getUnOcc();
             
                 if(playerColor == PlayerColor.WHITE){
 

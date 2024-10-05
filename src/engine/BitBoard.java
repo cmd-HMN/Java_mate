@@ -177,15 +177,15 @@ public class BitBoard {
     }
 
     // get all the occ squares
-    public long getOcc(long to) {
+    public long getOcc() {
         return whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKings |
                 blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKings;
     }
 
     // get all the unoccupied squares
-    public long getUnOcc(long to) {
+    public long getUnOcc() {
         long board_full = 0xFFFFFFFFFFFFFFFFL;
-        long occ = getOcc(to);
+        long occ = getOcc();
 
         return board_full & ~occ;
     }
@@ -247,6 +247,28 @@ public class BitBoard {
             default:
                 return PiecesType.NONE;
         }
+    }
+
+    public int getMoveType(long from, long to){
+        long occ_board = getOcc();
+        PiecesType piecesType = getPieceType(from);
+        System.out.println("OCC Board");
+        printBoardWithMoves(occ_board);
+
+        if((to == enPassantT && piecesType == PiecesType.PAWN)){
+            return 2;
+        }
+        else if((occ_board & to) == 0){
+            return 0;
+        }
+        else if((occ_board & to) != 0){
+            return 1;
+        }
+        else if( (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
+            return 3;
+        }
+        
+        return 1;
     }
 
     // print the board
