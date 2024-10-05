@@ -25,7 +25,8 @@ public class FeaturedMoves {
 
 
     // make the move (universal)
-    public void makeMove(long from, long to, int playerColor, int moveType) {
+    public void makeMove(long from, long to, int playerColor) {
+        int moveType = bitBoard.getMoveType(from, to);
         if(moveType == 0){     
             if (playerColor == 0) {
                 normal(from, to, PlayerColor.WHITE);
@@ -75,7 +76,7 @@ public class FeaturedMoves {
 
         PiecesType piecesType = bitBoard.getPieceType(from);
     
-        long unoccupied = bitBoard.getUnOcc(to);
+        long unoccupied = bitBoard.getUnOcc();
         
         long possible_move = mainInterface.getPossibleMoves(piecesType, playerColor, from, unoccupied);
 
@@ -105,7 +106,7 @@ public class FeaturedMoves {
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
 
-        long unoccupied = bitBoard.getUnOcc(to);
+        long unoccupied = bitBoard.getUnOcc();
 
         long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
 
