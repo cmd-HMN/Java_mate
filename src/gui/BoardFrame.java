@@ -4,19 +4,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+import src.engine.*;
+import src.engine.Interfaces.MainInterface;
+import src.engine.Moves.FeaturedMoves;
 
 public class BoardFrame extends JFrame {
 
-    private char[][] pieces;
+    BitBoard board = new BitBoard();
+    MainInterface mainInterface = new MainInterface();
+    FeaturedMoves featuredMoves = new FeaturedMoves(board, mainInterface);
+
+    private Image[][] pieces;
     private Point selectedPiece;
-    boolean selectedCursor = false; 
+    boolean selectedCursor = false;
+    private boolean isWhiteTurn = true;
 
     public BoardFrame() {
         setTitle("Java Mate");
         setBounds(10, 10, 512, 512);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        pieces = new char[8][8];
+        pieces = new Image[8][8];
         initPieces();
 
         JPanel boardPanel = new JPanel() {
@@ -25,15 +37,15 @@ public class BoardFrame extends JFrame {
                 super.paintComponent(g);
                 boolean isWhite = true;
 
-                for (int y = 7; y >= 0; y--) { 
+                for (int y = 7; y >= 0; y--) {
                     for (int x = 0; x < 8; x++) {
-                        g.setColor(isWhite ? Color.WHITE : Color.BLACK);
-                        g.fillRect(x * 64, (7 - y) * 64, 64, 64);  
+                        g.setColor(isWhite ? Color.WHITE : Color.BLUE);
+                        g.fillRect(x * 64, (7 - y) * 64, 64, 64);
                         isWhite = !isWhite;
 
-                        if (pieces[y][x] != ' ') {
-                            g.setColor(Color.RED);
-                            g.drawString(String.valueOf(pieces[y][x]), x * 64 + 32, (7 - y) * 64 + 32);  
+                        // Draw piece images
+                        if (pieces[y][x] != null) {
+                            g.drawImage(pieces[y][x], x * 64, (7 - y) * 64, 64, 64, this);
                         }
                     }
                     isWhite = !isWhite;
@@ -50,18 +62,30 @@ public class BoardFrame extends JFrame {
                 int y = e.getY() / 64;
 
                 if (selectedPiece == null) {
-                    if (pieces[7 - y][x] != ' ') {  
+                    if (pieces[7 - y][x] != null) {
                         selectedPiece = new Point(x, 7 - y);
                         selectedCursor = true;
                         System.out.println("Selected piece at: " + selectedPiece);
                     }
                 } else {
                     System.out.println("Move piece to: (" + x + ", " + (7 - y) + ")");
-                    pieces[7 - y][x] = pieces[selectedPiece.y][selectedPiece.x];
-                    pieces[selectedPiece.y][selectedPiece.x] = ' ';
-                    selectedPiece = null;
-                    selectedCursor = false;
-                    boardPanel.repaint();
+                    long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
+                    long to = 1L << (((7 - y) * 8) + x);
+
+                    boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1);
+
+                    if (move) {
+                        pieces[7 - y][x] = pieces[selectedPiece.y][selectedPiece.x];
+                        pieces[selectedPiece.y][selectedPiece.x] = null;
+                        selectedPiece = null;
+                        selectedCursor = false;
+                        isWhiteTurn = !isWhiteTurn;
+                        boardPanel.repaint();
+                    } else {
+                        System.out.println("Invalid move");
+                        selectedPiece = null;
+                        selectedCursor = false;
+                    }
                 }
             }
         });
@@ -73,7 +97,7 @@ public class BoardFrame extends JFrame {
                 int y = e.getY() / 64;
 
                 if (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                    if (pieces[7 - y][x] != ' ') {  
+                    if (pieces[7 - y][x] != null) {
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     } else {
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -91,27 +115,34 @@ public class BoardFrame extends JFrame {
     }
 
     private void initPieces() {
-        pieces[0][0] = 'R';
-        pieces[0][1] = 'N';
-        pieces[0][2] = 'B';
-        pieces[0][3] = 'Q';
-        pieces[0][4] = 'K';
-        pieces[0][5] = 'B';
-        pieces[0][6] = 'N';
-        pieces[0][7] = 'R';
+        try {
+            // Load white pieces
+            pieces[0][0] = ImageIO.read(new File("src/gui/assets/rook_white.png"));
+            pieces[0][1] = ImageIO.read(new File("src/gui/assets/knight_white.png"));
+            pieces[0][2] = ImageIO.read(new File("src/gui/assets/bishop_white.png"));
+            pieces[0][3] = ImageIO.read(new File("src/gui/assets/queen_white.png"));
+            pieces[0][4] = ImageIO.read(new File("src/gui/assets/king_white.png"));
+            pieces[0][5] = ImageIO.read(new File("src/gui/assets/bishop_white.png"));
+            pieces[0][6] = ImageIO.read(new File("src/gui/assets/knight_white.png"));
+            pieces[0][7] = ImageIO.read(new File("src/gui/assets/rook_white.png"));
 
-        for (int i = 0; i < 8; i++) {
-            pieces[1][i] = 'P';
-            pieces[6][i] = 'p';
+            for (int i = 0; i < 8; i++) {
+                pieces[1][i] = ImageIO.read(new File("src/gui/assets/pawn_white.png"));
+                pieces[6][i] = ImageIO.read(new File("src/gui/assets/pawn_black.png"));
+            }
+
+            // Load black pieces
+            pieces[7][0] = ImageIO.read(new File("src/gui/assets/rook_black.png"));
+            pieces[7][1] = ImageIO.read(new File("src/gui/assets/knight_black.png"));
+            pieces[7][2] = ImageIO.read(new File("src/gui/assets/bishop_black.png"));
+            pieces[7][3] = ImageIO.read(new File("src/gui/assets/queen_black.png"));
+            pieces[7][4] = ImageIO.read(new File("src/gui/assets/king_black.png"));
+            pieces[7][5] = ImageIO.read(new File("src/gui/assets/bishop_black.png"));
+            pieces[7][6] = ImageIO.read(new File("src/gui/assets/knight_black.png"));
+            pieces[7][7] = ImageIO.read(new File("src/gui/assets/rook_black.png"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        pieces[7][0] = 'r';
-        pieces[7][1] = 'n';
-        pieces[7][2] = 'b';
-        pieces[7][3] = 'q';
-        pieces[7][4] = 'k';
-        pieces[7][5] = 'b';
-        pieces[7][6] = 'n';
-        pieces[7][7] = 'r';
     }
 }
