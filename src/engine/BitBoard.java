@@ -271,6 +271,18 @@ public class BitBoard {
         return 1;
     }
 
+    public int getColor(long from){
+        if((getOccSquaresByColor(PlayerColor.WHITE) & from) != 0){
+            return 1;
+        }
+        else if((getOccSquaresByColor(PlayerColor.BLACK) & from) != 0){
+            return 0;
+        }
+        else{
+            return -1;
+        }
+    }
+
     // print the board
     public void printBoard() {
 

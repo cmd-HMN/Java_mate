@@ -23,6 +23,7 @@ public class MainInterface {
     // make an array 
     private final MoveFunction[][] moveFunctions = new MoveFunction[PlayerColor.values().length][PiecesType.values().length];
     private final AttackFunction[][] attackFunctions = new AttackFunction[PlayerColor.values().length][PiecesType.values().length];
+    private final PieceMove[][] moveFunctionsForPlayer = new PieceMove[PlayerColor.values().length][PiecesType.values().length];
 
 
     // initialization 
@@ -56,6 +57,20 @@ public class MainInterface {
         attackFunctions[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = (from, to, board) -> bishop.white_possible_attack(from, to, board);
         attackFunctions[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = (from, to, board) -> rook.white_possible_attack(from, to, board);
         attackFunctions[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = (from, to, board) -> queen.white_possible_attack(from, to, board);
+
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = (from, empty, board) -> king.white_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.PAWN.ordinal()] = (from, empty, board) -> pawn.white_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.KNIGHT.ordinal()] = (from, empty, board) -> knight.white_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = (from, empty, board) -> bishop.white_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = (from, empty, board) -> rook.white_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = (from, empty, board) -> queen.white_get_possible_pieces(from, empty, board);
+
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.KING.ordinal()] = (from, empty, board) -> king.black_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.PAWN.ordinal()] = (from, empty, board) -> pawn.black_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.KNIGHT.ordinal()] = (from, empty, board) -> knight.black_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = (from, empty, board) -> bishop.black_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = (from, empty, board) -> rook.black_get_possible_pieces(from, empty, board);
+        moveFunctionsForPlayer[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = (from, empty, board) -> queen.black_get_possible_pieces(from, empty, board);
     }
 
     // get all the possible moves
@@ -68,4 +83,7 @@ public class MainInterface {
         return attackFunctions[playerColor.ordinal()][piecesType.ordinal()].apply(from, to, empty);
     }
 
+    public long getPossibilities(PiecesType pieceType, PlayerColor playerColor, long move, long empty, long board){
+        return moveFunctionsForPlayer[playerColor.ordinal()][pieceType.ordinal()].apply(move, empty, board);
+    }  
 }
