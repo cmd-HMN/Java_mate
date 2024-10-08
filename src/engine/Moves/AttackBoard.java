@@ -39,9 +39,7 @@ public class AttackBoard {
         for(long i = 0; i < 64; i++){
             if((get_board & (1L << i)) != 0){
                 position = 1L << i;
-                printBoardWithMoves(position);
                 PiecesType piecesType = bitBoard.getPieceType(position);
-                System.out.println(piecesType);
                 long unOcc = bitBoard.getUnOcc();
             
                 if(playerColor == PlayerColor.WHITE){
@@ -78,8 +76,8 @@ public class AttackBoard {
 
                 }else{
                 switch(piecesType){
-    
-
+                    
+                    
                     case KING:
                         attack_board |= king.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
@@ -101,7 +99,6 @@ public class AttackBoard {
                         break;
 
                     case PAWN:
-                        printBoardWithMoves(pawn.black_possible_attack(position, get_opponent_board, unOcc));
                         attack_board |= pawn.black_possible_attack(position, get_opponent_board, unOcc);
                         break;
 
@@ -111,44 +108,6 @@ public class AttackBoard {
             }
             }
         }
-        System.out.println("Attack Board");
-        printBoardWithMoves(attack_board);
         return attack_board;
-
     }
-
-     // for debugging
-     public void printPossibleMoves(long possibleMoves) {
-        String binaryString = Long.toBinaryString(possibleMoves);
-        binaryString = String.format("%64s", binaryString).replace(' ', '0');
-        System.out.println("Possible Moves (Binary):");
-        System.out.println(binaryString);
-    }
-
-    public void printBoardWithMoves(long possibleMoves) {
-        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
-        long mask = 1L;
-        char[][] board = new char[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                board[i][j] = '-';
-            }
-        }
-
-        for (int i = 0; i < 64; i++) {
-            if ((possibleMoves & mask) != 0) {
-                int row = 7 - (i / 8);
-                int col = i % 8;
-                board[row][col] = '*';
-            }
-            mask <<= 1;
-        }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
 }
