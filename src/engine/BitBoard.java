@@ -16,19 +16,19 @@ public class BitBoard {
     public long enPassantT = 0L;
 
     // bitboards
-    private long whitePawns = 0x000000000000FF00L;
-    private long whiteKnights = 0x0000000000000042L;
-    private long whiteBishops = 0x0000000000000024L;
-    private long whiteRooks = 0x0000000000000081L;
-    private long whiteQueens = 0x0000000000000008L;
-    private long whiteKings = 0x0000000000000010L;
+    public long whitePawns = 0x000000000000FF00L;
+    public long whiteKnights = 0x0000000000000042L;
+    public long whiteBishops = 0x0000000000000024L;
+    public long whiteRooks = 0x0000000000000081L;
+    public long whiteQueens = 0x0000000000000008L;
+    public long whiteKings = 0x0000000000000010L;
 
-    private long blackPawns = 0x00FF000000000000L;
-    private long blackKnights = 0x4200000000000000L;
-    private long blackBishops = 0x2400000000000000L;
-    private long blackRooks = 0x8100000000000000L;
-    private long blackQueens = 0x0800000000000000L;
-    private long blackKings = 0x1000000000000000L;
+    public long blackPawns = 0x00FF000000000000L;
+    public long blackKnights = 0x4200000000000000L;
+    public long blackBishops = 0x2400000000000000L;
+    public long blackRooks = 0x8100000000000000L;
+    public long blackQueens = 0x0800000000000000L;
+    public long blackKings = 0x1000000000000000L;
 
     // file and rank masks
     public static final long FILE_A = 0xFEFEFEFEFEFEFEFEL;

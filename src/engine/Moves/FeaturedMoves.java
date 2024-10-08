@@ -87,6 +87,7 @@ public class FeaturedMoves {
     }
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
+        attackBoard.getAttackBoard(playerColor.getOppositeColor());
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
@@ -122,6 +123,8 @@ public class FeaturedMoves {
 
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
+        System.out.println("Opposite Lines");
+        printBoardWithMoves(to_);
 
         long unoccupied = bitBoard.getUnOcc();
 
@@ -213,10 +216,10 @@ public class FeaturedMoves {
     public long getAllMoves(long from, int temp_playerColor){
         System.out.println("getAllMoves");
         PiecesType piecesType = bitBoard.getPieceType(from);
-        long get_board = bitBoard.getOcc();
-        long get_unOcc = bitBoard.getUnOcc();
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
-
+        long get_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
+        long get_unOcc = bitBoard.getUnOcc();
+        
         printBoardWithMoves(mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board));
 
         return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board);
