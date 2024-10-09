@@ -8,6 +8,7 @@ import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 import src.engine.Validity.Valid;
+import src.gui.Pop.PromoPop;
 
 public class FeaturedMoves {
     private BitBoard bitBoard;
@@ -87,7 +88,8 @@ public class FeaturedMoves {
     }
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
-        attackBoard.getAttackBoard(playerColor.getOppositeColor());
+        System.out.println("Attack Board");
+        printBoardWithMoves(attackBoard.getAttackBoard(playerColor.getOppositeColor()));
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
@@ -124,7 +126,6 @@ public class FeaturedMoves {
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
         System.out.println("Opposite Lines");
-        printBoardWithMoves(to_);
 
         long unoccupied = bitBoard.getUnOcc();
 
@@ -174,16 +175,14 @@ public class FeaturedMoves {
     public boolean promotion(long from, long to, PlayerColor playerColor){
         // get the pieceType before capture
         PiecesType piecesType_to = bitBoard.getPieceType(to);
-
+        
         System.out.println("Promotion");
         capture(from, to, playerColor); 
-        bitBoard.printBoard();
         
         boolean checkValidity = playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0
                             : (to & BitBoard.RANK_1) != 0;
 
-        System.out.println(checkValidity);
         if(checkValidity){
 
             //get the user requested bit board

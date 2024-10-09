@@ -26,21 +26,13 @@ public class BoardFrame extends JFrame {
     private Image dotImage;  
     boolean selectedCursor = false;
     private boolean isWhiteTurn = true;
-    private List<Point> possibleMoves = new ArrayList<>();
+    private long moveBoard;
 
 
     public BoardFrame() {
         setTitle("Java Mate");
         setBounds(10, 10, 512, 512);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        try{
-            dotImage = ImageIO.read(new File("src/gui/assets/dot.png"));
-            dotImage = dotImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-
         JPanel boardPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -94,14 +86,13 @@ public class BoardFrame extends JFrame {
                         else if((board.blackQueens & mask) != 0){
                             g.drawImage(chessPiece.black_queen ,x * 64, (7 - y) * 64, 64, 64, this);
                         }
+
+
+                        if((moveBoard & mask) != 0){
+                            g.drawImage(chessPiece.dotImage, x * 64, (7 - y) * 64, 64, 64, this);
+                        }
                     }
                     isWhite = !isWhite;
-                }
-                
-                for (Point move : possibleMoves) {
-                    int dotX = move.x * 64 + 23; 
-                    int dotY = (7 - move.y) * 64 + 23; 
-                    g.drawImage(dotImage, dotX, dotY, this);  
                 }
             }
         };
@@ -113,22 +104,14 @@ public class BoardFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / 64;
                 int y = e.getY() / 64;
-                System.out.println(x);
-                System.out.println(y);
 
                 if (selectedPiece == null) {
                             selectedPiece = new Point(x, 7 - y);
                             selectedCursor = true;
                             long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
-                            long moveBoard = featuredMoves.getAllMoves(from, isWhiteTurn ? 0 : 1);
-                            possibleMoves.clear(); 
-                            for (int i = 0; i < 64; i++) {
-                                if ((moveBoard & (1L << i)) != 0) {  
-                                    int xx = i % 8;  
-                                    int yy = i / 8; 
-                                    possibleMoves.add(new Point(xx, yy));  
-                                }
-                            }
+                            moveBoard  = 0L;
+                            moveBoard = featuredMoves.getAllMoves(from, isWhiteTurn ? 0 : 1);
+
                             if(isWhiteTurn == featuredMoves.isWhiteTurn(from)){
                                 boardPanel.repaint();  
                                 System.out.println("Selected piece at: " + selectedPiece);
@@ -149,14 +132,14 @@ public class BoardFrame extends JFrame {
                         selectedPiece = null;
                         selectedCursor = false;
                         isWhiteTurn = !isWhiteTurn;
-                        possibleMoves.clear();  
+                        moveBoard  = 0L; 
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     } else {
                         System.out.println("Invalid move");
                         selectedPiece = null;
                         selectedCursor = false;
-                        possibleMoves.clear();  
+                        moveBoard  = 0L;  
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     }
