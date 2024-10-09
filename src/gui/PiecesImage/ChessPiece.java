@@ -1,5 +1,6 @@
 package src.gui.PiecesImage;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class ChessPiece {
     black_bishop,
     black_knight,
     black_rook,
-    black_pawn;
+    black_pawn
+    ,dotImage;
 
 
     public ChessPiece(){
@@ -37,6 +39,11 @@ public class ChessPiece {
             black_knight = ImageIO.read(new File("src/gui/assets/knight_black.png"));
             black_rook = ImageIO.read(new File("src/gui/assets/rook_black.png"));
             black_pawn = ImageIO.read(new File("src/gui/assets/pawn_black.png"));
+
+
+
+            dotImage = ImageIO.read(new File("src/gui/assets/dot.png"));
+            dotImage.getScaledInstance(5, 5, Image.SCALE_SMOOTH);
         }catch (IOException e){
             e.printStackTrace();
         }

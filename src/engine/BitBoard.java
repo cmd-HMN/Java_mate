@@ -7,9 +7,6 @@ import src.engine.Type.PlayerColor;
 
 public class BitBoard {
 
-    // temp board
-    private long board;
-
     // array used to handle the board
     private long[][] bitboards = new long[2][6];
 
@@ -258,14 +255,15 @@ public class BitBoard {
         if((to == enPassantT && piecesType == PiecesType.PAWN)){
             return 2;
         }
+        else if( (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
+            System.out.println("Worked");
+            return 3;
+        }
         else if((occ_board & to) == 0){
             return 0;
         }
         else if((occ_board & to) != 0){
             return 1;
-        }
-        else if( (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
-            return 3;
         }
         
         return 1;
