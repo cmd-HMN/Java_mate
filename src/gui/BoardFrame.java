@@ -4,11 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.imageio.ImageIO;
 
 import src.engine.*;
 import src.engine.Interfaces.MainInterface;
@@ -22,8 +17,7 @@ public class BoardFrame extends JFrame {
     FeaturedMoves featuredMoves = new FeaturedMoves(board, mainInterface);
     ChessPiece chessPiece = new ChessPiece();
 
-    private Point selectedPiece;
-    private Image dotImage;  
+    private Point selectedPiece; 
     boolean selectedCursor = false;
     private boolean isWhiteTurn = true;
     private long moveBoard;
@@ -114,7 +108,6 @@ public class BoardFrame extends JFrame {
 
                             if(isWhiteTurn == featuredMoves.isWhiteTurn(from)){
                                 boardPanel.repaint();  
-                                System.out.println("Selected piece at: " + selectedPiece);
                                 boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                             }else{
                                 System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");
@@ -122,7 +115,6 @@ public class BoardFrame extends JFrame {
                                 selectedPiece = null;
                             }
                 } else {
-                    System.out.println("Move piece to: (" + x + ", " + (7 - y) + ")");
                     long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
                     long to = 1L << (((7 - y) * 8) + x);
 

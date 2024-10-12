@@ -1,6 +1,8 @@
 Task to be completed be
-1. Attack Board
+
 2. king in checkmate
 3. checkmate
 4. castling
+5. Fix en Passant
+6. Fix Promotion
 more.......
