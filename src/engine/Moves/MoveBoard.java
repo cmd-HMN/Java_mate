@@ -10,7 +10,7 @@ import src.engine.ChessPieces.Rook;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
-public class AttackBoard {
+public class MoveBoard {
 
 
     BitBoard bitBoard;
@@ -22,7 +22,7 @@ public class AttackBoard {
     Bishop bishop = new Bishop();
     Rook rook = new Rook();
     
-    public AttackBoard(BitBoard bitBoard){
+    public MoveBoard(BitBoard bitBoard){
         this.bitBoard = bitBoard;
     }
 
@@ -31,16 +31,15 @@ public class AttackBoard {
         long attack_board = 0L;
         
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
-        System.out.println(playerColor);
 
-        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
+        long unOcc = bitBoard.getUnOcc();
+        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor())| unOcc;
         long position;
 
         for(long i = 0; i < 64; i++){
             if((get_board & (1L << i)) != 0){
                 position = 1L << i;
                 PiecesType piecesType = bitBoard.getPieceType(position);
-                long unOcc = bitBoard.getUnOcc();
             
                 if(playerColor == PlayerColor.WHITE){
 
@@ -108,6 +107,48 @@ public class AttackBoard {
             }
             }
         }
+        System.out.println("attack board attack board");
+        printBoardWithMoves(attack_board);
         return attack_board;
+    }
+
+
+    public void printPossibleMoves(long possibleMoves) {
+        String binaryString = Long.toBinaryString(possibleMoves);
+        binaryString = String.format("%64s", binaryString).replace(' ', '0');
+        System.out.println("Possible Moves (Binary):");
+        System.out.println(binaryString);
+    }
+
+    // for debugging
+    public void printBoardWithMoves(long possibleMoves) {
+        if(possibleMoves == 0L){
+            System.out.println("No possible moves");
+        }
+        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
+        long mask = 1L;
+        char[][] board = new char[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = '-';
+            }
+        }
+
+        for (int i = 0; i < 64; i++) {
+            if ((possibleMoves & mask) != 0) {
+                int row = 7 - (i / 8);
+                int col = i % 8;
+                board[row][col] = '*';
+            }
+            mask <<= 1;
+        }
+
+        System.out.println("Board with Possible Moves:");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

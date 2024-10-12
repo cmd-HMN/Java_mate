@@ -249,8 +249,6 @@ public class BitBoard {
     public int getMoveType(long from, long to){
         long occ_board = getOcc();
         PiecesType piecesType = getPieceType(from);
-        System.out.println("OCC Board");
-        printBoardWithMoves(occ_board);
 
         if((to == enPassantT && piecesType == PiecesType.PAWN)){
             return 2;

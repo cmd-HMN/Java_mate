@@ -8,25 +8,25 @@ import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 import src.engine.Validity.Valid;
-import src.gui.Pop.PromoPop;
 
 public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
-    Valid valid = new Valid();
-    AttackBoard attackBoard;
+    Valid valid;
+    MoveBoard move_board;
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
-        this.attackBoard = new AttackBoard(bitBoard);
-
+        this.move_board = new MoveBoard(bitBoard);
+        this.valid = new Valid(bitBoard);
     }
 
 
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
+        
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE)){
@@ -88,8 +88,12 @@ public class FeaturedMoves {
     }
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
-        System.out.println("Attack Board");
-        printBoardWithMoves(attackBoard.getAttackBoard(playerColor.getOppositeColor()));
+
+        System.out.println(valid.kingInCheck(playerColor));
+        if(valid.kingInCheck(playerColor)){
+            System.out.println("King is in check");
+            preventCheckMove(playerColor);
+        }
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
@@ -103,7 +107,7 @@ public class FeaturedMoves {
         long get_board = getBoard(piecesType, playerColor);
 
         if(from == Bits.H4 && to == Bits.H3){
-            attackBoard.getAttackBoard(playerColor);
+            move_board.getAttackBoard(playerColor);
         }
         System.out.println((to & possible_move) != 0);
         if ((to & possible_move) != 0) {
@@ -213,19 +217,48 @@ public class FeaturedMoves {
     }
 
     public long getAllMoves(long from, int temp_playerColor){
-        System.out.println("getAllMoves");
         PiecesType piecesType = bitBoard.getPieceType(from);
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
         long get_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
         long get_unOcc = bitBoard.getUnOcc();
-        
-        printBoardWithMoves(mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board));
 
         return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board);
     }
 
     public boolean isWhiteTurn(long from){
         return bitBoard.getColor(from) == 1 ? true : false;
+    }
+
+    public long getAllPossibleMove(PlayerColor playerColor){
+        System.out.println("Possible Moves!!");
+        long possibleMoves = 0L;
+        for(int i = 0; i < 64; i++){
+            if((bitBoard.getOccSquaresByColor(playerColor) & (1L << i)) != 0){
+                possibleMoves |= getAllMoves((1L << i), playerColor.getOppositeColor() == PlayerColor.WHITE ? 0: 1);
+            }
+        }
+
+        printBoardWithMoves(possibleMoves);
+        System.out.println();
+        return possibleMoves;
+    }
+
+
+    public long preventCheckMove(PlayerColor playerColor){
+        long prevention_board = 0L;
+        long attack_board = move_board.getAttackBoard(playerColor.getOppositeColor());
+        System.out.println("Attack Board");
+        printBoardWithMoves(attack_board);
+
+        long prevention = getAllPossibleMove(playerColor);
+        System.out.println("Prevention");
+        printBoardWithMoves(prevention);
+        System.out.println();
+        prevention_board = prevention & attack_board;
+
+        System.out.println("Prevention board");
+        printBoardWithMoves(prevention_board);
+        return prevention_board;
     }
     // for debugging
     public void printPossibleMoves(long possibleMoves) {
