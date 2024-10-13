@@ -1,8 +1,8 @@
 Task to be completed be
 
-2. king in checkmate
 3. checkmate
 4. castling
 5. Fix en Passant
-6. Fix Promotion
+7. prevention moves when king is in check
+
 more.......

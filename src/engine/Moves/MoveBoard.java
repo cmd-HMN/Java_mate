@@ -33,7 +33,7 @@ public class MoveBoard {
         long get_board = bitBoard.getOccSquaresByColor(playerColor);
 
         long unOcc = bitBoard.getUnOcc();
-        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor())| unOcc;
+        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor())| unOcc  ;
         long position;
 
         for(long i = 0; i < 64; i++){
@@ -107,8 +107,6 @@ public class MoveBoard {
             }
             }
         }
-        System.out.println("attack board attack board");
-        printBoardWithMoves(attack_board);
         return attack_board;
     }
 

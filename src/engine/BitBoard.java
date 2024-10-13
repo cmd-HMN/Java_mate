@@ -1,9 +1,9 @@
 package src.engine;
 
-import java.util.Scanner;
 
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
+import src.gui.BoardFrame;
 
 public class BitBoard {
 
@@ -226,10 +226,8 @@ public class BitBoard {
 
     // get the pieceType using the string given by the use
     public PiecesType getPieceTypeFromString() {
-        Scanner scanner = new Scanner(System.in);
-        String pieceType = scanner.nextLine();
-        scanner.close();
 
+        String pieceType = BoardFrame.getPromotionChoice();
         switch (pieceType) {
             case "Pawn":
                 return PiecesType.PAWN;

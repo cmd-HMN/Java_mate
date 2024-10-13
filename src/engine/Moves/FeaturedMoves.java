@@ -14,6 +14,7 @@ public class FeaturedMoves {
     private MainInterface mainInterface;
     Valid valid;
     MoveBoard move_board;
+
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
         this.bitBoard = bitBoard;
@@ -216,12 +217,47 @@ public class FeaturedMoves {
         }
     }
 
+    public boolean getPromotionDialog(){
+        return false;
+    }
+
     public long getAllMoves(long from, int temp_playerColor){
         PiecesType piecesType = bitBoard.getPieceType(from);
+        
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
+        long enPassantMove = 0L;
+        if(temp_playerColor == 0 && piecesType == PiecesType.PAWN){
+            System.out.println("line 0");
+            if((from & (BitBoard.RANK_4)) != 0){
+                System.out.println("line 1");
+                if((bitBoard.enPassantT & (from << 1L)) != 0){
+                    System.out.println("line 2");
+                    enPassantMove = from << 9;
+                }else if ((bitBoard.enPassantT & (from >> 1)) != 0){
+                    System.out.println("line 3");
+                    enPassantMove = from << 7; 
+                }
+            }
+        }
+        else if(temp_playerColor == 1 && piecesType == PiecesType.PAWN){
+            if((from & (BitBoard.RANK_5)) != 0){
+                if((bitBoard.enPassantT & (from >>> 1)) != 0){
+                    enPassantMove = from >>> 9;
+                }else if ((bitBoard.enPassantT & (from << 1)) != 0){
+                    enPassantMove = from >>> 7; 
+                }
+            }
+        }
         long get_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
         long get_unOcc = bitBoard.getUnOcc();
-
+        if(piecesType  == PiecesType.NONE){
+            return 0L;
+        }
+        System.out.println("ENpassanet MOve");
+        printBoardWithMoves(enPassantMove);
+        if(enPassantMove != 0){
+            return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board) | enPassantMove;
+        }
         return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board);
     }
 
