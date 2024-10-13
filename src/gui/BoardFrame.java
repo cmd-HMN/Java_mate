@@ -100,20 +100,21 @@ public class BoardFrame extends JFrame {
                 int y = e.getY() / 64;
 
                 if (selectedPiece == null) {
-                            selectedPiece = new Point(x, 7 - y);
-                            selectedCursor = true;
-                            long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
-                            moveBoard  = 0L;
-                            moveBoard = featuredMoves.getAllMoves(from, isWhiteTurn ? 0 : 1);
+                    selectedPiece = new Point(x, 7 - y);
+                    selectedCursor = true;
+                    long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
+                    System.out.println(from);
+                    moveBoard  = 0L;
+                    moveBoard = featuredMoves.getAllMoves(from, isWhiteTurn ? 0 : 1);
 
-                            if(isWhiteTurn == featuredMoves.isWhiteTurn(from)){
-                                boardPanel.repaint();  
-                                boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                            }else{
-                                System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");
-                                selectedCursor = false;
-                                selectedPiece = null;
-                            }
+                    if(isWhiteTurn == featuredMoves.isWhiteTurn(from)){
+                        boardPanel.repaint();  
+                        boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    }else{
+                        System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");
+                        selectedCursor = false;
+                        selectedPiece = null;
+                    }
                 } else {
                     long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
                     long to = 1L << (((7 - y) * 8) + x);
@@ -143,5 +144,22 @@ public class BoardFrame extends JFrame {
         add(boardPanel);
         pack();
         setVisible(true);
+
+    }
+
+
+    public static String getPromotionChoice() {
+        String[] options = {"Queen", "Rook", "Bishop", "Knight"};
+        int choice = JOptionPane.showOptionDialog(
+            null, 
+            "Choose your promotion piece:", 
+            "Pawn Promotion", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE, 
+            null, 
+            options, 
+            options[0]);
+
+        return options[choice];
     }
 }
