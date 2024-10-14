@@ -2,7 +2,7 @@ Task to be completed be
 
 3. checkmate
 4. castling
-5. Fix en Passant
 7. prevention moves when king is in check
+9. Fix black enPassant
 
 more.......

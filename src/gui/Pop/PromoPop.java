@@ -58,7 +58,7 @@ public class PromoPop extends JFrame {
  
         p1.add(b);
         f.add(p1);
-        f.show();
+        f.setVisible(true);
     }
 
     public String get_promoting_string(){
