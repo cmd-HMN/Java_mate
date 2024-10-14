@@ -181,36 +181,4 @@ public class ClassicMoves {
         System.out.println("Possible Moves (Binary):");
         System.out.println(binaryString);
     }
-
-    // for debugging
-    public static void printBoardWithMoves(long possibleMoves) {
-        if(possibleMoves == 0L){
-            System.out.println("No possible moves");
-        }
-        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
-        long mask = 1L;
-        char[][] board = new char[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                board[i][j] = '-';
-            }
-        }
-
-        for (int i = 0; i < 64; i++) {
-            if ((possibleMoves & mask) != 0) {
-                int row = 7 - (i / 8);
-                int col = i % 8;
-                board[row][col] = '*';
-            }
-            mask <<= 1;
-        }
-
-        System.out.println("Board with Possible Moves:");
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 }

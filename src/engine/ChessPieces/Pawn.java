@@ -15,12 +15,20 @@ public class Pawn extends Pieces{
 
     private long wPawn_DForward(long move, long empty){
         long forward = wPawn_forward(move, empty);
-        return ClassicMoves.north(forward) & empty & ~BitBoard.RANK_2;
+        long dForward = 0L;
+        if((move & BitBoard.RANK_2) != 0){
+            dForward = wPawn_forward(forward, empty);
+        }
+        return forward | dForward;
     }
-
+    
     private long bPawn_DForward(long move, long empty){
         long forward = bPawn_forward(move, empty);
-        return ClassicMoves.south(forward) & empty & ~BitBoard.RANK_7;
+        long dForward = 0L;
+        if((move & BitBoard.RANK_7) != 0){
+            dForward = bPawn_forward(forward, empty);
+        }
+        return forward | dForward;
     }
 
     private long wPawn_capture(long move){
@@ -60,5 +68,36 @@ public class Pawn extends Pieces{
     @Override
     public long black_get_possible_pieces(long move, long empty ,long white_occ){
         return black_possible_attack(move,white_occ, empty) | black_possible_moves(move, empty);
+    }
+      // for debugging
+      public void printBoardWithMoves(long possibleMoves) {
+        if(possibleMoves == 0L){
+            System.out.println("No possible moves");
+        }
+        long fullBoard = 0xFFFFFFFFFFFFFFFFL;
+        long mask = 1L;
+        char[][] board = new char[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = '-';
+            }
+        }
+
+        for (int i = 0; i < 64; i++) {
+            if ((possibleMoves & mask) != 0) {
+                int row = 7 - (i / 8);
+                int col = i % 8;
+                board[row][col] = '*';
+            }
+            mask <<= 1;
+        }
+
+        System.out.println("Board with Possible Moves:");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

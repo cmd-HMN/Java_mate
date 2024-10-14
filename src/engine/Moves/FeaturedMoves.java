@@ -226,39 +226,34 @@ public class FeaturedMoves {
         
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
         long enPassantMove = 0L;
-        if(temp_playerColor == 0 && piecesType == PiecesType.PAWN){
-            System.out.println("line 0");
-            if((from & (BitBoard.RANK_4)) != 0){
-                System.out.println("line 1");
-                if((bitBoard.enPassantT & (from << 1L)) != 0){
-                    System.out.println("line 2");
-                    enPassantMove = from << 9;
-                }else if ((bitBoard.enPassantT & (from >> 1)) != 0){
-                    System.out.println("line 3");
-                    enPassantMove = from << 7; 
-                }
+        System.out.println("ENpassant Move");
+        printBoardWithMoves(bitBoard.enPassantT);
+        System.out.println();
+        if(((bitBoard.enPassantT) != 0) && piecesType == PiecesType.PAWN){
+            switch (temp_playerColor) {
+                case 0:
+                    if((((from << 7 & BitBoard.FILE_H) | (from << 9 & BitBoard.FILE_A)) & bitBoard.enPassantT) != 0){
+                        enPassantMove = bitBoard.enPassantT;
+                    }
+                    break;
+
+                case 1:
+                    if(((((from >> 9) & BitBoard.FILE_A) | ((from >>> 7) & BitBoard.FILE_A)) & bitBoard.enPassantT) != 0){
+                        enPassantMove = bitBoard.enPassantT;
+                    }
+                    break;
+            
+                default:
+                    break;
             }
         }
-        else if(temp_playerColor == 1 && piecesType == PiecesType.PAWN){
-            if((from & (BitBoard.RANK_5)) != 0){
-                if((bitBoard.enPassantT & (from >>> 1)) != 0){
-                    enPassantMove = from >>> 9;
-                }else if ((bitBoard.enPassantT & (from << 1)) != 0){
-                    enPassantMove = from >>> 7; 
-                }
-            }
-        }
+
         long get_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
         long get_unOcc = bitBoard.getUnOcc();
         if(piecesType  == PiecesType.NONE){
             return 0L;
         }
-        System.out.println("ENpassanet MOve");
-        printBoardWithMoves(enPassantMove);
-        if(enPassantMove != 0){
-            return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board) | enPassantMove;
-        }
-        return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board);
+        return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board) | enPassantMove;
     }
 
     public boolean isWhiteTurn(long from){

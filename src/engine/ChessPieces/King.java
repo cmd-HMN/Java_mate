@@ -6,12 +6,14 @@ public class King extends Pieces{
 
     @Override
     public long white_possible_moves(long move, long empty){
-       return (ClassicMoves.north(move) | ClassicMoves.south(move) | ClassicMoves.east(move) | ClassicMoves.west(move)) & empty;
+        long diagonal_move = (ClassicMoves.north_east(move) | ClassicMoves.north_west(move) | ClassicMoves.south_east(move) | ClassicMoves.south_west(move) )& empty;
+        return (ClassicMoves.north(move) | ClassicMoves.south(move) | ClassicMoves.east(move) | ClassicMoves.west(move)) & empty | diagonal_move;
     };
 
     @Override
     public long black_possible_moves(long move, long empty){
-        return (ClassicMoves.north(move) | ClassicMoves.south(move) | ClassicMoves.east(move) | ClassicMoves.west(move)) & empty;
+        long diagonal_move = (ClassicMoves.north_east(move) | ClassicMoves.north_west(move) | ClassicMoves.south_east(move) | ClassicMoves.south_west(move) )& empty;
+        return (ClassicMoves.north(move) | ClassicMoves.south(move) | ClassicMoves.east(move) | ClassicMoves.west(move)) & empty | diagonal_move;
     };
 
     @Override
@@ -26,12 +28,7 @@ public class King extends Pieces{
 
     @Override
     public long white_get_possible_pieces(long move, long empty, long black_occ){
-        System.out.println("Move black");
-        printBoardWithMoves(black_occ);
-        System.out.println();
-        System.out.println("Empty");
-        printBoardWithMoves(empty);
-        return white_possible_attack(move, ~black_occ, empty) | white_possible_moves(move, empty);
+        return white_possible_attack(move, black_occ, empty) | white_possible_moves(move, empty);
     }
 
     @Override
