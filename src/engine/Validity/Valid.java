@@ -1,7 +1,7 @@
 package src.engine.Validity;
 
 import src.engine.BitBoard;
-import src.engine.Moves.MoveBoard;
+import src.engine.Moves.AttackBoard;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
@@ -9,10 +9,10 @@ import src.engine.Type.PlayerColor;
 public class Valid {
 
     private BitBoard bitBoard;
-    private MoveBoard move_board;
+    private AttackBoard attack_board;
     public Valid(BitBoard bitBoard){
         this.bitBoard = bitBoard;
-        this.move_board = new MoveBoard(bitBoard);
+        this.attack_board = new AttackBoard(bitBoard);
     }
     
     //to check if the pawn has move double squares
@@ -28,7 +28,7 @@ public class Valid {
     public boolean kingInCheck(PlayerColor playerColor){
         long king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
 
-        if((move_board.getAttackBoard(playerColor.getOppositeColor()) & king) != 0){
+        if((attack_board.getAttackBoard(playerColor.getOppositeColor()) & king) != 0){
             return true;
         }
         return false;

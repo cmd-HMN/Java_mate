@@ -13,13 +13,13 @@ public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
     Valid valid;
-    MoveBoard move_board;
+    AttackBoard attack_board;
 
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
-        this.move_board = new MoveBoard(bitBoard);
+        this.attack_board = new AttackBoard(bitBoard);
         this.valid = new Valid(bitBoard);
     }
 
@@ -90,11 +90,6 @@ public class FeaturedMoves {
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
 
-        System.out.println(valid.kingInCheck(playerColor));
-        if(valid.kingInCheck(playerColor)){
-            System.out.println("King is in check");
-            preventCheckMove(playerColor);
-        }
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
@@ -107,14 +102,18 @@ public class FeaturedMoves {
 
         long get_board = getBoard(piecesType, playerColor);
 
-        if(from == Bits.H4 && to == Bits.H3){
-            move_board.getAttackBoard(playerColor);
-        }
         System.out.println((to & possible_move) != 0);
-        if ((to & possible_move) != 0) {
+        
+        if (((to & possible_move) != 0)) {
             get_board &= ~from;
             get_board |= to;
             setBoard(piecesType, playerColor, get_board);
+            if(valid.kingInCheck(playerColor)){
+                get_board &= ~to;
+                get_board |= from;
+                setBoard(piecesType, playerColor, get_board);
+                return false;
+            }
             return true;
         }
         System.out.println("Failed");
@@ -143,6 +142,14 @@ public class FeaturedMoves {
             to_ &= ~to;
             setBoard(piecesType2, playerColor.getOppositeColor(), to_);
             setBoard(piecesType, playerColor, get_board);
+            if(valid.kingInCheck(playerColor)){
+                get_board &= ~to;
+                get_board |= from;
+                to_ |= to;
+                setBoard(piecesType2, playerColor.getOppositeColor(), to_);
+                setBoard(piecesType, playerColor, get_board);
+                return false;
+            }
             return true;
         }
         System.out.println("Failed");
@@ -168,6 +175,16 @@ public class FeaturedMoves {
             long capturedPawnSquare = playerColor == PlayerColor.WHITE ? (to >>> 8) : (to << 8);
             opponentBoard &= ~capturedPawnSquare;
             setBoard(PiecesType.PAWN, playerColor.getOppositeColor(), opponentBoard);
+
+            if(valid.kingInCheck(playerColor)){
+                get_board &= ~to;
+                get_board |= from;
+                setBoard(PiecesType.PAWN, playerColor, get_board);
+
+                opponentBoard |= capturedPawnSquare;
+                setBoard(PiecesType.PAWN, playerColor.getOppositeColor(), opponentBoard);
+                return false;
+            }
 
             bitBoard.enPassantT = 0L;
             return true;
@@ -202,13 +219,19 @@ public class FeaturedMoves {
             // the bit board of the piece at the to position
             long to_ = getBoard(piecesType_to, playerColor.getOppositeColor());
             to_ &= ~to;
-
-
-            System.out.println("Rook");
-            printBoardWithMoves(to_);
             setBoard(piecesType_to, playerColor.getOppositeColor(), to_);
             setBoard(piecesType, playerColor, get_promoting_board);
             setBoard(PiecesType.PAWN, playerColor, get_board);
+
+            if(valid.kingInCheck(playerColor)){
+                get_promoting_board &= ~to;
+                get_board |= from;
+                to_ |= to;
+                setBoard(piecesType_to, playerColor.getOppositeColor(), to_);
+                setBoard(piecesType, playerColor, get_promoting_board);
+                setBoard(PiecesType.PAWN, playerColor, get_board);
+                return false;
+            }
             return true;
         }
         else{
@@ -226,8 +249,6 @@ public class FeaturedMoves {
         
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
         long enPassantMove = 0L;
-        System.out.println("ENpassant Move");
-        printBoardWithMoves(bitBoard.enPassantT);
         System.out.println();
         if(((bitBoard.enPassantT) != 0) && piecesType == PiecesType.PAWN){
             switch (temp_playerColor) {
@@ -274,23 +295,6 @@ public class FeaturedMoves {
         return possibleMoves;
     }
 
-
-    public long preventCheckMove(PlayerColor playerColor){
-        long prevention_board = 0L;
-        long attack_board = move_board.getAttackBoard(playerColor.getOppositeColor());
-        System.out.println("Attack Board");
-        printBoardWithMoves(attack_board);
-
-        long prevention = getAllPossibleMove(playerColor);
-        System.out.println("Prevention");
-        printBoardWithMoves(prevention);
-        System.out.println();
-        prevention_board = prevention & attack_board;
-
-        System.out.println("Prevention board");
-        printBoardWithMoves(prevention_board);
-        return prevention_board;
-    }
     // for debugging
     public void printPossibleMoves(long possibleMoves) {
         String binaryString = Long.toBinaryString(possibleMoves);

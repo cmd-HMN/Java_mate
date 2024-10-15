@@ -10,7 +10,7 @@ import src.engine.ChessPieces.Rook;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
-public class MoveBoard {
+public class AttackBoard {
 
 
     BitBoard bitBoard;
@@ -22,7 +22,7 @@ public class MoveBoard {
     Bishop bishop = new Bishop();
     Rook rook = new Rook();
     
-    public MoveBoard(BitBoard bitBoard){
+    public AttackBoard(BitBoard bitBoard){
         this.bitBoard = bitBoard;
     }
 
