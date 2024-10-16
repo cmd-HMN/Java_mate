@@ -27,6 +27,7 @@ public class FeaturedMoves {
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
+        castle(from, to, playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK);
         
         if(moveType == 0){     
             if (playerColor == 0) {
@@ -79,6 +80,20 @@ public class FeaturedMoves {
             }
             if (playerColor == 1) {
                 if(promotion(from, to, PlayerColor.BLACK)){
+                    bitBoard.printBoard();
+                    return true;
+                }
+            }
+        }
+        if(moveType == 4){
+            if (playerColor == 0) {
+                if(castle(from, to, PlayerColor.WHITE)){
+                    bitBoard.printBoard();
+                    return true;
+                }
+            }
+            if (playerColor == 1) {
+                if(castle(from, to, PlayerColor.BLACK)){
                     bitBoard.printBoard();
                     return true;
                 }
@@ -156,12 +171,66 @@ public class FeaturedMoves {
         return false;
     }
 
-    public long castle(long from, long to, PlayerColor playerColor){    
+    public boolean castle(long from, long to, PlayerColor playerColor){    
         System.out.println("Castling");
-        return 0L;
+
+        if(valid.kingInCheck(playerColor)){
+            return false;
+        }
+
+        long kingsideMask = 0x0000000000000060L;
+        long queenSideMask = 0x000000000000001CL;
+        long get_attack_board = attack_board.getAttackBoard(playerColor);
+        long get_occ = bitBoard.getOcc();
+        long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
+        long get_board_rook = bitBoard.getBitBoard(PiecesType.ROOK, playerColor);
+
+        boolean isKingside = false;
+        boolean isQueenSide = false;
+        boolean kingSafe = false;
+        boolean rookSafe = false;
+
+        if (playerColor == PlayerColor.WHITE) {
+            isKingside = (from == (1L << 4) && to == (1L << 7));  // e1 to g1
+            isQueenSide = (from == (1L << 4) && to == (1L << 0)); // e1 to c1
+            kingSafe = (get_board_king & (1L << 4)) != 0;
+            rookSafe = (get_board_rook & (1L << 0)) != 0 || (get_board_rook & (1L << 7)) != 0;
+        } else if (playerColor == PlayerColor.BLACK) {
+            isKingside = (from == (1L << 60) && to == (1L << 63));  // e8 to g8
+            isQueenSide = (from == (1L << 60) && to == (1L << 56)); // e8 to c8
+            kingSafe = (get_board_king & (1L << 60)) != 0;
+            rookSafe = (get_board_rook & (1L << 56)) != 0 || (get_board_rook & (1L << 63)) != 0;
+        }
+        System.out.println("King side " + isKingside);
+        System.out.println("Queen Side " + isQueenSide);
+
+        if(isKingside && kingSafe && rookSafe){
+            if((kingsideMask & get_occ) == 0 && (kingsideMask & get_attack_board) == 0){
+                get_board_king &= ~from;
+                get_board_rook &= ~to;
+
+                if(playerColor == PlayerColor.WHITE){
+                    get_board_king |= (1L << 6);
+                    get_board_rook |= (1L << 5);
+                }
+
+                if(playerColor == PlayerColor.BLACK){
+                    get_board_king |= (1L << 62);
+                    get_board_rook |= (1L << 63);
+                }
+                setBoard(PiecesType.KING, playerColor, get_board_king);
+                setBoard(PiecesType.ROOK, playerColor, get_board_rook);
+            }
+        }else if((queenSideMask & get_occ) == 0 && (queenSideMask & get_attack_board) == 0){
+            get_board_king &= ~from;
+            get_board_rook &= ~to;
+        }
+        
+
+        return false;
     }
 
-    // en Passant(under development)
+    // en Passant
     public boolean enPassant(long from, long to, PlayerColor playerColor){
         System.out.println("En Passant");
 
@@ -238,10 +307,6 @@ public class FeaturedMoves {
             System.out.println("Failed");
             return false;
         }
-    }
-
-    public boolean getPromotionDialog(){
-        return false;
     }
 
     public long getAllMoves(long from, int temp_playerColor){
