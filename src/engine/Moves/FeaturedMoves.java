@@ -172,7 +172,7 @@ public class FeaturedMoves {
     }
 
     public boolean castle(long from, long to, PlayerColor playerColor){    
-        System.out.println("Castling struggling");
+        System.out.println("Castling");
 
         if(valid.kingInCheck(playerColor)){
             return false;
