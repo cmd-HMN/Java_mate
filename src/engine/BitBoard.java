@@ -258,6 +258,9 @@ public class BitBoard {
             System.out.println("Worked");
             return 3;
         }
+        else if(((from == (1L << 4) && (to == (1L << 7) || to == (1L << 0))) || (from == (1L << 60) && (to == (1L << 63)) || to == (1L << 56)))){
+            return 4;
+        }
         else if((occ_board & to) == 0){
             return 0;
         }
