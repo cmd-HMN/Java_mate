@@ -120,7 +120,7 @@ public class BoardFrame extends JFrame {
                     long to = 1L << (((7 - y) * 8) + x);
 
                     boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1);
-
+                    System.out.println("move: " + move);
                     if (move) {
                         selectedPiece = null;
                         selectedCursor = false;
