@@ -2,7 +2,6 @@ package src.engine.Moves;
 
 import src.engine.BitBoard;
 
-import src.engine.Bits.Bits;
 
 import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
@@ -27,7 +26,6 @@ public class FeaturedMoves {
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
-        castle(from, to, playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK);
         
         if(moveType == 0){     
             if (playerColor == 0) {
@@ -178,9 +176,7 @@ public class FeaturedMoves {
             return false;
         }
 
-        long kingsideMask = 0x0000000000000060L;
-        long queenSideMask = 0x000000000000001CL;
-        long get_attack_board = attack_board.getAttackBoard(playerColor);
+        long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
         long get_occ = bitBoard.getOcc();
         long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
         long get_board_rook = bitBoard.getBitBoard(PiecesType.ROOK, playerColor);
@@ -189,6 +185,8 @@ public class FeaturedMoves {
         boolean isQueenSide = false;
         boolean kingSafe = false;
         boolean rookSafe = false;
+        boolean castleConditionKingSide = ((get_occ & 0x0000000000000060L) == 0 && (get_attack_board & 0x0000000000000060L) == 0) || (get_occ & 0x6000000000000000L) == 0 && (get_attack_board & 0x6000000000000000L) == 0;
+        boolean castleConditionQueenSide = ((get_occ & 0x000000000000000EL) == 0 && (get_attack_board & 0x000000000000000EL) == 0) || (get_occ & 0x0E00000000000000L) == 0 && (get_attack_board & 0x0E00000000000000L) == 0;
 
         if (playerColor == PlayerColor.WHITE) {
             isKingside = (from == (1L << 4) && to == (1L << 7));  // e1 to g1
@@ -201,32 +199,47 @@ public class FeaturedMoves {
             kingSafe = (get_board_king & (1L << 60)) != 0;
             rookSafe = (get_board_rook & (1L << 56)) != 0 || (get_board_rook & (1L << 63)) != 0;
         }
-        System.out.println("King side " + isKingside);
-        System.out.println("Queen Side " + isQueenSide);
 
-        if(isKingside && kingSafe && rookSafe){
-            if((kingsideMask & get_occ) == 0 && (kingsideMask & get_attack_board) == 0){
-                get_board_king &= ~from;
-                get_board_rook &= ~to;
-
-                if(playerColor == PlayerColor.WHITE){
-                    get_board_king |= (1L << 6);
-                    get_board_rook |= (1L << 5);
-                }
-
-                if(playerColor == PlayerColor.BLACK){
-                    get_board_king |= (1L << 62);
-                    get_board_rook |= (1L << 63);
-                }
-                setBoard(PiecesType.KING, playerColor, get_board_king);
-                setBoard(PiecesType.ROOK, playerColor, get_board_rook);
-            }
-        }else if((queenSideMask & get_occ) == 0 && (queenSideMask & get_attack_board) == 0){
+        if(isKingside && kingSafe && rookSafe && castleConditionKingSide){
             get_board_king &= ~from;
             get_board_rook &= ~to;
-        }
-        
 
+            if(playerColor == PlayerColor.WHITE){
+                get_board_king |= (1L << 6);
+                get_board_rook |= (1L << 5);
+            }
+
+            if(playerColor == PlayerColor.BLACK){
+                get_board_king |= (1L << 62);
+                get_board_rook |= (1L << 61);
+            }
+
+            setBoard(PiecesType.KING, playerColor, get_board_king);
+            setBoard(PiecesType.ROOK, playerColor, get_board_rook);
+
+            System.out.println("Above true");
+            return true;
+        }
+        else if((isQueenSide && kingSafe && rookSafe && castleConditionQueenSide)){
+            System.out.println("Queen side entered");
+            get_board_king &= ~from;
+            get_board_rook &= ~to;
+
+            if(playerColor == PlayerColor.WHITE){
+                get_board_king |= (1L << 2);
+                get_board_rook |= (1L << 3);
+            }
+
+            if(playerColor == PlayerColor.BLACK){
+                get_board_king |= (1L << 58);
+                get_board_rook |= (1L << 59);
+            }
+
+            setBoard(PiecesType.KING, playerColor, get_board_king);
+            setBoard(PiecesType.ROOK, playerColor, get_board_rook);
+
+            return true;
+        }
         return false;
     }
 
@@ -314,7 +327,7 @@ public class FeaturedMoves {
         
         PlayerColor playerColor = temp_playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK; 
         long enPassantMove = 0L;
-        System.out.println();
+        //enPassant
         if(((bitBoard.enPassantT) != 0) && piecesType == PiecesType.PAWN){
             switch (temp_playerColor) {
                 case 0:
@@ -333,13 +346,51 @@ public class FeaturedMoves {
                     break;
             }
         }
+        long castleMove = 0L;
+        //castling
+        if(((from & 1L << 4) != 0) || (from & 1L << 60) != 0)
+        {
+            System.out.println("castling");
+            long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
+            long get_occ = bitBoard.getOcc();
+            long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
+            long get_board_rook = bitBoard.getBitBoard(PiecesType.ROOK, playerColor);
+    
+            boolean kingSafe = false;
+            boolean rookSafe = false;
+            boolean isKingside = false;
+            boolean isQueenSide = false;
+            boolean castleConditionKingSide = ((get_occ & 0x0000000000000060L) == 0 && (get_attack_board & 0x0000000000000060L) == 0) || (get_occ & 0x6000000000000000L) == 0 && (get_attack_board & 0x6000000000000000L) == 0;
+            boolean castleConditionQueenSide = ((get_occ & 0x000000000000000EL) == 0 && (get_attack_board & 0x000000000000000EL) == 0) || (get_occ & 0x0E00000000000000L) == 0 && (get_attack_board & 0x0E00000000000000L) == 0;
+    
+            if (playerColor == PlayerColor.WHITE) {
+                kingSafe = (get_board_king & (1L << 4)) != 0;
+                rookSafe = (get_board_rook & (1L << 0)) != 0 || (get_board_rook & (1L << 7)) != 0;
+            } else if (playerColor == PlayerColor.BLACK) {
+                kingSafe = (get_board_king & (1L << 60)) != 0;
+                rookSafe = (get_board_rook & (1L << 56)) != 0 || (get_board_rook & (1L << 63)) != 0;
+            }
+    
+            System.out.println("isKingSide: " + isKingside);
+            System.out.println("isQueenSide: " + isQueenSide);
+            System.out.println("castleConditionKingSide: " + castleConditionKingSide);
+            System.out.println("castleConditionQueenSide: " + castleConditionQueenSide);
+            
+            if(castleConditionKingSide && kingSafe && rookSafe){
+                castleMove = (temp_playerColor == 0 ? 0x00000000000000E0L : 0xE000000000000000L) | castleMove;
+            }
+            if(castleConditionQueenSide && kingSafe && rookSafe){
+                castleMove = (temp_playerColor == 0 ? 0x00000000000000F0L : 0x0F00000000000000L) | castleMove;
+            }
+        }
 
+        //get the remaining thing
         long get_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
         long get_unOcc = bitBoard.getUnOcc();
         if(piecesType  == PiecesType.NONE){
             return 0L;
         }
-        return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board) | enPassantMove;
+        return mainInterface.getPossibilities(piecesType, playerColor, from, get_unOcc, get_board) | enPassantMove | castleMove;
     }
 
     public boolean isWhiteTurn(long from){

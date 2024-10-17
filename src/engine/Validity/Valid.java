@@ -33,4 +33,11 @@ public class Valid {
         }
         return false;
     }
+
+    public boolean checkMate(PlayerColor playerColor){
+        if(kingInCheck(playerColor)){
+            return true;
+        }
+        return false;
+    }
 }
