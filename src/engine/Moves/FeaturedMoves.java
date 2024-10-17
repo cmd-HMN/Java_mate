@@ -103,6 +103,7 @@ public class FeaturedMoves {
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
 
+        System.out.println("Normal");
         if(valid.isDoubleSquare(from, to, playerColor)){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }
@@ -142,11 +143,11 @@ public class FeaturedMoves {
 
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
-        System.out.println("Opposite Lines");
 
         long unoccupied = bitBoard.getUnOcc();
 
         long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
+        printBoardWithMoves(possible_attack);
 
         long get_board = getBoard(piecesType, playerColor);
         if ((to & possible_attack) != 0) {
@@ -282,10 +283,11 @@ public class FeaturedMoves {
         
         System.out.println("Promotion");
         capture(from, to, playerColor); 
-        
-        boolean checkValidity = playerColor == PlayerColor.WHITE 
+    
+        boolean checkValidity = (playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0
-                            : (to & BitBoard.RANK_1) != 0;
+                            : (to & BitBoard.RANK_1) != 0) && 
+                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 0;
 
         if(checkValidity){
 
