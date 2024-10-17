@@ -104,8 +104,10 @@ public class FeaturedMoves {
     public boolean normal(long from, long to, PlayerColor playerColor) {
 
         System.out.println("Normal");
-        if(valid.isDoubleSquare(from, to, playerColor)){
+        if(valid.isDoubleSquare(from, to, playerColor) && bitBoard.enPassantT == 0L){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
+        }else{
+            bitBoard.enPassantT = 0L;
         }
 
         PiecesType piecesType = bitBoard.getPieceType(from);
@@ -164,6 +166,7 @@ public class FeaturedMoves {
                 setBoard(piecesType, playerColor, get_board);
                 return false;
             }
+            bitBoard.enPassantT = 0L;
             return true;
         }
         System.out.println("Failed");
@@ -218,7 +221,7 @@ public class FeaturedMoves {
             setBoard(PiecesType.KING, playerColor, get_board_king);
             setBoard(PiecesType.ROOK, playerColor, get_board_rook);
 
-            System.out.println("Above true");
+            bitBoard.enPassantT = 0L;
             return true;
         }
         else if((isQueenSide && kingSafe && rookSafe && castleConditionQueenSide)){
@@ -239,6 +242,7 @@ public class FeaturedMoves {
             setBoard(PiecesType.KING, playerColor, get_board_king);
             setBoard(PiecesType.ROOK, playerColor, get_board_rook);
 
+            bitBoard.enPassantT = 0L;
             return true;
         }
         return false;
@@ -287,7 +291,7 @@ public class FeaturedMoves {
         boolean checkValidity = (playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0
                             : (to & BitBoard.RANK_1) != 0) && 
-                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 0;
+                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 05;
 
         if(checkValidity){
 
@@ -316,6 +320,7 @@ public class FeaturedMoves {
                 setBoard(PiecesType.PAWN, playerColor, get_board);
                 return false;
             }
+            bitBoard.enPassantT = 0L;
             return true;
         }
         else{

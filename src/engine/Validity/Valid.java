@@ -1,6 +1,7 @@
 package src.engine.Validity;
 
 import src.engine.BitBoard;
+import src.engine.ChessPieces.King;
 import src.engine.Moves.AttackBoard;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
@@ -8,6 +9,7 @@ import src.engine.Type.PlayerColor;
 // this class help us to check different valid conditions   
 public class Valid {
 
+    King king = new King();
     private BitBoard bitBoard;
     private AttackBoard attack_board;
     public Valid(BitBoard bitBoard){
@@ -36,7 +38,7 @@ public class Valid {
 
     public boolean checkMate(PlayerColor playerColor){
         if(kingInCheck(playerColor)){
-            return true;
+            boolean kingMove = playerColor == PlayerColor.WHITE;
         }
         return false;
     }
