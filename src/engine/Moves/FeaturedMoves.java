@@ -26,6 +26,9 @@ public class FeaturedMoves {
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
+        valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK);
+        System.out.print("CheckMate: ");
+        System.out.println(valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK));
         
         if(moveType == 0){     
             if (playerColor == 0) {
@@ -103,8 +106,11 @@ public class FeaturedMoves {
     // make the normal move (only movement)
     public boolean normal(long from, long to, PlayerColor playerColor) {
 
-        if(valid.isDoubleSquare(from, to, playerColor)){
+        System.out.println("Normal");
+        if(valid.isDoubleSquare(from, to, playerColor) && bitBoard.enPassantT == 0L){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
+        }else{
+            bitBoard.enPassantT = 0L;
         }
 
         PiecesType piecesType = bitBoard.getPieceType(from);
@@ -142,11 +148,11 @@ public class FeaturedMoves {
 
         PiecesType piecesType2 = bitBoard.getPieceType(to);
         long to_ = getBoard(piecesType2, playerColor.getOppositeColor());
-        System.out.println("Opposite Lines");
 
         long unoccupied = bitBoard.getUnOcc();
 
         long possible_attack = mainInterface.getPossibleAttack(piecesType, playerColor, from, to_, unoccupied);
+        printBoardWithMoves(possible_attack);
 
         long get_board = getBoard(piecesType, playerColor);
         if ((to & possible_attack) != 0) {
@@ -163,6 +169,7 @@ public class FeaturedMoves {
                 setBoard(piecesType, playerColor, get_board);
                 return false;
             }
+            bitBoard.enPassantT = 0L;
             return true;
         }
         System.out.println("Failed");
@@ -217,7 +224,7 @@ public class FeaturedMoves {
             setBoard(PiecesType.KING, playerColor, get_board_king);
             setBoard(PiecesType.ROOK, playerColor, get_board_rook);
 
-            System.out.println("Above true");
+            bitBoard.enPassantT = 0L;
             return true;
         }
         else if((isQueenSide && kingSafe && rookSafe && castleConditionQueenSide)){
@@ -238,6 +245,7 @@ public class FeaturedMoves {
             setBoard(PiecesType.KING, playerColor, get_board_king);
             setBoard(PiecesType.ROOK, playerColor, get_board_rook);
 
+            bitBoard.enPassantT = 0L;
             return true;
         }
         return false;
@@ -282,10 +290,11 @@ public class FeaturedMoves {
         
         System.out.println("Promotion");
         capture(from, to, playerColor); 
-        
-        boolean checkValidity = playerColor == PlayerColor.WHITE 
+    
+        boolean checkValidity = (playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0
-                            : (to & BitBoard.RANK_1) != 0;
+                            : (to & BitBoard.RANK_1) != 0) && 
+                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 05;
 
         if(checkValidity){
 
@@ -314,6 +323,7 @@ public class FeaturedMoves {
                 setBoard(PiecesType.PAWN, playerColor, get_board);
                 return false;
             }
+            bitBoard.enPassantT = 0L;
             return true;
         }
         else{

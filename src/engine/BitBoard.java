@@ -254,8 +254,7 @@ public class BitBoard {
         if((to == enPassantT && piecesType == PiecesType.PAWN)){
             return 2;
         }
-        else if( (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
-            System.out.println("Worked");
+        else if( (((from & RANK_2) != 0) || ((from & RANK_7) != 0)) && (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
             return 3;
         }
         else if(((from == (1L << 4) && (to == (1L << 7) || to == (1L << 0))) || (from == (1L << 60) && (to == (1L << 63)) || to == (1L << 56)))){
