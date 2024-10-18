@@ -136,7 +136,6 @@ public class BoardFrame extends JFrame {
                         moveBoard  = 0L;  
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                        checkMateDialog(0);
                     }
                 }
             }

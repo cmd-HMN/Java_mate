@@ -46,8 +46,21 @@ public class Valid {
             }
         }
 
+        long get_occ = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
+
+        // System.out.println("OCC");
+        // bitBoard.printBoardWithMoves(get_occ);
         
-        if((attack_board.getAttackBoard(playerColor.getOppositeColor()) & king_position) == 0){
+        long get_unOcc = bitBoard.getUnOcc();
+
+        // System.out.println("UNOCC");
+        // bitBoard.printBoardWithMoves(get_unOcc);
+
+        long possible_move = playerColor == PlayerColor.WHITE ? king.white_get_possible_pieces(king_position, get_occ, get_unOcc) : king.black_get_possible_pieces(king_position, get_occ, get_unOcc);
+        // System.out.println("POSSIBLE MOVE");
+        // bitBoard.printBoardWithMoves(possible_move);
+
+        if(kingInCheck(playerColor) && possible_move == 0L){
             return true;
         }
         return false;
