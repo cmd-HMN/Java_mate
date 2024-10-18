@@ -16,18 +16,19 @@ public class BoardFrame extends JFrame {
     MainInterface mainInterface = new MainInterface();
     FeaturedMoves featuredMoves = new FeaturedMoves(board, mainInterface);
     ChessPiece chessPiece = new ChessPiece();
-
+    private JPanel boardPanel;
+    
     private Point selectedPiece; 
     boolean selectedCursor = false;
     private boolean isWhiteTurn = true;
     private long moveBoard;
-
-
+    
+    
     public BoardFrame() {
         setTitle("Java Mate");
         setBounds(10, 10, 512, 512);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel boardPanel = new JPanel() {
+        boardPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -135,6 +136,7 @@ public class BoardFrame extends JFrame {
                         moveBoard  = 0L;  
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        checkMateDialog(0);
                     }
                 }
             }
@@ -161,5 +163,19 @@ public class BoardFrame extends JFrame {
             options[0]);
 
         return options[choice];
+    }
+
+    public void checkMateDialog(int playerColor){
+        JOptionPane.showMessageDialog(
+            null, 
+            "CheckMate", 
+            "sd", 
+            JOptionPane.NO_OPTION
+            );
+
+        remove(boardPanel);
+        revalidate();
+        repaint();
+
     }
 }

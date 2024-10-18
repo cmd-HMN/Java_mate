@@ -36,9 +36,19 @@ public class Valid {
         return false;
     }
 
-    public boolean checkMate(PlayerColor playerColor){
-        if(kingInCheck(playerColor)){
-            boolean kingMove = playerColor == PlayerColor.WHITE;
+    public boolean checkmate(PlayerColor playerColor){
+        long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
+        long king_position = 0L;
+        for(int i = 0; i < 64; i++){
+            if((get_board_king & (1L << i)) != 0){
+                king_position = (1L << i);
+                break;
+            }
+        }
+
+        
+        if((attack_board.getAttackBoard(playerColor.getOppositeColor()) & king_position) == 0){
+            return true;
         }
         return false;
     }
