@@ -3,6 +3,7 @@ package src.engine.Validity;
 import src.engine.BitBoard;
 import src.engine.ChessPieces.King;
 import src.engine.Moves.AttackBoard;
+import src.engine.Moves.FeaturedMoves;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 
@@ -12,9 +13,12 @@ public class Valid {
     King king = new King();
     private BitBoard bitBoard;
     private AttackBoard attack_board;
-    public Valid(BitBoard bitBoard){
+    private FeaturedMoves  featuredMoves;
+
+    public Valid(BitBoard bitBoard, FeaturedMoves featuredMoves){
         this.bitBoard = bitBoard;
         this.attack_board = new AttackBoard(bitBoard);
+        this.featuredMoves = featuredMoves;
     }
     
     //to check if the pawn has move double squares
@@ -46,19 +50,11 @@ public class Valid {
             }
         }
 
-        long get_occ = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
+        long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
+        bitBoard.printBoardWithMoves(get_attack_board);
 
-        // System.out.println("OCC");
-        // bitBoard.printBoardWithMoves(get_occ);
-        
-        long get_unOcc = bitBoard.getUnOcc();
-
-        // System.out.println("UNOCC");
-        // bitBoard.printBoardWithMoves(get_unOcc);
-
-        long possible_move = playerColor == PlayerColor.WHITE ? king.white_get_possible_pieces(king_position, get_occ, get_unOcc) : king.black_get_possible_pieces(king_position, get_occ, get_unOcc);
-        // System.out.println("POSSIBLE MOVE");
-        // bitBoard.printBoardWithMoves(possible_move);
+        long possible_move = featuredMoves.getAllPossibleMove(playerColor);
+        bitBoard.printBoardWithMoves(possible_move);
 
         if(kingInCheck(playerColor) && possible_move == 0L){
             return true;
