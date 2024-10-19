@@ -41,24 +41,23 @@ public class Valid {
     }
 
     public boolean checkmate(PlayerColor playerColor){
-        long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
-        long king_position = 0L;
-        for(int i = 0; i < 64; i++){
-            if((get_board_king & (1L << i)) != 0){
-                king_position = (1L << i);
-                break;
-            }
-        }
 
+        if(!kingInCheck(playerColor)){
+            return false;
+        }
         long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
         bitBoard.printBoardWithMoves(get_attack_board);
 
         long possible_move = featuredMoves.getAllPossibleMove(playerColor);
         bitBoard.printBoardWithMoves(possible_move);
 
+        long prevention_board = get_attack_board & possible_move;
+        bitBoard.printBoardWithMoves(prevention_board);
+
         if(kingInCheck(playerColor) && possible_move == 0L){
             return true;
         }
+
         return false;
     }
 }
