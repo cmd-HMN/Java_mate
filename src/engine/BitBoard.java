@@ -2,13 +2,11 @@ package src.engine;
 
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
-import src.engine.Validity.Valid;
 import src.gui.BoardFrame;
 
 public class BitBoard {
     // array used to handle the board
     BitBoard bitBoard;
-    Valid valid = new Valid(bitBoard);
     private long[][] bitboards = new long[2][6];
 
     public long enPassantT = 0L;

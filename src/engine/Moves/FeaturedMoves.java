@@ -19,7 +19,7 @@ public class FeaturedMoves {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
         this.attack_board = new AttackBoard(bitBoard);
-        this.valid = new Valid(bitBoard);
+        this.valid = new Valid(bitBoard, this);
     }
 
 
@@ -27,9 +27,7 @@ public class FeaturedMoves {
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
         valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK);
-        System.out.print("CheckMate: ");
-        System.out.println(valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK));
-        
+    
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE)){
@@ -368,8 +366,6 @@ public class FeaturedMoves {
     
             boolean kingSafe = false;
             boolean rookSafe = false;
-            boolean isKingside = false;
-            boolean isQueenSide = false;
             boolean castleConditionKingSide = ((get_occ & 0x0000000000000060L) == 0 && (get_attack_board & 0x0000000000000060L) == 0) || (get_occ & 0x6000000000000000L) == 0 && (get_attack_board & 0x6000000000000000L) == 0;
             boolean castleConditionQueenSide = ((get_occ & 0x000000000000000EL) == 0 && (get_attack_board & 0x000000000000000EL) == 0) || (get_occ & 0x0E00000000000000L) == 0 && (get_attack_board & 0x0E00000000000000L) == 0;
     
@@ -380,12 +376,7 @@ public class FeaturedMoves {
                 kingSafe = (get_board_king & (1L << 60)) != 0;
                 rookSafe = (get_board_rook & (1L << 56)) != 0 || (get_board_rook & (1L << 63)) != 0;
             }
-    
-            System.out.println("isKingSide: " + isKingside);
-            System.out.println("isQueenSide: " + isQueenSide);
-            System.out.println("castleConditionKingSide: " + castleConditionKingSide);
-            System.out.println("castleConditionQueenSide: " + castleConditionQueenSide);
-            
+
             if(castleConditionKingSide && kingSafe && rookSafe){
                 castleMove = (temp_playerColor == 0 ? 0x00000000000000E0L : 0xE000000000000000L) | castleMove;
             }
@@ -409,6 +400,7 @@ public class FeaturedMoves {
 
     public long getAllPossibleMove(PlayerColor playerColor){
         System.out.println("Possible Moves!!");
+        System.out.println(playerColor);
         long possibleMoves = 0L;
         for(int i = 0; i < 64; i++){
             if((bitBoard.getOccSquaresByColor(playerColor) & (1L << i)) != 0){
