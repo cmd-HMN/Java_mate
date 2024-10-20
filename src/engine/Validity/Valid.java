@@ -45,14 +45,33 @@ public class Valid {
         if(!kingInCheck(playerColor)){
             return false;
         }
+        long get_board_king = bitBoard.getBitBoard(PiecesType.KING, playerColor);
+        long from = 0L;
+        for(int i = 0; i < 64; i++){
+            if((get_board_king & (1L << i)) != 0){
+                from |= (1L << i);
+            }
+        }
+        
+        long get_opponent_board = bitBoard.getOccSquaresByColor(playerColor.getOppositeColor());
+        long get_unOcc = bitBoard.getUnOcc();
+
+        long get_board_king_move = playerColor == PlayerColor.WHITE ?
+        king.white_get_possible_pieces(from, get_unOcc, get_opponent_board) :
+        king.black_get_possible_pieces(from, get_unOcc, get_opponent_board);
         long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
-        bitBoard.printBoardWithMoves(get_attack_board);
+
+        System.out.println("King Move");
+        get_board_king_move = get_board_king_move & ~get_attack_board;
+        bitBoard.printBoardWithMoves(get_board_king_move);
+        // bitBoard.printBoardWithMoves(get_attack_board);
+
 
         long possible_move = featuredMoves.getAllPossibleMove(playerColor);
-        bitBoard.printBoardWithMoves(possible_move);
+        // bitBoard.printBoardWithMoves(possible_move);
 
         long prevention_board = get_attack_board & possible_move;
-        bitBoard.printBoardWithMoves(prevention_board);
+        // bitBoard.printBoardWithMoves(prevention_board);
 
         if(kingInCheck(playerColor) && possible_move == 0L){
             return true;
