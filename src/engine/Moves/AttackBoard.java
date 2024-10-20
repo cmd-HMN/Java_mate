@@ -43,7 +43,6 @@ public class AttackBoard {
             
                 if(playerColor == PlayerColor.WHITE){
 
-                    attack_board |= position;
                     switch(piecesType){
                         
                         case KING:
@@ -75,8 +74,6 @@ public class AttackBoard {
                     }
 
                 }else{
-
-                attack_board |= position;
                 switch(piecesType){
                     
                     
