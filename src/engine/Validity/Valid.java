@@ -69,7 +69,10 @@ public class Valid {
 
         long possible_move = featuredMoves.getAllPossibleMove(playerColor);
 
-        getAttackPieceOnKing(playerColor, possible_move, get_board_king, get_opponent_board, get_unOcc, get_board, king_position);
+        System.out.println("Get_board");
+        bitBoard.printBoardWithMoves(get_board);
+        boolean cond = capturePiece(playerColor, possible_move, get_board_king, get_opponent_board, get_unOcc, get_board, king_position);
+        System.out.println("capture: " + cond);
         if(get_board_king_move == 0L){
             
         }
@@ -79,7 +82,7 @@ public class Valid {
 
 
 
-    public PiecesType getAttackPieceOnKing(PlayerColor playerColor, long to, long get_board_king, long get_opponent_board, long unOcc, long get_board, long king_position){
+    public boolean capturePiece(PlayerColor playerColor, long to, long get_board_king, long get_opponent_board, long unOcc, long get_board, long king_position){
 
         for(int i = 0; i < 64; i++){
             if((get_opponent_board & (1L << i)) != 0){
@@ -88,28 +91,26 @@ public class Valid {
                 
                 long attacker_move = mainInterface.getPossibilities(piecesType, playerColor, attacker_position, unOcc, get_board);
 
-                System.out.println("attacker Move");
-                bitBoard.printBoardWithMoves(attacker_move);
                 if((attacker_move & king_position) != 0){
                     for(int j = 0; j < 64; j++){
                         if((get_board & (1L << j)) != 0){
                             long defender_position = 1L << j;
+                            bitBoard.printBoardWithMoves(defender_position);
                             PiecesType piecesType2 = bitBoard.getPieceType(defender_position);
 
                             System.out.println(piecesType2);
-                            long defender_move =  mainInterface.getPossibilities(piecesType2, playerColor, defender_position, unOcc, get_opponent_board);
+                            long defender_move =  mainInterface.getPossibilities(piecesType2, playerColor.getOppositeColor(), defender_position, unOcc, get_opponent_board);
                             System.err.println("defender Move");
                             bitBoard.printBoardWithMoves(defender_move);
 
-                            System.out.println(((defender_move & attacker_move) & king_position) == 0);
-                            if(((defender_move & attacker_move) & king_position) == 0){
-                                return piecesType;
+                            if((defender_move & (1L << attacker_position)) != 0){
+                                return true;
                             }
                         }
                     }
                 }
             }
         }
-        return PiecesType.NONE;
+        return false;
     }
 }
