@@ -19,7 +19,7 @@ public class FeaturedMoves {
         this.bitBoard = bitBoard;
         this.mainInterface = mainInterface;
         this.attack_board = new AttackBoard(bitBoard);
-        this.valid = new Valid(bitBoard, this);
+        this.valid = new Valid(bitBoard, this, mainInterface);
     }
 
 
