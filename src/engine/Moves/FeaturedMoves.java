@@ -26,17 +26,21 @@ public class FeaturedMoves {
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
         int moveType = bitBoard.getMoveType(from, to);
-        valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK);
+        if(valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK)){
+            System.out.println(
+                    playerColor == 0 ? "White Wins" : "Black Wins"
+            );
+        }
     
         if(moveType == 0){     
             if (playerColor == 0) {
-                if(normal(from, to, PlayerColor.WHITE)){
+                if(normal(from, to, PlayerColor.WHITE, false)){
                     bitBoard.printBoard();
                     return true;
                 }
             }
             if (playerColor == 1) {
-                if(normal(from, to, PlayerColor.BLACK)){
+                if(normal(from, to, PlayerColor.BLACK, false)){
                     bitBoard.printBoard();
                     return true;
                 }
@@ -72,13 +76,13 @@ public class FeaturedMoves {
         }
         if(moveType == 3){
             if (playerColor == 0) {
-                if(promotion(from, to, PlayerColor.WHITE)){
+                if(promotion(from, to, PlayerColor.WHITE, false)){
                     bitBoard.printBoard();
                     return true;
                 }
             }
             if (playerColor == 1) {
-                if(promotion(from, to, PlayerColor.BLACK)){
+                if(promotion(from, to, PlayerColor.BLACK, false)){
                     bitBoard.printBoard();
                     return true;
                 }
@@ -102,15 +106,13 @@ public class FeaturedMoves {
         return false;
     }
     // make the normal move (only movement)
-    public boolean normal(long from, long to, PlayerColor playerColor) {
-
-        System.out.println("Normal");
+    public boolean normal(long from, long to, PlayerColor playerColor, boolean v) {
         if(valid.isDoubleSquare(from, to, playerColor) && bitBoard.enPassantT == 0L){
             bitBoard.enPassantT = playerColor == PlayerColor.WHITE ?  (to >> 8) : (to << 8);
         }else{
             bitBoard.enPassantT = 0L;
         }
-
+        
         PiecesType piecesType = bitBoard.getPieceType(from);
     
         long unoccupied = bitBoard.getUnOcc();
@@ -131,9 +133,14 @@ public class FeaturedMoves {
                 setBoard(piecesType, playerColor, get_board);
                 return false;
             }
+            if(v){
+                get_board &= ~to;
+                get_board |= from;
+                setBoard(piecesType, playerColor, get_board);
+                return true;
+            }
             return true;
         }
-        System.out.println("Failed");
         return false;
     }
 
@@ -282,7 +289,7 @@ public class FeaturedMoves {
     }
 
     //promotion
-    public boolean promotion(long from, long to, PlayerColor playerColor){
+    public boolean promotion(long from, long to, PlayerColor playerColor, boolean v){
         // get the pieceType before capture
         PiecesType piecesType_to = bitBoard.getPieceType(to);
         
@@ -320,6 +327,15 @@ public class FeaturedMoves {
                 setBoard(piecesType, playerColor, get_promoting_board);
                 setBoard(PiecesType.PAWN, playerColor, get_board);
                 return false;
+            }
+            if(v){
+                get_promoting_board &= ~to;
+                get_board |= from;
+                to_ |= to;
+                setBoard(piecesType_to, playerColor.getOppositeColor(), to_);
+                setBoard(piecesType, playerColor, get_promoting_board);
+                setBoard(PiecesType.PAWN, playerColor, get_board);
+                return true;
             }
             bitBoard.enPassantT = 0L;
             return true;

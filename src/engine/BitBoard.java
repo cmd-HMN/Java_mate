@@ -249,23 +249,32 @@ public class BitBoard {
         long occ_board = getOcc();
         PiecesType piecesType = getPieceType(from);
 
+        // en Passant 
         if((to == enPassantT && piecesType == PiecesType.PAWN)){
             return 2;
         }
+
+        // promotion
         else if( (((from & RANK_2) != 0) || ((from & RANK_7) != 0)) && (((to & RANK_8) != 0) || ((to & RANK_1) != 0)) && piecesType == PiecesType.PAWN){
             return 3;
         }
+
+        // castle
         else if(((from == (1L << 4) && (to == (1L << 7) || to == (1L << 0))) || (from == (1L << 60) && (to == (1L << 63)) || to == (1L << 56)))){
             return 4;
         }
+
+        // normal
         else if((occ_board & to) == 0){
             return 0;
         }
+
+        // capture
         else if((occ_board & to) != 0){
             return 1;
         }
         
-        return 1;
+        return 0;
     }
 
     public int getColor(long from){

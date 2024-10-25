@@ -63,6 +63,7 @@ public class Valid {
         long get_board_king_move = playerColor == PlayerColor.WHITE
                 ? king.white_get_possible_pieces(king_position, get_unOcc, get_opponent_board)
                 : king.black_get_possible_pieces(king_position, get_unOcc, get_opponent_board);
+                
         long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
 
         get_board_king_move = get_board_king_move & ~get_attack_board;
@@ -78,8 +79,21 @@ public class Valid {
         king_position);
 
         System.out.println("prevention: " + cond1);
-        if (get_board_king_move == 0L) {
 
+
+        bitBoard.printBoardWithMoves(get_board_king_move);
+        if (get_board_king_move == 0L) {
+            if(cond == true){
+                if(cond1 == false){
+                    System.out.println("Checkmate: " + playerColor);
+                    return true;
+                }
+            }
+            
+            if((cond && cond1) == false){
+                System.out.println("Checkmate: " + playerColor);
+                return true;
+            }
         }
 
         return false;
@@ -119,6 +133,7 @@ public class Valid {
     public boolean preventionMove(PlayerColor playerColor, long get_board_king, long get_opponent_board,
             long unOcc, long get_board, long king_position) {
 
+        boolean move;
         for (int i = 0; i < 64; i++) {
             if ((get_opponent_board & (1L << i)) != 0) {
                 long attacker_position = 1L << i;
@@ -130,9 +145,29 @@ public class Valid {
 
                 if ((attacker_move & king_position) != 0) {
                     for (int j = 0; j < 64; j++) {
+                        long from = 1L << j;
                         if ((get_board & (1L << j)) != 0) {
                             for(int k = 0; k < 64; k++){
-                               
+                                long to = 1L << k;
+                                if((unOcc & to) != 0){
+                                    int getMoveType = bitBoard.getMoveType(from, to);
+                                    if (getMoveType == 0) {
+                                        if (playerColor == PlayerColor.WHITE) {
+                                            move = featuredMoves.normal(from, to, PlayerColor.WHITE, true);
+                                            if (!move) {
+                                                continue;
+                                            }
+                                            return true;
+                                        } else if (playerColor == PlayerColor.BLACK) {
+                                            move = featuredMoves.normal(from, to, PlayerColor.BLACK, true);
+                                            if (!move) {
+                                                continue;
+                                            }
+                                            return true;
+                                        }
+                                    }
+                                    
+                                }
                             }
                         }
                     }
