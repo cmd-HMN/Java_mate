@@ -25,13 +25,7 @@ public class FeaturedMoves {
 
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
-        int moveType = bitBoard.getMoveType(from, to);
-        if(valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK)){
-            System.out.println(
-                    playerColor == 0 ? "White Wins" : "Black Wins"
-            );
-        }
-    
+        int moveType = bitBoard.getMoveType(from, to);    
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE, false)){
@@ -48,13 +42,13 @@ public class FeaturedMoves {
         }   
         if(moveType == 1){
             if (playerColor == 0) {
-                if(capture(from, to, PlayerColor.WHITE, false)){
+                if(capture(from, to, PlayerColor.WHITE)){
                     bitBoard.printBoard();
                     return true;
                 };
             }
             if (playerColor == 1) {
-                if(capture(from, to, PlayerColor.BLACK, false)){
+                if(capture(from, to, PlayerColor.BLACK)){
                     bitBoard.printBoard();
                     return true;
                 }
@@ -146,7 +140,7 @@ public class FeaturedMoves {
 
 
     // make the capture move
-    public boolean capture(long from, long to, PlayerColor playerColor, boolean v){
+    public boolean capture(long from, long to, PlayerColor playerColor){
         System.out.println("Capture");
         PiecesType piecesType = bitBoard.getPieceType(from);
 
@@ -173,14 +167,6 @@ public class FeaturedMoves {
                 setBoard(piecesType2, playerColor.getOppositeColor(), to_);
                 setBoard(piecesType, playerColor, get_board);
                 return false;
-            }
-            if(v){
-                get_board &= ~to;
-                get_board |= from;
-                to_ |= to;
-                setBoard(piecesType2, playerColor.getOppositeColor(), to_);
-                setBoard(piecesType, playerColor, get_board);
-                return true;
             }
             bitBoard.enPassantT = 0L;
             return true;
@@ -302,7 +288,7 @@ public class FeaturedMoves {
         PiecesType piecesType_to = bitBoard.getPieceType(to);
         
         System.out.println("Promotion");
-        capture(from, to, playerColor, false); 
+        capture(from, to, playerColor); 
     
         boolean checkValidity = (playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0

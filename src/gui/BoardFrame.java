@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import src.engine.*;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Moves.FeaturedMoves;
+import src.engine.Type.PlayerColor;
+import src.engine.Validity.Valid;
 import src.gui.PiecesImage.ChessPiece;
 
 public class BoardFrame extends JFrame {
@@ -16,6 +18,7 @@ public class BoardFrame extends JFrame {
     MainInterface mainInterface = new MainInterface();
     FeaturedMoves featuredMoves = new FeaturedMoves(board, mainInterface);
     ChessPiece chessPiece = new ChessPiece();
+    Valid valid = new Valid(board, featuredMoves, mainInterface);
     private JPanel boardPanel;
     
     private Point selectedPiece; 
@@ -88,6 +91,10 @@ public class BoardFrame extends JFrame {
                         }
                     }
                     isWhite = !isWhite;
+                    if(valid.checkmate(isWhite ? PlayerColor.WHITE : PlayerColor.BLACK)){
+                        checkMateDialog(isWhite ? 0 : 1);
+                        System.exit(0);
+                    }
                 }
             }
         };

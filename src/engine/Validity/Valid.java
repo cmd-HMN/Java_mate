@@ -73,16 +73,17 @@ public class Valid {
 
         boolean cond = capturePiece(playerColor, get_board_king, get_opponent_board, get_unOcc, get_board,
                 king_position);
-        System.out.println("capture: " + cond);
-
         boolean cond1 = preventionMove(playerColor, get_board_king, get_opponent_board, get_unOcc, get_board,
         king_position);
+        boolean cond2 = isAvoidingMove(playerColor, get_board_king_move, king_position);
 
+        System.out.println("capture: " + cond);
         System.out.println("prevention: " + cond1);
+        System.out.println("avoiding: " + cond2);
 
 
         bitBoard.printBoardWithMoves(get_board_king_move);
-        if (get_board_king_move == 0L) {
+        if (!cond2) {
             if(cond == true){
                 if(cond1 == false){
                     System.out.println("Checkmate: " + playerColor);
@@ -172,6 +173,50 @@ public class Valid {
                         }
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isAvoidingMove(PlayerColor playerColor, long get_board_king_move, long king_position){
+        boolean move;
+        for(int i = 0; i < 64; i++){
+            if((get_board_king_move & (1L << i)) != 0){
+                long to = 1L << i;
+                int getMoveType = bitBoard.getMoveType(king_position, to);
+                if (getMoveType == 0) {
+                    if (playerColor == PlayerColor.WHITE) {
+                        move = featuredMoves.normal(king_position, to, PlayerColor.WHITE, true);
+                        if (!move) {
+                            continue;
+                        }
+                        return true;
+                    } else if (playerColor == PlayerColor.BLACK) {
+                        move = featuredMoves.normal(king_position, to, PlayerColor.BLACK, true);
+                        if (!move) {
+                            continue;
+                        }
+                        return true;
+                    }
+                }
+                if (getMoveType == 1) {
+                    if (playerColor == PlayerColor.WHITE) {
+                        move = featuredMoves.capture(king_position, to, PlayerColor.WHITE);
+                        if (!move) {
+                            continue;
+                        }
+                        return true;
+                    } else if (playerColor == PlayerColor.BLACK) {
+                        move = featuredMoves.capture(king_position, to, PlayerColor.BLACK);
+                        if (!move) {
+                            continue;
+                        }
+                        return true;
+                    }
+                }
+
+                
             }
         }
         return false;
