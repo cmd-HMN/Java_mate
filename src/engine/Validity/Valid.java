@@ -66,7 +66,7 @@ public class Valid {
                 
         long get_attack_board = attack_board.getAttackBoard(playerColor.getOppositeColor());
 
-        get_board_king_move = get_board_king_move & ~get_attack_board;
+        get_board_king_move = get_board_king_move & ~get_attack_board;  
 
         System.out.println("Get_board");
         bitBoard.printBoardWithMoves(get_board);
