@@ -25,13 +25,7 @@ public class FeaturedMoves {
 
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor) {
-        int moveType = bitBoard.getMoveType(from, to);
-        if(valid.checkmate(playerColor == 0 ? PlayerColor.WHITE : PlayerColor.BLACK)){
-            System.out.println(
-                    playerColor == 0 ? "White Wins" : "Black Wins"
-            );
-        }
-    
+        int moveType = bitBoard.getMoveType(from, to);    
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE, false)){
