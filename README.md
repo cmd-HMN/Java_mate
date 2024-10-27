@@ -1,4 +1,4 @@
-# 👑 Java_mate 👑(its a sample ReadMe)(Working on it.....)
+# 👑 Java_mate 👑
 
 A chess engine written in Java, designed to build the engine and GUI for a chess game.
 
@@ -10,7 +10,7 @@ A chess engine written in Java, designed to build the engine and GUI for a chess
 
 ## Installation 🪛
 
-To install the engine, you will need to have Java installed on your computer. You can download the
+To run this, you will need to have Java installed on your computer. You can download the
 
 1. Download the below files:
 
@@ -29,9 +29,20 @@ To install the engine, you will need to have Java installed on your computer. Yo
 
     download the zip file from [here](https://github.com/cmd-HMN/Java_mate/archive/refs/heads/main.zip) then extract the files
 
-3. Run the file (will be specified)
+3. Run the file
 
-    run the file
+    We need to build and then run the game. (Use PowerShell or Terminal or any code editor.)
+   
+    Run below commands
+    
+    ```bash
+        cd ...\JavaMate  //(go the dir where u have extract the files, root folder)
+         --build--
+        javac src/engine/*.java src/gui/*.java
+        -- after that run the below command--
+        java src.gui.ChessBoard
+    ```
+    Hurray!🙌 it worked.
 
 ## Contributing 💖
 
