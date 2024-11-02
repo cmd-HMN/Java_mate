@@ -82,7 +82,42 @@ public class Evaluation {
         -30,-40,-40,-50,-50,-40,-40,-30
     };
 
-    private int getScore(PlayerColor playerColor){
+    private int material(PlayerColor playerColor){
+        int materialScore = 0;
+        switch (playerColor){
+            case WHITE:
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * PAWN;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * KNIGHT;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * BISHOP;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * ROOK;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * QUEEN;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.WHITE) * KING;
+                break;
+            case BLACK:
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * PAWN;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * KNIGHT;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * BISHOP;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * ROOK;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * QUEEN;
+                materialScore += bitBoard.getOccSquaresByColor(PlayerColor.BLACK) * KING;
+                break;
+        }
+        return materialScore;
+    }
+
+    private int position(PlayerColor playerColor){
+        int positionScore = 0;
+        for (int square = 0; square < 64; square++) {
+        }
+        return positionScore;
+    }
+
+    private int popBit(long[] board){
+        int index  = Long.numberOfTrailingZeros(board[0]);
+        board[0] &= ~(1L << index);
+        return index;
+    }
+    public int getScore(){
         int score = 0;
         return score;
     }
