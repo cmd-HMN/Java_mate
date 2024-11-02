@@ -4,5 +4,6 @@ Task to be completed be
 4. evaluation board
 5. chess algo
 6. EnPassant problems
+7. One more condition in the promotion
 
 more.......
