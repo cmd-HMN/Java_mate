@@ -16,55 +16,137 @@ public class Evaluation {
         this.bitBoard = bitBoard;
     }
     
-    private static final int[] pawnTable = {
-        0, 0, 0, 0, 0, 0, 0, 0, 
-        50, 50, 50, 50, 50, 50, 50, 50, 
-        10, 10, 20, 30, 30, 20, 10, 10, 
-        5, 5, 10, 25, 25, 10, 5, 5, 
-        0, 0, 0, 20, 20, 0, 0, 0, 
-        5, -5, -10, 0, 0, -10, -5, 5, 
-        5, 10, 10, -20, -20, 10, 10, 5, 
-        0, 0, 0, 0, 0, 0, 0, 0
+    private static final int[] whitePawnTable = {
+        0,  0,  0,  0,  0,  0,  0,  0,
+        90, 90, 90, 90, 90, 90, 90, 90,
+        30, 30, 40, 60, 60, 40, 30, 30,
+        10, 10, 20, 40, 40, 20, 10, 10,
+        5,  5, 10, 20, 20, 10,  5,  5,
+        0,  0,  0,-10,-10,  0,  0,  0,
+        5, -5,-10,  0,  0,-10, -5,  5,
+        0,  0,  0,  0,  0,  0,  0,  0
     };
 
-    private static final int[] knightTable = {
-        -50, -40, -30, -30, -30, -30, -40, -50, 
-        -40, -20, 0, 0, 0, 0, -20, -40, 
-        -30, 0, 10, 15, 15, 10, 0, -30, 
-        -30, 5, 15, 20, 20, 15, 5, -30, 
-        -30, 0, 15, 20, 20, 15, 0, -30, 
-        -30, 5, 10, 15, 15, 10, 5, -30, 
-        -40, -20, 0, 5, 5, 0, -20, -40, 
-        -50, -40, -30, -30, -30, -30, -40, -50};
+    private static final int[] blackPawnTable = {
+        0,  0,  0,  0,  0,  0,  0,  0,
+        5, -5,-10,  0,  0,-10, -5,  5,
+        0,  0,  0,-10,-10,  0,  0,  0,
+        5,  5, 10, 20, 20, 10,  5,  5,
+        10, 10, 20, 40, 40, 20, 10, 10,
+        30, 30, 40, 60, 60, 40, 30, 30,
+        90, 90, 90, 90, 90, 90, 90, 90,
+        0,  0,  0,  0,  0,  0,  0,  0
+    };
 
-    private static final int[] bishopTable =  {
-        -20, -10, -10, -10, -10, -10, -10, -20, 
-        -10, 0, 0, 0, 0, 0, 0, -10, 
-        -10, 0, 5, 10, 10, 5, 0, -10, 
-        -10, 5, 5, 10, 10, 5, 5, -10, 
-        -10, 0, 10, 10, 10, 10, 0, -10, 
-        -10, 10, 10, 10, 10, 10, 10, -10, 
-        -10, 5, 0, 0, 0, 0, 5, -10, 
-        -20, -10, -10, -10, -10, -10, -10, -20};
+    private static final int[] whiteKnightTable =  {
+        -50,-40,-30,-30,-30,-30,-40,-50,
+        -40,-20,  0,  5,  5,  0,-20,-40,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -40,-20,  0,  0,  0,  0,-20,-40,
+        -50,-40,-30,-30,-30,-30,-40,-50
+    };
 
-    private static final int[] rookTable = {0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, 10, 10, 10, 10, 5, -5, 0, 0,
-        0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5,
-        -5, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0, 5, 5, 0, 0, 0};
-  
+    private static final int[] blackKnightTable = {
+        -50,-40,-30,-30,-30,-30,-40,-50,
+        -40,-20,  0,  0,  0,  0,-20,-40,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -40,-20,  0,  5,  5,  0,-20,-40,
+        -50,-40,-30,-30,-30,-30,-40,-50,
+    };
 
-    private static final int[] queenTable = {-20, -10, -10, -5, -5, -10, -10, -20, -10, 0, 0, 0, 0, 0, 0,
-        -10, -10, 0, 5, 5, 5, 5, 0, -10, -5, 0, 5, 5, 5, 5, 0, -5, 0, 0, 5, 5, 5, 5, 0, -5, -10, 5, 5,
-        5, 5, 5, 0, -10, -10, 0, 5, 0, 0, 0, 0, -10, -20, -10, -10, -5, -5, -10, -10, -20};
 
-    private static final int[] kingMidTable = {-30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50,
-        -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40,
-        -30, -20, -30, -30, -40, -40, -30, -30, -20, -10, -20, -20, -20, -20, -20, -20, -10, 20, 20,
-        0, 0, 0, 0, 20, 20, 20, 30, 10, 0, 0, 10, 30, 20};
+    private static final int[] whiteBishopTable = {
+        -20,-10,-10,-10,-10,-10,-10,-20,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  5, 10, 10,  5,  0,-10,
+        -10,  5,  5, 10, 10,  5,  5,-10,
+        -10,  0, 10, 15, 15, 10,  0,-10,
+        -10, 10, 10, 10, 10, 10, 10,-10,
+        -10,  5,  0,  0,  0,  0,  5,-10,
+        -20,-10,-10,-10,-10,-10,-10,-20
+    };
+
+    private static final int[] blackBishopTable = {
+        -20,-10,-10,-10,-10,-10,-10,-20,
+        -10,  5,  0,  0,  0,  0,  5,-10,
+        -10, 10, 10, 10, 10, 10, 10,-10,
+        -10,  0, 10, 15, 15, 10,  0,-10,
+        -10,  5, 10, 15, 15, 10,  5,-10,
+        -10,  0, 10, 10, 10, 10,  0,-10,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -20,-10,-10,-10,-10,-10,-10,-20
+    };
+
+    private static final int[] whiteRookTable = {
+        0,  0,  0,  0,  0,  0,  0,  0,
+        5, 20, 20, 20, 20, 20, 20,  5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        0,  0,  0,  5,  5,  0,  0,  0
+    };
+
+    private static final int[] blackRookTable = {
+        0,  0,  0,  5,  5,  0,  0,  0,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        5, 20, 20, 20, 20, 20, 20,  5,
+        0,  0,  0,  0,  0,  0,  0,  0,
+};
+    private static final int[] whiteQueenTable = {
+        -20,-10,-10, -5, -5,-10,-10,-20,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  5,  5,  5,  5,  0,-10,
+        -5,  0,  5, 10, 10,  5,  0, -5,
+        -5,  0,  5, 10, 10,  5,  0, -5,
+        -10,  0,  5,  5,  5,  5,  0,-10,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -20,-10,-10, -5, -5,-10,-10,-20
+    };
+
+    private static final int[] blackQueenTable =  {
+        -20,-10,-10, -5, -5,-10,-10,-20,
+        -10,  0,  5,  0,  0,  0,  0,-10,
+        -10,  5,  5,  5,  5,  5,  0,-10,
+        -5,  0,  5, 10, 10,  5,  0, -5,
+        -5,  0,  5, 10, 10,  5,  0, -5,
+        -10,  0,  5,  5,  5,  5,  0,-10,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -20,-10,-10, -5, -5,-10,-10,-20
+    };
+
+    private static final int[] whiteKingTable = {
+        -50,-30,-30,-30,-30,-30,-30,-50,
+        -30,-30,  0,  0,  0,  0,-30,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-20,-10,  0,  0,-10,-20,-30,
+        -50,-40,-30,-20,-20,-30,-40,-50
+};
         
-    private static final int kingEndTable[] = {-50, -40, -30, -20, -20, -30, -40, -50, -30, -20, -10, 0,
-        0, -10, -20, -30, -30, -10, 20, 30, 30, 20, -10, -30, -30, -10, 30, 40, 40, 30, -10, -30, -30,
-        -10, 30, 40, 40, 30, -10, -30, -30, -10, 20, 30, 30, 20, -10, -30, -30, -30, 0, 0, 0, 0, -30,
-        -30, -50, -30, -30, -30, -30, -30, -30, -50};
+    private static final int blackKingTable[] = {
+        -50,-40,-30,-20,-20,-30,-40,-50,
+        -30,-20,-10,  0,  0,-10,-20,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-30,  0,  0,  0,  0,-30,-30,
+        -50,-30,-30,-30,-30,-30,-30,-50
+};
       
 
     private int countPiece(long board){
@@ -112,92 +194,123 @@ public class Evaluation {
                 long pawn = bitBoard.whitePawns;
                 while(pawn != 0){
                     int index = popBit(new long[]{pawn});
-                    positionScore += pawnTable[index];
-                    pawnScore += pawnTable[index];
+                    positionScore += whitePawnTable[index];
+                    pawnScore += whitePawnTable[index];
                     pawn &= ~1L << index;
                 }   
                 long knight = bitBoard.whiteKnights;
                 while(knight != 0){
                     int index = popBit(new long[]{knight});
-                    positionScore += knightTable[index];
-                    knightScore += knightTable[index];
+                    positionScore += whiteKnightTable[index];
+                    knightScore += whiteKnightTable[index];
                     knight &= ~1L << index;
                 }
                 long bishop = bitBoard.whiteBishops;
                 while(bishop != 0){
                     int index = popBit(new long[]{bishop});
-                    positionScore += bishopTable[index];
-                    bishopScore += bishopTable[index];
+                    positionScore += whiteBishopTable[index];
+                    bishopScore += whiteBishopTable[index];
                     bishop &= ~1L << index;
                 }
                 long rook = bitBoard.whiteRooks;
                 while(rook != 0){
                     int index = popBit(new long[]{rook});
-                    positionScore += rookTable[index];
-                    rookScore += rookTable[index];
+                    positionScore += whiteRookTable[index];
+                    rookScore += whiteRookTable[index];
                     rook &= ~1L << index;
                 }
                 long queen = bitBoard.whiteQueens;
                 while(queen != 0){
                     int index = popBit(new long[]{queen});
-                    positionScore += queenTable[index];
-                    queenScore += queenTable[index];
+                    positionScore += whiteQueenTable[index];
+                    queenScore += whiteQueenTable[index];
                     queen &= ~1L << index;
                 }
                 long king = bitBoard.whiteKings;
                 while(king != 0){
                     int index = popBit(new long[]{king});
-                    positionScore += Math.floor(index / 100) <= 13 ? kingMidTable[index] : kingEndTable[index]; 
-                    kingScore += Math.floor(index / 100) <= 13 ? kingMidTable[index] : kingEndTable[index];
+                    positionScore += whiteKingTable[index];
+                    kingScore += whiteKingTable[index];
                     king &= ~1L << index;
                 }
+                System.out.println("White");
+                System.out.println();
+                System.out.println("Pawn Score");
+                System.out.println(pawnScore);
+                System.out.println("Knight Score");
+                System.out.println(knightScore);
+                System.out.println("Bishop Score");
+                System.out.println(bishopScore);
+                System.out.println("Rook Score");
+                System.out.println(rookScore);
+                System.out.println("Queen Score");
+                System.out.println(queenScore);
+                System.out.println("King Score");
+                System.out.println(kingScore);
+
+                System.out.println("position score");
+                System.out.println(positionScore);
                 return positionScore;
             case BLACK:
                 long bPawn = bitBoard.blackPawns;
                 while(bPawn != 0){
                     int index = popBit(new long[]{bPawn});
-                    positionScore += pawnTable[index];
-                    pawnScore += pawnTable[index];
+                    positionScore += blackPawnTable[index];
+                    pawnScore += blackPawnTable[index];
                     bPawn &= ~1L << index;
                 }
                 long bKnight = bitBoard.blackKnights;
                 while(bKnight != 0){
                     int index = popBit(new long[]{bKnight});
-                    positionScore += knightTable[index];
-                    knightScore += knightTable[index];
+                    positionScore += blackKnightTable[index];
+                    knightScore += blackKnightTable[index];
                     bKnight &= ~1L << index;
                 }
                 long bBishop = bitBoard.blackBishops;
                 while(bBishop != 0){
                     int index = popBit(new long[]{bBishop});
-                    positionScore += bishopTable[index];
-                    bishopScore += bishopTable[index];
+                    positionScore += blackBishopTable[index];
+                    bishopScore += blackBishopTable[index];
                     bBishop &= ~1L << index;
                 }
                 long bRook = bitBoard.blackRooks;
                 while(bRook != 0){
                     int index = popBit(new long[]{bRook});
-                    positionScore += rookTable[index];
-                    rookScore += rookTable[index];
+                    positionScore += blackRookTable[index];
+                    rookScore += blackRookTable[index];
                     bRook &= ~1L << index;
                 }
                 long bQueen = bitBoard.blackQueens;
                 while(bQueen != 0){
                     int index = popBit(new long[]{bQueen});
-                    positionScore += queenTable[index];
-                    queenScore += queenTable[index];
+                    positionScore += blackQueenTable[index];
+                    queenScore += blackQueenTable[index];
                     bQueen &= ~1L << index;
                 }
                 long bKing = bitBoard.blackKings;
                 while(bKing != 0){
                     int index = popBit(new long[]{bKing});
-                    positionScore += Math.floor(index / 100) <= 13 ? kingMidTable[index] : kingEndTable[index];
-                    kingScore += Math.floor(index / 100) <= 13 ? kingMidTable[index] : kingEndTable[index];
+                    positionScore += blackKingTable[index];
+                    kingScore += blackKingTable[index];
                     bKing &= ~1L << index;
                 }
                 System.out.println("Black");
+                System.out.println();
                 System.out.println("Pawn Score");
                 System.out.println(pawnScore);
+                System.out.println("Knight Score");
+                System.out.println(knightScore);
+                System.out.println("Bishop Score");
+                System.out.println(bishopScore);
+                System.out.println("Rook Score");
+                System.out.println(rookScore);
+                System.out.println("Queen Score");
+                System.out.println(queenScore);
+                System.out.println("King Score");
+                System.out.println(kingScore);
+
+                System.out.println("position score");
+                System.out.println(positionScore);
                 return positionScore;
             default:
                 return positionScore;
@@ -218,15 +331,15 @@ public class Evaluation {
         score -= material(PlayerColor.BLACK);
         score -= position(PlayerColor.BLACK);
 
-        System.out.println("White Material");
-        System.out.println(material(PlayerColor.WHITE));
-        System.out.println("Black Material");
-        System.out.println(material(PlayerColor.BLACK));
+        // System.out.println("White Material");
+        // System.out.println(material(PlayerColor.WHITE));
+        // System.out.println("Black Material");
+        // System.out.println(material(PlayerColor.BLACK));
 
-        System.out.println("White Position");
-        System.out.println(position(PlayerColor.WHITE));
-        System.out.println("Black Position");
-        System.out.println(position(PlayerColor.BLACK));
+        // System.out.println("White Position");
+        // System.out.println(position(PlayerColor.WHITE));
+        // System.out.println("Black Position");
+        // System.out.println(position(PlayerColor.BLACK));
         System.out.println("SCORE");
         System.out.println(score);
         return score;
