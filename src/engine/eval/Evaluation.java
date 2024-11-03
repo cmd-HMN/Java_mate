@@ -9,7 +9,7 @@ public class Evaluation {
     int BISHOP = 3;
     int ROOK = 5;
     int QUEEN = 9;
-    int KING = 1000;
+    int KING = 10;
     BitBoard bitBoard;
 
     public Evaluation(BitBoard bitBoard){
@@ -233,23 +233,6 @@ public class Evaluation {
                     kingScore += whiteKingTable[index];
                     king &= ~1L << index;
                 }
-                System.out.println("White");
-                System.out.println();
-                System.out.println("Pawn Score");
-                System.out.println(pawnScore);
-                System.out.println("Knight Score");
-                System.out.println(knightScore);
-                System.out.println("Bishop Score");
-                System.out.println(bishopScore);
-                System.out.println("Rook Score");
-                System.out.println(rookScore);
-                System.out.println("Queen Score");
-                System.out.println(queenScore);
-                System.out.println("King Score");
-                System.out.println(kingScore);
-
-                System.out.println("position score");
-                System.out.println(positionScore);
                 return positionScore;
             case BLACK:
                 long bPawn = bitBoard.blackPawns;
@@ -294,23 +277,6 @@ public class Evaluation {
                     kingScore += blackKingTable[index];
                     bKing &= ~1L << index;
                 }
-                System.out.println("Black");
-                System.out.println();
-                System.out.println("Pawn Score");
-                System.out.println(pawnScore);
-                System.out.println("Knight Score");
-                System.out.println(knightScore);
-                System.out.println("Bishop Score");
-                System.out.println(bishopScore);
-                System.out.println("Rook Score");
-                System.out.println(rookScore);
-                System.out.println("Queen Score");
-                System.out.println(queenScore);
-                System.out.println("King Score");
-                System.out.println(kingScore);
-
-                System.out.println("position score");
-                System.out.println(positionScore);
                 return positionScore;
             default:
                 return positionScore;
@@ -330,16 +296,6 @@ public class Evaluation {
         
         score -= material(PlayerColor.BLACK);
         score -= position(PlayerColor.BLACK);
-
-        // System.out.println("White Material");
-        // System.out.println(material(PlayerColor.WHITE));
-        // System.out.println("Black Material");
-        // System.out.println(material(PlayerColor.BLACK));
-
-        // System.out.println("White Position");
-        // System.out.println(position(PlayerColor.WHITE));
-        // System.out.println("Black Position");
-        // System.out.println(position(PlayerColor.BLACK));
         System.out.println("SCORE");
         System.out.println(score);
         return score;
