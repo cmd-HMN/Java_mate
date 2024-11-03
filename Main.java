@@ -12,10 +12,10 @@ public class Main extends BitBoard {
         FeaturedMoves featuredMoves = new FeaturedMoves(board, mainInterface);
 
 
-        featuredMoves.makeMove(Bits.E2, Bits.E4, 0);
-        featuredMoves.makeMove(Bits.E4, Bits.E5, 0);
-        featuredMoves.makeMove(Bits.D7, Bits.D5, 1);
-        featuredMoves.makeMove(Bits.E5, Bits.D6, 0);
+        // featuredMoves.makeMove(Bits.E2, Bits.E4, 0);
+        // featuredMoves.makeMove(Bits.E4, Bits.E5, 0);
+        // featuredMoves.makeMove(Bits.D7, Bits.D5, 1);
+        // featuredMoves.makeMove(Bits.E5, Bits.D6, 0);
         // featuredMoves.makeMove(Bits.A7, Bits.A5, 1);
         // featuredMoves.makeMove(Bits.B2, Bits.B4, 0);
         // featuredMoves.makeMove(Bits.A5, Bits.B4, 1);

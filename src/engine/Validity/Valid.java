@@ -69,7 +69,6 @@ public class Valid {
         get_board_king_move = get_board_king_move & ~get_attack_board;  
 
         System.out.println("Get_board");
-        bitBoard.printBoardWithMoves(get_board);
 
         boolean cond = capturePiece(playerColor, get_board_king, get_opponent_board, get_unOcc, get_board,
                 king_position);
@@ -81,8 +80,6 @@ public class Valid {
         System.out.println("prevention: " + cond1);
         System.out.println("avoiding: " + cond2);
 
-
-        bitBoard.printBoardWithMoves(get_board_king_move);
         if (!cond2) {
             if(cond == true){
                 if(cond1 == false){
