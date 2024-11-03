@@ -27,18 +27,18 @@ public class FeaturedMoves {
 
 
     // make the move (universal)
-    public boolean makeMove(long from, long to, int playerColor) {
+    public boolean makeMove(long from, long to, int playerColor, boolean change) {
         evaluate.getScore();
         int moveType = bitBoard.getMoveType(from, to);    
         if(moveType == 0){     
             if (playerColor == 0) {
-                if(normal(from, to, PlayerColor.WHITE, false)){
+                if(normal(from, to, PlayerColor.WHITE, change)){
                     bitBoard.printBoard();
                     return true;
                 }
             }
             if (playerColor == 1) {
-                if(normal(from, to, PlayerColor.BLACK, false)){
+                if(normal(from, to, PlayerColor.BLACK, change)){
                     bitBoard.printBoard();
                     return true;
                 }
@@ -297,9 +297,14 @@ public class FeaturedMoves {
         boolean checkValidity = (playerColor == PlayerColor.WHITE 
                             ? (to & BitBoard.RANK_8) != 0
                             : (to & BitBoard.RANK_1) != 0) && 
-                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 05;
+                            playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 0;
 
-        if(checkValidity){
+        System.out.println((playerColor == PlayerColor.WHITE 
+                            ? (to & BitBoard.RANK_8) != 0
+                            : (to & BitBoard.RANK_1) != 0));
+        
+        System.out.println(playerColor == PlayerColor.WHITE ? (from & BitBoard.RANK_7) != 0 : (from  & BitBoard.RANK_2) != 0);
+        if(checkValidity != false){
 
             //get the user requested bit board
             PiecesType piecesType = bitBoard.getPieceTypeFromString();
@@ -338,10 +343,8 @@ public class FeaturedMoves {
             bitBoard.enPassantT = 0L;
             return true;
         }
-        else{
-            System.out.println("Failed");
-            return false;
-        }
+        System.out.println("Failed");
+        return false;
     }
 
     public long getAllMoves(long from, int temp_playerColor){
