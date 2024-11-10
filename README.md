@@ -44,11 +44,11 @@ To run this, you will need to have Java installed on your computer. You can down
     ```
     Hurray!🙌 it worked.
 
-## Motivation
+## Motivation 🔥
 
 *"I started this little chess engine project just for fun, really – something to keep me busy and, yeah, maybe even level up my coding skills while I’m at it! 😎 It’s been a wild mix of battling code bugs and figuring out cool chess moves, but I’m here for the challenge. Every line of code is like a puzzle piece fitting into place, making me better at this whole software thing one move at a time. Just enjoying the process and seeing where it goes! 🚀"*
 
-##🛠️ Known Issues & Limitations:
+## 🛠️ Known Issues & Limitations:
 
 #### Gameplay Restricted to White: 
     Only the white pieces are functional right now, giving white players an unfair advantage 😅
