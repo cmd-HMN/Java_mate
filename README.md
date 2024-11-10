@@ -2,7 +2,7 @@
 
 A chess engine written in Java, designed to build the engine and GUI for a chess game.
 
-## Features(Mainly to be decided, features are written just for the show) 🔑
+## Features 🔑
 
 - **Game Logic**: The engine will be able to handle basic game logic such as moving pieces, and checking for checkmate.
 
@@ -43,6 +43,18 @@ To run this, you will need to have Java installed on your computer. You can down
         java src.gui.ChessBoard
     ```
     Hurray!🙌 it worked.
+
+## Motivation
+
+*"I started this little chess engine project just for fun, really – something to keep me busy and, yeah, maybe even level up my coding skills while I’m at it! 😎 It’s been a wild mix of battling code bugs and figuring out cool chess moves, but I’m here for the challenge. Every line of code is like a puzzle piece fitting into place, making me better at this whole software thing one move at a time. Just enjoying the process and seeing where it goes! 🚀"*
+
+##🛠️ Known Issues & Limitations:
+
+#### Gameplay Restricted to White: 
+    Only the white pieces are functional right now, giving white players an unfair advantage 😅
+#### Existing Bugs & Errors 🐞:
+    Certain moves might not work as intended (It's like our rook is trying to be a knight sometimes 😂)
+    Movement validation is limited and may allow illegal moves or miss valid ones.
 
 ## Contributing 💖
 
