@@ -14,7 +14,6 @@ public class FeaturedMoves {
     Valid valid;
     AttackBoard attack_board;
     Evaluation evaluate;
-    MiniMaxAlgo miniMaxAlgo;
 
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
@@ -29,14 +28,7 @@ public class FeaturedMoves {
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor, boolean change, boolean main) {
         
-        if(playerColor == 1 && main){
-            MiniMaxAlgo miniMax = new MiniMaxAlgo(new BitBoard(bitBoard));
-            int value = miniMax.minMaxAlgo(1, false);
-            System.out.println(value + ": Value");
-            bitBoard.printBoard();
-            return true;
-        }
-        int moveType = bitBoard.getMoveType(from, to);    
+        int moveType = bitBoard.getMoveType(from, to);      
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE, change)){

@@ -21,6 +21,7 @@ public class BoardFrame extends JFrame {
     ChessPiece chessPiece = new ChessPiece();
     Valid valid = new Valid(board, featuredMoves, mainInterface);
     private JPanel boardPanel;
+  
     
     private Point selectedPiece; 
     boolean selectedCursor = false;
@@ -120,7 +121,12 @@ public class BoardFrame extends JFrame {
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }else{
-                        System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");
+                        System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");  
+                        if(!isWhiteTurn){
+                            MiniMaxAlgo miniMaxAlgo = new MiniMaxAlgo(new BitBoard(board));
+                            int value = miniMaxAlgo.minMaxAlgo(1, false);
+                            System.out.println("Value: " + value);
+                        }
                         selectedCursor = false;
                         selectedPiece = null;
                     }

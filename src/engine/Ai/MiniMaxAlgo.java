@@ -19,6 +19,11 @@ public class MiniMaxAlgo {
         this.bitBoard = board;
     }
     public int minMaxAlgo(int depth, boolean isMaximizing) {
+        if(bitBoard == null){
+            return 0;
+        }
+        bitBoard.printBoardWithMoves(bitBoard.getOcc());
+        
         if(depth == 0){
             return 0;
         }
@@ -65,6 +70,9 @@ public class MiniMaxAlgo {
     }
 
     public void applyMove(int from, int to, PlayerColor playerColor){
+        if(bitBoard == null){
+            System.out.println("WTF Going on");
+        }
         featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 
