@@ -8,26 +8,27 @@ import src.engine.Interfaces.MainInterface;
 import src.engine.Moves.FeaturedMoves;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
+import src.engine.eval.Evaluation;
 
 public class MiniMaxAlgo {
 
     private BitBoard bitBoard;
     MainInterface mainInterface;
     FeaturedMoves featuredMoves;
+    Evaluation evaluation;
 
     public MiniMaxAlgo(BitBoard board){
         this.bitBoard = board;
         this.mainInterface = new MainInterface();
         this.featuredMoves = new FeaturedMoves(board, mainInterface);
+        this.evaluation = new Evaluation(board);
     }
     public int minMaxAlgo(int depth, boolean isMaximizing) {
-        if(bitBoard == null){
-            return 0;
-        }
+
         bitBoard.printBoardWithMoves(bitBoard.getOcc());
         
         if(depth == 0){
-            return 0;
+            return evaluation.getScore();
         }
 
         if(isMaximizing){
@@ -54,8 +55,10 @@ public class MiniMaxAlgo {
 
     public List<int[]> getPossibleMoves(boolean isWhite){
         List<int[]> possibleMoves = new ArrayList<>();
+        long occ = bitBoard.getOccSquaresByColor(isWhite ? PlayerColor.WHITE : PlayerColor.BLACK);
+        bitBoard.printBoardWithMoves(occ);
         for(int i = 0; i < 64; i++){
-            if((bitBoard.getOccSquaresByColor(isWhite? PlayerColor.WHITE : PlayerColor.BLACK) & (1L << i))!= 0){
+            if((occ & (i << 1L)) != 0){
                 PiecesType pieceType = bitBoard.getPieceType(1L << i);
                 System.out.println("PieceTypes");
                 System.out.println(pieceType);
