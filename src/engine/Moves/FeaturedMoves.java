@@ -23,15 +23,16 @@ public class FeaturedMoves {
         this.attack_board = new AttackBoard(bitBoard);
         this.valid = new Valid(bitBoard, this, mainInterface);
         this.evaluate = new Evaluation(bitBoard);
-        this.miniMaxAlgo = new MiniMaxAlgo(bitBoard, mainInterface, this);
     }
 
 
     // make the move (universal)
-    public boolean makeMove(long from, long to, int playerColor, boolean change) {
+    public boolean makeMove(long from, long to, int playerColor, boolean change, boolean main) {
         
-        if(playerColor == 1){
-            miniMaxAlgo.minMaxAlgo(2, false);
+        if(playerColor == 1 && main){
+            MiniMaxAlgo miniMax = new MiniMaxAlgo(new BitBoard(bitBoard));
+            int value = miniMax.minMaxAlgo(1, false);
+            System.out.println(value + ": Value");
             bitBoard.printBoard();
             return true;
         }

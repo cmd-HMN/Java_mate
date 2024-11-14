@@ -12,13 +12,11 @@ import src.engine.Type.PlayerColor;
 public class MiniMaxAlgo {
 
     private BitBoard bitBoard;
-    private MainInterface mainInterface;
-    private FeaturedMoves featuredMoves;
+    MainInterface mainInterface = new MainInterface();
+    FeaturedMoves featuredMoves = new FeaturedMoves(bitBoard, mainInterface);
 
-    public MiniMaxAlgo(BitBoard board, MainInterface mainInterface, FeaturedMoves FeaturedMoves){
+    public MiniMaxAlgo(BitBoard board){
         this.bitBoard = board;
-        this.mainInterface = mainInterface;
-        this.featuredMoves = FeaturedMoves;
     }
     public int minMaxAlgo(int depth, boolean isMaximizing) {
         if(depth == 0){
@@ -67,10 +65,10 @@ public class MiniMaxAlgo {
     }
 
     public void applyMove(int from, int to, PlayerColor playerColor){
-        featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false);
+        featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 
     public void undoMove(int from, int to, PlayerColor playerColor){
-        featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false);
+        featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 }

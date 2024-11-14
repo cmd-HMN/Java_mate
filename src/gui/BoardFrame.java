@@ -21,7 +21,6 @@ public class BoardFrame extends JFrame {
     ChessPiece chessPiece = new ChessPiece();
     Valid valid = new Valid(board, featuredMoves, mainInterface);
     private JPanel boardPanel;
-    MiniMaxAlgo miniMax = new MiniMaxAlgo(board, mainInterface, featuredMoves);
     
     private Point selectedPiece; 
     boolean selectedCursor = false;
@@ -129,7 +128,7 @@ public class BoardFrame extends JFrame {
                     long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
                     long to = 1L << (((7 - y) * 8) + x);
 
-                    boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1, false);
+                    boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1, false, true);
                     System.out.println("move: " + move);
                     if (move) {
                         selectedPiece = null;
