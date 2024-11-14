@@ -1,19 +1,16 @@
 package src.engine.Moves;
 
 import src.engine.BitBoard;
-import src.engine.Ai.MiniMaxAlgo;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
 import src.engine.Validity.Valid;
-import src.engine.eval.Evaluation;
 
 public class FeaturedMoves {
     private BitBoard bitBoard;
     private MainInterface mainInterface;
-    Valid valid;
-    AttackBoard attack_board;
-    Evaluation evaluate;
+    private Valid valid;
+    private AttackBoard attack_board;
 
     // initialize the bitboard
     public FeaturedMoves(BitBoard bitBoard, MainInterface mainInterface) {
@@ -21,14 +18,17 @@ public class FeaturedMoves {
         this.mainInterface = mainInterface;
         this.attack_board = new AttackBoard(bitBoard);
         this.valid = new Valid(bitBoard, this, mainInterface);
-        this.evaluate = new Evaluation(bitBoard);
     }
 
 
     // make the move (universal)
     public boolean makeMove(long from, long to, int playerColor, boolean change, boolean main) {
         
-        int moveType = bitBoard.getMoveType(from, to);      
+        int moveType = bitBoard.getMoveType(from, to);    
+        System.out.println("From"); 
+        bitBoard.printBoardWithMoves(from);
+        System.out.println("To");
+        bitBoard.printBoardWithMoves(to); 
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE, change)){

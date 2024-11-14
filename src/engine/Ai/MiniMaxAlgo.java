@@ -12,11 +12,13 @@ import src.engine.Type.PlayerColor;
 public class MiniMaxAlgo {
 
     private BitBoard bitBoard;
-    MainInterface mainInterface = new MainInterface();
-    FeaturedMoves featuredMoves = new FeaturedMoves(bitBoard, mainInterface);
+    MainInterface mainInterface;
+    FeaturedMoves featuredMoves;
 
     public MiniMaxAlgo(BitBoard board){
         this.bitBoard = board;
+        this.mainInterface = new MainInterface();
+        this.featuredMoves = new FeaturedMoves(board, mainInterface);
     }
     public int minMaxAlgo(int depth, boolean isMaximizing) {
         if(bitBoard == null){
@@ -55,9 +57,19 @@ public class MiniMaxAlgo {
         for(int i = 0; i < 64; i++){
             if((bitBoard.getOccSquaresByColor(isWhite? PlayerColor.WHITE : PlayerColor.BLACK) & (1L << i))!= 0){
                 PiecesType pieceType = bitBoard.getPieceType(1L << i);
+                System.out.println("PieceTypes");
+                System.out.println(pieceType);
+                System.out.println("position");
+                bitBoard.printBoardWithMoves(i << 1L);
                 long empty = bitBoard.getUnOcc();
+                System.out.println("Empty");
+                bitBoard.printBoardWithMoves(empty);
                 long opponentBoard = bitBoard.getOccSquaresByColor(isWhite ? PlayerColor.BLACK : PlayerColor.WHITE);
-                long move = mainInterface.getPossibilities(pieceType,isWhite? PlayerColor.WHITE : PlayerColor.BLACK, i, empty, opponentBoard);
+                System.out.println("Opponent Board");
+                bitBoard.printBoardWithMoves(opponentBoard);
+                long move = mainInterface.getPossibilities(pieceType,isWhite? PlayerColor.WHITE : PlayerColor.BLACK,  i << 1L, empty, opponentBoard);
+                System.out.println("Moves");
+                bitBoard.printBoardWithMoves(move);
 
                 while (move != 0) {
                     int to = Long.numberOfTrailingZeros(move);
@@ -70,10 +82,7 @@ public class MiniMaxAlgo {
     }
 
     public void applyMove(int from, int to, PlayerColor playerColor){
-        if(bitBoard == null){
-            System.out.println("WTF Going on");
-        }
-        featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
+        featuredMoves.makeMove(from << 1L, to << 1L, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 
     public void undoMove(int from, int to, PlayerColor playerColor){
