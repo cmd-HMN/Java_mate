@@ -1,8 +1,7 @@
 package src.engine.Moves;
 
 import src.engine.BitBoard;
-
-
+import src.engine.Ai.MiniMaxAlgo;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Type.PiecesType;
 import src.engine.Type.PlayerColor;
@@ -27,9 +26,9 @@ public class FeaturedMoves {
 
 
     // make the move (universal)
-    public boolean makeMove(long from, long to, int playerColor, boolean change) {
-        evaluate.getScore();
-        int moveType = bitBoard.getMoveType(from, to);    
+    public boolean makeMove(long from, long to, int playerColor, boolean change, boolean main) {
+        
+        int moveType = bitBoard.getMoveType(from, to);      
         if(moveType == 0){     
             if (playerColor == 0) {
                 if(normal(from, to, PlayerColor.WHITE, change)){

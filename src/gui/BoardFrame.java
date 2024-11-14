@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import src.engine.*;
+import src.engine.Ai.MiniMaxAlgo;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Moves.FeaturedMoves;
 import src.engine.Type.PlayerColor;
@@ -20,6 +21,7 @@ public class BoardFrame extends JFrame {
     ChessPiece chessPiece = new ChessPiece();
     Valid valid = new Valid(board, featuredMoves, mainInterface);
     private JPanel boardPanel;
+  
     
     private Point selectedPiece; 
     boolean selectedCursor = false;
@@ -119,7 +121,12 @@ public class BoardFrame extends JFrame {
                         boardPanel.repaint();  
                         boardPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }else{
-                        System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");
+                        System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");  
+                        if(!isWhiteTurn){
+                            MiniMaxAlgo miniMaxAlgo = new MiniMaxAlgo(new BitBoard(board));
+                            int value = miniMaxAlgo.minMaxAlgo(1, false);
+                            System.out.println("Value: " + value);
+                        }
                         selectedCursor = false;
                         selectedPiece = null;
                     }
@@ -127,7 +134,7 @@ public class BoardFrame extends JFrame {
                     long from = 1L << ((selectedPiece.y * 8) + selectedPiece.x);
                     long to = 1L << (((7 - y) * 8) + x);
 
-                    boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1, false);
+                    boolean move = featuredMoves.makeMove(from, to, isWhiteTurn ? 0 : 1, false, true);
                     System.out.println("move: " + move);
                     if (move) {
                         selectedPiece = null;

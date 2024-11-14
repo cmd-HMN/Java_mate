@@ -6,7 +6,6 @@ import src.gui.BoardFrame;
 
 public class BitBoard {
     // array used to handle the board
-    BitBoard bitBoard;
     private long[][] bitboards = new long[2][6];
 
     public long enPassantT = 0L;
@@ -58,6 +57,23 @@ public class BitBoard {
         bitboards[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = blackBishops; // Black Bishops
         bitboards[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = blackRooks; // Black Rooks
         bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = blackQueens; // Black Queen
+    }
+
+    public BitBoard(BitBoard orgBitBoard){
+
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KING.ordinal()] = orgBitBoard.whiteKings; // White King
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.PAWN.ordinal()] = orgBitBoard.whitePawns;
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.KNIGHT.ordinal()] = orgBitBoard.whiteKnights;
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.BISHOP.ordinal()] = orgBitBoard.whiteBishops;
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.ROOK.ordinal()] = orgBitBoard.whiteRooks;
+        bitboards[PlayerColor.WHITE.ordinal()][PiecesType.QUEEN.ordinal()] = orgBitBoard.whiteQueens;
+
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KING.ordinal()] = orgBitBoard.blackKings;
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.PAWN.ordinal()] = orgBitBoard.blackPawns;
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.KNIGHT.ordinal()] = orgBitBoard.blackKnights;
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.BISHOP.ordinal()] = orgBitBoard.blackBishops;
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.ROOK.ordinal()] = orgBitBoard.blackRooks;
+        bitboards[PlayerColor.BLACK.ordinal()][PiecesType.QUEEN.ordinal()] = orgBitBoard.blackQueens; 
     }
 
     // get the respective bitboard
@@ -331,6 +347,8 @@ public class BitBoard {
         }
         System.out.println(boardStringRepresentation.toString());
     }
+    
+    // for debugging
 
     public void printPossibleMoves(long possibleMoves) {
         String binaryString = Long.toBinaryString(possibleMoves);
@@ -339,7 +357,6 @@ public class BitBoard {
         System.out.println(binaryString);
     }
 
-    // for debugging
     public void printBoardWithMoves(long possibleMoves) {
         if(possibleMoves == 0L){
             System.out.println("No possible moves");
