@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import src.engine.*;
+import src.engine.Ai.MiniMaxAlgo;
 import src.engine.Interfaces.MainInterface;
 import src.engine.Moves.FeaturedMoves;
 import src.engine.Type.PlayerColor;
@@ -20,6 +21,7 @@ public class BoardFrame extends JFrame {
     ChessPiece chessPiece = new ChessPiece();
     Valid valid = new Valid(board, featuredMoves, mainInterface);
     private JPanel boardPanel;
+    MiniMaxAlgo miniMax = new MiniMaxAlgo(board, mainInterface, featuredMoves);
     
     private Point selectedPiece; 
     boolean selectedCursor = false;
