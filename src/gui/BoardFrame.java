@@ -124,8 +124,8 @@ public class BoardFrame extends JFrame {
                         System.out.println("It is " + (isWhiteTurn ? "White" : "Black") + " moves.");  
                         if(!isWhiteTurn){
                             MiniMaxAlgo miniMaxAlgo = new MiniMaxAlgo(new BitBoard(board));
-                            int value = miniMaxAlgo.minMaxAlgo(1, false);
-                            System.out.println("Value: " + value);
+                            int value = miniMaxAlgo.minMaxAlgo(2, false);
+                            System.out.println("Value of minimax: " + value);
                         }
                         selectedCursor = false;
                         selectedPiece = null;
