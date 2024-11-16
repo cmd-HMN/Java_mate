@@ -33,7 +33,7 @@ public class MiniMaxAlgo {
 
         if(isMaximizing){
             int max_eval = Integer.MIN_VALUE;
-            for(int[] move: getPossibleMoves(false)){
+            for(long[] move: getPossibleMoves(false)){
                 applyMove(move[0], move[1], PlayerColor.BLACK);
                 int eval = minMaxAlgo(depth - 1, false);
                 undoMove(move[1], move[0], PlayerColor.BLACK);
@@ -43,7 +43,9 @@ public class MiniMaxAlgo {
         }
         else{
             int min_eval = Integer.MAX_VALUE;
-            for(int[] move: getPossibleMoves(false)){
+            for(long[] move: getPossibleMoves(false)){
+                bitBoard.printBoardWithMoves(move[0]);
+                bitBoard.printBoardWithMoves(move[1]);
                 applyMove(move[0], move[1], PlayerColor.BLACK);
                 int eval = minMaxAlgo(depth - 1, true);
                 undoMove(move[1], move[0], PlayerColor.BLACK);
@@ -53,42 +55,33 @@ public class MiniMaxAlgo {
         }
     }
 
-    public List<int[]> getPossibleMoves(boolean isWhite){
-        List<int[]> possibleMoves = new ArrayList<>();
+    public List<long[]> getPossibleMoves(boolean isWhite){
+        List<long[]> possibleMoves = new ArrayList<>();
         long occ = bitBoard.getOccSquaresByColor(isWhite ? PlayerColor.WHITE : PlayerColor.BLACK);
-        bitBoard.printBoardWithMoves(occ);
         for(int i = 0; i < 64; i++){
-            if((occ & (i << 1L)) != 0){
+            if((occ & (1l << i)) != 0){
                 PiecesType pieceType = bitBoard.getPieceType(1L << i);
-                System.out.println("PieceTypes");
-                System.out.println(pieceType);
-                System.out.println("position");
-                bitBoard.printBoardWithMoves(i << 1L);
                 long empty = bitBoard.getUnOcc();
-                System.out.println("Empty");
-                bitBoard.printBoardWithMoves(empty);
                 long opponentBoard = bitBoard.getOccSquaresByColor(isWhite ? PlayerColor.BLACK : PlayerColor.WHITE);
-                System.out.println("Opponent Board");
-                bitBoard.printBoardWithMoves(opponentBoard);
                 long move = mainInterface.getPossibilities(pieceType,isWhite? PlayerColor.WHITE : PlayerColor.BLACK,  i << 1L, empty, opponentBoard);
-                System.out.println("Moves");
-                bitBoard.printBoardWithMoves(move);
 
                 while (move != 0) {
-                    int to = Long.numberOfTrailingZeros(move);
-                    possibleMoves.add(new int[]{i, to});
+                    long to = Long.numberOfTrailingZeros(move);
+                    possibleMoves.add(new long[]{1L << i,1L << to});
+
                     move &= move - 1;
                 }
             }
         }
+        System.out.println(possibleMoves);
         return possibleMoves;
     }
 
-    public void applyMove(int from, int to, PlayerColor playerColor){
+    public void applyMove(long from, long to, PlayerColor playerColor){
         featuredMoves.makeMove(from << 1L, to << 1L, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 
-    public void undoMove(int from, int to, PlayerColor playerColor){
+    public void undoMove(long from, long to, PlayerColor playerColor){
         featuredMoves.makeMove(from, to, playerColor == PlayerColor.WHITE ? 0: 1, false, false);
     }
 }
