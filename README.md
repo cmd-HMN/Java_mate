@@ -1,4 +1,4 @@
-# 👑 Java_mate 👑 (Postponed)
+# 👑 Java_mate 👑
 
 A chess engine written in Java, designed to build the engine and GUI for a chess game.
 
@@ -42,6 +42,14 @@ To run this, you will need to have Java installed on your computer. You can down
         -- after that run the below command--
         java src.gui.ChessBoard
     ```
+
+    or
+
+    ```
+        // u can run the below command after downloading the zip
+        cd  ..\JavaMate 
+        java -jar dist/ChessGame.jar
+    ```
     Hurray!🙌 it worked.
 
 ## Motivation 🔥
@@ -50,11 +58,10 @@ To run this, you will need to have Java installed on your computer. You can down
 
 ## 🛠️ Known Issues & Limitations:
 
-#### Gameplay Restricted to White: 
-    Only the white pieces are functional right now, giving white players an unfair advantage 😅
 #### Existing Bugs & Errors 🐞:
     Certain moves might not work as intended (It's like our rook is trying to be a knight sometimes 😂)
     Movement validation is limited and may allow illegal moves or miss valid ones.
+    Issue in the checkmate.
 
 ## Contributing 💖
 
@@ -66,6 +73,10 @@ Contributions are welcome! Please follow these steps:
 4. Commit your changes (`git commit -am 'Add new feature'`).
 5. Push to the branch (`git push origin feature-branch`).
 6. Create a new Pull Request.
+
+## Future 🔮
+
+I wanna add AI in this, it's on my to do list.
 
 ## License 📖🔓
 
